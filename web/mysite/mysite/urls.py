@@ -20,6 +20,5 @@ from myapp import views  # Import your views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('matches/', views.match_view, name='match_view'),  # Matches URL
     path('', views.placeholder_view, name='home'),  # Optional: Root URL placeholder
 ]

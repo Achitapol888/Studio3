@@ -2,14 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 
-class Match(models.Model):
-    name = models.CharField(max_length=100)
-    date = models.DateField()
-    score = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.name
-
 class Dorm(models.Model):
     dorm_ID = models.AutoField(primary_key=True)
     dorm_name = models.CharField(max_length=100)
@@ -17,8 +9,8 @@ class Dorm(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
-    prefer_items = ArrayField(models.CharField(max_length=50), size=5, default=list)
-    history = ArrayField(models.CharField(max_length=50), size=5, default=list)
+    prefer_items = models.TextField(default='[]')  # Store as JSON or comma-separated values
+    history = models.TextField(default='[]')  # Same as above
     student_ID = models.CharField(max_length=15, unique=True)
     kku_mail = models.EmailField(max_length=100, unique=True)
     dorm = models.ForeignKey(Dorm, on_delete=models.SET_NULL, null=True)

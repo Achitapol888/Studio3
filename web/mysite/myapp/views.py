@@ -13,7 +13,5 @@ def match_view(request):
     # Render the matches in a template
     return render(request, 'matching_results.html', {'matches': matches})
 
-
-
 def placeholder_view(request):
     return HttpResponse("This is a placeholder for the home page.")
