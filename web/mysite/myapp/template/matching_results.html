@@ -1,0 +1,6 @@
+<h2>Matching Items</h2>
+<ul>
+  {% for post in matches %}
+    <li>{{ post.item_name }} - {{ post.dorm.dorm_name }} (Item Type: {{ post.item_type }})</li>
+  {% endfor %}
+</ul>
