@@ -7,7 +7,8 @@ def placeholder_view(request):
 def home(request):
     return render(request, "myweb/home.html")
 
+def login(request):
+    return render(request, "myweb/login.html")
+
 def register(request):
     return render(request, "myweb/register.html")
-
-

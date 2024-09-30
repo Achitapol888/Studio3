@@ -1,0 +1,250 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, sans-serif;
+    
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+header{
+    margin-top: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Logo{
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 35rem;
+    font-size:  2rem;
+    color: #ffffff;
+    font-weight: 800;
+    cursor: pointer; 
+}
+
+button.Login{
+    display: inline-block;
+   
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 20px;
+    color: #fff;
+    background: none;
+    margin-left: 5rem;
+    border: 2px solid,rgb(0, 0, 0);
+    cursor: pointer ;
+    text-decoration: none;
+    transition: 0.8s;
+}
+.button.Login :hover{
+    color: #ff0000;
+}
+.Login{
+    margin-left: 1rem;
+    color: rgb(0, 21, 255);
+    cursor: pointer;
+}
+.Menu{
+
+    font-size: 1.9rem;
+    color: rgb(0, 0, 0);
+    margin-left: 20rem;
+    font-weight: 50px;
+    transition: 0.3s ease;
+    border-bottom: 3px solid transparent;
+
+}
+input.log-input{
+    text-align: left;
+    width: 300px;
+    height: 40px;
+    padding: 20px 20px;
+   
+    border: none;
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.image{
+    /* background-color: #000000; opacity:0.6; */
+    width: 100%;
+    height: 90vh;
+    background-position: center;
+    background-size: cover;
+    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('image/1.jpg');
+}
+.get-info{
+    margin-top: 2rem;
+}
+.image-overlay{
+    width: 100%;
+    height: 90vh;
+    background-color: rgba(0, 0, 0, 0.6);
+
+}
+
+div.welcome{
+    position: fixed;
+}
+
+.log-form {
+    background-color: #e0e0e0;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* text-align: center; */
+    width: 400px;
+    height: 550px;
+    margin-top: 30px;
+    margin-left: 35rem;
+    /* left: 30px; */
+    text-align: center;
+}
+
+.home-con{
+    position: relative;
+}
+.user-box{
+    margin-bottom: 20px;
+    margin-top: 50px;
+}
+h2{
+    align-items: center;
+    
+}
+.user-box label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+
+.log-buttonnextpage{
+    display: inline-block;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    /* margin: 20px; */
+    color: #fff;
+    width: 300px;
+    background-image: linear-gradient(#295CCC,#152E66);
+    border: none;
+    border-radius: 38px;
+    text-decoration: none;
+    
+}
+.Signup{
+    display: inline-block;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    
+    color: #fff;
+    width: 300px;
+    background-image: linear-gradient(0.25turn,#FFE53B,#FF2525);
+    border: none;
+    border-radius: 38px;
+    text-decoration: none;
+}
+.forget{
+    color: black;
+    text-align: right;
+    margin-left: 180px;
+    bottom: 10px;
+}
+.contentbar{
+    left: 20rem;
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+}
+
+
+
+.learnmore {
+    
+    padding: 20px;
+    position: relative;
+    top: 30%; /* Adjust for desired vertical position */
+    left: 50%;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+   
+   
+}
+
+.learnbtm{
+    display: inline-block;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+
+    color: #fff;
+    align-items: center;
+    width: 150px;
+    background-color: black;
+    border: none;
+    border-radius: 38px;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 150px;
+    margin-left: 10rem;
+}
+
+/* .learnbtm :hover{
+    display: inline-block;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+
+    color: #fff;
+    align-items: center;
+    width: 150px;
+    background-color: rgb(60, 0, 255);
+    border: none;
+    border-radius: 38px;
+    text-align: center;
+    margin-bottom: 10px;
+   
+} */
+.text {
+    font-size: 36px; 
+    margin-bottom: 10px;
+    text-align: left;
+    margin-top: 6rem;
+    font-size: 50px;
+    margin-left: 47rem;
+    color: #ffffff;
+}
+
+.word {
+    font-size: 48px;
+    color: #0176FF;
+    text-align: left;
+    margin-left: 47rem;
+}
+
+.word span {
+    color: #FF7A00;
+    text-align: right;
+    
+
+}
+p.word{
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+    text-align: left;
+    margin-left: 47rem;
+}

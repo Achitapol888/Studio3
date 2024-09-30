@@ -8,6 +8,9 @@ class Dorm(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length = 30)
+    surname = models.CharField(max_length = 30)
+    nick_name = models.CharField(max_length = 30)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     prefer_items = models.TextField(default='[]')  # Store as JSON or comma-separated values
     history = models.TextField(default='[]')  # Same as above
