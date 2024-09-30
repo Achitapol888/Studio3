@@ -1,11 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Base{% endblock %}</title>
-</head>
-<body>
-    {% block content %}
-    {% endblock %}
-</body>
-</html>
+{% extends 'myweb/base.html' %}
+
+{% block title %}
+Home
+{% endblock %} 
+
+{% block content %}
+It a home place
+
+
+<a href="register/">go register</a>
+{% endblock %}
