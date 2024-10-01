@@ -1,16 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.postgres.fields import ArrayField
-
 class Dorm(models.Model):
     dorm_ID = models.AutoField(primary_key=True)
     dorm_name = models.CharField(max_length=100)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length = 30)
-    surname = models.CharField(max_length = 30)
-    nick_name = models.CharField(max_length = 30)
+    username = models.CharField(max_length = 30, blank=True, null=True)
+    first_name = models.CharField(max_length = 30, blank=True, null=True)
+    surname = models.CharField(max_length = 30, blank=True, null=True)
+    nick_name = models.CharField(max_length = 30, blank=True, null=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     prefer_items = models.TextField(default='[]')  # Store as JSON or comma-separated values
     history = models.TextField(default='[]')  # Same as above
