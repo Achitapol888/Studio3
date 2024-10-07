@@ -19,10 +19,12 @@ from django.urls import path
 from myapp import views
 
 urlpatterns = [
+    path('base/', views.base, name = 'base'),
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
     path('select-prefer/', views.select_prefer, name="select-prefer"), 
+    path('role-selection/', views.role_selection, name='role-selection')
 ]
 

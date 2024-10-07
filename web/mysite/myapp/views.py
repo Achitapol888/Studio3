@@ -4,6 +4,12 @@ from django.shortcuts import HttpResponse
 def placeholder_view(request):
     return HttpResponse("This is a placeholder for the home page.")
 
+def base(request):
+    return render(request, "myweb/base.html")
+
+def role_selection(reqest):
+    return render(reqest, "myweb/role_selection.html")
+
 def home(request):
     return render(request, "myweb/home.html")
 
