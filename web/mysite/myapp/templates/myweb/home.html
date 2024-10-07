@@ -1,12 +1,59 @@
-{% extends 'myweb/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="login.css">
+        <title>DormExchange</title>
+    </head>
 
-{% block title %}
-Home
-{% endblock %} 
+    <body>
+            <div class="image">
+                <div class="image-overlay"></div>
 
-{% block content %}
-It a home place
+            </div>
+        
+        <header>
+           
+            <nav>
+                <a class="Logo">DormExchange</a>
+                <a class="contentbar" href="#">About</a>
+                <a class="contentbar" href="#">Contact</a>
+                <a class="contentbar" href="#">Help</a>
+                
+            </nav>
+                        
+            <form method="post" class="form-login" id="log">
+                   
+                <img src="{% static 'images/icon_accout.png' %}">
+                    <h2>Login</h2>
+                   
+                       
+                    <div class="user-box">
+                        <label for="username">Username</label>
+                        <input type="email" class="log-input" placeholder="username">
+                     
+                        <label for="password">Passwords</label>
+                        <input type="password" class="log-input" placeholder="Enter passwords">
+                        <a href="#" class="forget">forget password?</a>
 
+                        <div>
+                            <a href="login/" class="log-buttonnextpage"><b>Login</b></a>
+                        </div>
+                        
+                </form>
+        </header>
+        
+      
 
+    </body>
+</html>
+<!--
+Link
 <a href="login/">go register</a>
-{% endblock %}
+-->
+
+
+

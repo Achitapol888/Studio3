@@ -12,3 +12,6 @@ def login(request):
 
 def register(request):
     return render(request, "myweb/register.html")
+
+def select_prefer(request):
+    return render(request, "myweb/select_prefer.html")
