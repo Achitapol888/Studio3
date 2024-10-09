@@ -1,15 +1,38 @@
 {% extends 'myweb/base.html' %}
 
-{% load static %} 
+{% load static %}
 
 {% block title %}
-เลือก
+เลือกบทบาทของคุณ
 {% endblock %}
 
 {% block background_style %}
 background-color: rgba(0, 0, 0);
 {% endblock %}
 
-{% block content %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/role_selection.css' %}">  <!-- Add more CSS files here -->
+{% endblock %}
 
+{% block content %}
+    <h1 class="fw-light text-center text-light mt-4 mb-0 fs-1">เลือกบทบาทของคุณ</h1>
+    <hr class="mt-1 mb-5">
+    <div class="row justify-content-center text-center">
+        <div class="col-lg-6 col-md-4">
+            <figure class="d-block mb-4 h-100">
+                <img class="img-fluid img-thumbnail large-image" src="{% static 'images/sofa.png' %}" alt="">
+                <figcaption class="text-light text-center fs-2 mt-3">ผู้ให้</figcaption>
+            </figure>
+        </div>
+        <div class="col-lg-6 col-md-4">
+            <figure class="d-block mb-4 h-100">
+                <img class="img-fluid img-thumbnail large-image" src="{% static 'images/sofa.png' %}" alt="">
+                <figcaption class="text-light text-center fs-2 mt-3">ผู้รับ</figcaption>
+            </figure>
+        </div>
+    </div>
+    <div class="text-center">
+        <a href="{% url 'role-selection' %}" class="btn btn-primary btn-lg mb-2 mt-1 fs-4">ต่อไป</a>
+    </div>
+    
 {% endblock %}

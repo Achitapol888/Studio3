@@ -11,11 +11,10 @@ background-color: rgba(0, 0, 0);
 {% endblock %}
 
 {% block content %}
-<div class="container">
 
     <h1 class="fw-light text-center text-light mt-4 mb-0">เลือกประเภทสิ่งของที่คุณสนใจ</h1>
 
-    <hr class="mt-2 mb-5">
+    <hr class="mt-1 mb-3">
 
     <!-- First row (3 columns) -->
     <div class="row text-center text-lg-start">
@@ -65,9 +64,9 @@ background-color: rgba(0, 0, 0);
         </div>
     </div>
 
-    <!-- Button below the content -->
-    <div class="text-center mt-4">
-        <a href="#" class="btn btn-primary">เลือกสิ่งของ</a>
+    <!-- Button placed below content with margin -->
+    <div class="text-center mb-4">
+        <a href="{% url "role-selection" %}" class="btn btn-primary fs-5">ต่อไป</a>
     </div>
 
 </div>
