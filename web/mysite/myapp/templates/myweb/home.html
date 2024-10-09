@@ -1,55 +1,61 @@
+{% extends 'myweb/base.html' %}
+
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="login.css">
-        <title>DormExchange</title>
-    </head>
 
+{% block title %}
+DormExchange
+{% endblock %}
+
+{% block background_style %}
+background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),url('https://www.goodmove-th.com/images/editor/Blog/blog_6_1.jpeg'); 
+background-size: cover;
+background-repeat: no-repeat;
+{% endblock %}
+
+{% block content %}
+<style>
+ .custom-margin {
+    margin-left: 700px;
+    } 
+ .custom-ln{
+    margin-bottom: 100px;
+    margin-left: 50px;
+ }
+ .marginD {
+    margin-left: 125px;
+    } 
+</style>
     <body>
-            <div class="image">
-                <div class="image-overlay"></div>
-
-            </div>
-        
         <header>
-           
-            <nav>
-                <a class="Logo">DormExchange</a>
-                <a class="contentbar" href="#">About</a>
-                <a class="contentbar" href="#">Contact</a>
-                <a class="contentbar" href="#">Help</a>
-                
-            </nav>
-                        
-            <form method="post" class="form-login" id="log">
-                   
-                <img src="{% static 'images/icon_accout.png' %}">
-                    <h2>Login</h2>
-                   
-                       
-                    <div class="user-box">
-                        <label for="username">Username</label>
-                        <input type="email" class="log-input" placeholder="username">
-                     
-                        <label for="password">Passwords</label>
-                        <input type="password" class="log-input" placeholder="Enter passwords">
-                        <a href="#" class="forget">forget password?</a>
-
-                        <div>
-                            <a href="login/" class="log-buttonnextpage"><b>Login</b></a>
-                        </div>
-                        
-                </form>
+            <div class="px-3 py-2 border-bottom mb-3">
+                <div class="container d-flex flex-wrap justify-content-center">
+                  <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
+                     <h1 class="d-inline-flex text-decoration-none" style="color: white;">DormExchange</h1>
+                  </form>
+          
+                  <div class="text-end">
+                    <button type="button" class="btn btn-light text-dark  ms-5 mt-2">Login</button>
+                  </div>
+                </div>
+              </div>                           
         </header>
-        
-      
 
+        <div class="container d-flex justify-content-end align-items-center vh-100">
+            <div class="user-box text-last">
+                <h1 class="text-uppercase marginD" style="color: white; font-size: 90px;">ยินดีต้อนรับสู่</h1>
+                <h1 class="word" style="color: rgb(0, 0, 201); font-size: 90px">Dorm<span style="color: #f39c12;">Exchange</span></h1>
+                <p class="word" style="color: white; font-size: 50px">คุณเคยเจอปัญหา.....</p>
+            </div>
+            
+        </div>
+
+        <div class="text-start custom-ln">
+            <button class="learnbtm btn btn-primary rounded-pill"><b>Learn more</b></button>
+        </div>
+        
+    
     </body>
-</html>
+{% endblock %}
 <!--
 Link
 <a href="login/">go register</a>
