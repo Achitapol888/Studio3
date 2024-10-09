@@ -25,6 +25,9 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
     path('select-prefer/', views.select_prefer, name="select-prefer"), 
-    path('role-selection/', views.role_selection, name='role-selection')
+    path('role-selection/', views.role_selection, name='role-selection'),
+    path('reciver/', views.reciver, name='reciver'),
+    path('giver/', views.giver, name='giver'),
+
 ]
 

@@ -21,3 +21,9 @@ def select_prefer(request):
 
 def role_selection(reqest):
     return render(reqest, "myweb/role_selection.html")
+
+def reciver(reqest):
+    return render(reqest, "myweb/reciver.html")
+
+def giver(reqest):
+    return render(reqest, "myweb/giver.html")
