@@ -3,66 +3,45 @@
 {% load static %}
 
 {% block title %}
-DormExchange
+Home
 {% endblock %}
 
 {% block background_style %}
-background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),url('https://www.goodmove-th.com/images/editor/Blog/blog_6_1.jpeg'); 
+background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://www.goodmove-th.com/images/editor/Blog/blog_6_1.jpeg'); 
 background-size: cover;
 background-repeat: no-repeat;
 {% endblock %}
 
-{% block content %}
-<style>
- .custom-margin {
-    margin-left: 700px;
-    } 
- .custom-ln{
-    margin-bottom: 100px;
-    margin-left: 50px;
- }
- .marginD {
-    margin-left: 125px;
-    } 
-</style>
-    <body>
-        <header>
-            <div class="px-3 py-2 border-bottom mb-3">
-                <div class="container d-flex flex-wrap justify-content-center">
-                  <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
-                     <h1 class="d-inline-flex text-decoration-none" style="color: white;">DormExchange</h1>
-                  </form>
-          
-                  <div class="text-end">
-                    <a href="{% url 'login'%}">
-                        <button type="button" class="btn btn-light text-dark  ms-5 mt-2">Login</button>
-                    </a>
-                  </div>
-                </div>
-              </div>                           
-        </header>
+{% block styles %}
 
-        <div class="container d-flex justify-content-end align-items-center vh-100">
-            <div class="user-box text-last">
-                <h1 class="text-uppercase marginD" style="color: white; font-size: 90px;">ยินดีต้อนรับสู่</h1>
-                <h1 class="word" style="color: rgb(0, 0, 201); font-size: 90px">Dorm<span style="color: #f39c12;">Exchange</span></h1>
-                <p class="word" style="color: white; font-size: 50px">คุณเคยเจอปัญหา.....</p>
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+{% endblock %}
+
+{% block content %}
+    <div class="vh-100">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center">
+            <div class="col-12 col-md-6 col-lg-8">
+                <h1 class="d-inline-flex text-decoration-none text-white dormexchange-title">DormExchange</h1>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 text-end mt-2 mt-md-0">
+                <a href="{% url 'login' %}">
+                    <button type="button" class="btn btn-light text-dark btn-login">Login</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="container d-flex flex-column justify-content-end align-items-end text-end">
+            <div class="col-12 col-md-8 col-lg-6">
+                <h1 class="text-uppercase mb-3 text-white welcome-heading">ยินดีต้อนรับสู่</h1>
+                <h1 class="word text-primary welcome-heading">Dorm<span class="text-warning">Exchange</span></h1>
+                <p class="text-white welcome-text">คุณเคยเจอปัญหา.....</p>
             </div>
             
+            <div class="col-12 col-md-4 col-lg-3 mt-4 d-flex justify-content-end">
+                <a href="#"><button class="btn btn-primary rounded-pill px-4 py-2 btn-learn-more"><b>Learn more</b></button></a>
+            </div>
         </div>
+    </div>
 
-        <div class="text-start custom-ln">
-            <a href="#"><button class="learnbtm btn btn-primary rounded-pill"><b>Learn more</b></button></a>
-            
-        </div>
-        
-    
-    </body>
 {% endblock %}
-<!--
-Link
-<a href="login/">go register</a>
--->
-
-
-
