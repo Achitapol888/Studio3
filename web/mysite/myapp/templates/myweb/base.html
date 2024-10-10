@@ -15,11 +15,40 @@
     
     <!-- Block for additional CSS files -->
     {% block styles %}
-    
+    <style>
+        .navbar-brand {
+            margin: 0 auto; /* Center the logo */
+        }
+        .navbar {
+            justify-content: center; /* Center the entire navbar */
+        }
+    </style>
     {% endblock %}
 </head>
 
 <body style="{% block background_style %}background: rgba(128, 128, 128, 0.5);{% endblock %}">
+ <!-- Navbar -->
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-body-tertiary">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#" id="navbarToggle">
+            <img src="{% static 'images/test.png' %}" height="30" alt="Logo" loading="lazy" />
+        </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="#">About us</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Help</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+            </ul>
+            <!-- Right-aligned button -->
+            <a href="{% url 'login' %}" class="btn btn-primary btn-block btn-lg gradient-custom-4 text-white">เข้าสู่ระบบ</a>
+        </div>
+    </div>
+</nav>
+
+
     <div class="container">
         {% block content %}
         {% endblock %}

@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-Home
+หน้าหลัก
 {% endblock %}
 
 {% block background_style %}
@@ -20,18 +20,7 @@ background-repeat: no-repeat;
 
 {% block content %}
     <div class="vh-100">
-        <div class="container d-flex flex-wrap justify-content-between align-items-center">
-            <div class="col-12 col-md-6 col-lg-8">
-                <h1 class="d-inline-flex text-decoration-none text-white dormexchange-title">DormExchange</h1>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 text-end mt-2 mt-md-0">
-                <a href="{% url 'login' %}">
-                    <button type="button" class="btn btn-light text-dark btn-login">Login</button>
-                </a>
-            </div>
-        </div>
-
-        <div class="container d-flex flex-column justify-content-end align-items-end text-end">
+        <div class="container d-flex flex-column justify-content-end align-items-end text-end mt-5">
             <div class="col-12 col-md-8 col-lg-6">
                 <h1 class="text-uppercase mb-3 text-white welcome-heading">ยินดีต้อนรับสู่</h1>
                 <h1 class="word text-primary welcome-heading">Dorm<span class="text-warning">Exchange</span></h1>
