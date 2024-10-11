@@ -34,6 +34,8 @@ class Post(models.Model):
     post_time = models.TimeField()
     dorm = models.ForeignKey(Dorm, on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)  # New field
+
 
 class Chat(models.Model):
     chat_ID = models.AutoField(primary_key=True)

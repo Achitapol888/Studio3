@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from myapp import views
+from django.conf.urls.i18n import i18n_patterns
+
+
 
 urlpatterns = [
     path('base/', views.base, name = 'base'),
@@ -28,6 +31,5 @@ urlpatterns = [
     path('role-selection/', views.role_selection, name='role-selection'),
     path('reciver/', views.reciver, name='reciver'),
     path('giver/', views.giver, name='giver'),
-
+    path('profile/', views.profile, name= 'profile'),
 ]
-

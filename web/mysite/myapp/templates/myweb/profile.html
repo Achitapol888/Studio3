@@ -1,0 +1,121 @@
+{% extends 'myweb/base2.html' %}
+
+{% load static %}
+
+{% block title %}
+โปรไฟล์
+{% endblock %}
+
+{% block background_style %}
+background-color: rgba(0, 0, 0);
+{% endblock %}
+
+{% block styles %}
+<!-- Add more CSS files here -->
+<link rel="stylesheet" href="{% static 'css/role_selection.css' %}">
+{% endblock %}
+
+{% block content %}      
+    <div class="container my-4">
+        <div class="bg-light rounded-5 shadow-sm p-4">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img src="{% static 'images/icon_accout.png' %}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                            <h5 class="my-3">อิอิ ไม่บอก</h5>
+                            <div class="d-flex justify-content-center mb-2">
+                                <a href="" class="btn btn-outline-primary ms-1">แก้ไขโปรไฟล์</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <p class="mb-0">ชื่อ</p>
+                                </div>
+                                <div class="col-sm-8">
+                                    <p class="text-muted mb-0">อิอิ</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <p class="mb-0">นามสกุล</p>
+                                </div>
+                                <div class="col-sm-8">
+                                    <p class="text-muted mb-0">ไม่บอก
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <p class="mb-0">อีเมล</p>
+                                </div>
+                                <div class="col-sm-8">
+                                    <p class="text-muted mb-0">xxx@kkumail.com</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <p class="mb-0">เบอร์โทรศัพท์</p>
+                                </div>
+                                <div class="col-sm-8">
+                                    <p class="text-muted mb-0">xxxxxxx</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <p class="mb-0">หอพักของคุณ</p>
+                                </div>
+                                <div class="col-sm-8">
+                                    <p class="text-muted mb-0">หอไรอ่ะ</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center col-12">
+                <div class="mb-4">
+                    <h5>เลือกบทบาทของคุณ</h5>
+                </div>
+                
+                <div class="row justify-content-center">
+                    <!-- Giver -->
+                    <div class="col-lg-5 col-md-6 col-sm-8 mb-3">
+                        <figure class="d-block h-100" data-url="{% url 'giver' %}" onclick="selectRole(this)">
+                            <img class="img-fluid img-thumbnail large-image" src="{% static 'images/sofa.png' %}" alt="Giver">
+                            <figcaption class="text-dark text-center fs-5 mt-3">ผู้ให้</figcaption>
+                        </figure>
+                    </div>
+
+                    <!-- Receiver -->
+                    <div class="col-lg-5 col-md-6 col-sm-8 mb-3">
+                        <figure class="d-block h-100" data-url="{% url 'reciver' %}" onclick="selectRole(this)">
+                            <img class="img-fluid img-thumbnail large-image" src="{% static 'images/sofa.png' %}" alt="Receiver">
+                            <figcaption class="text-dark text-center fs-5 mt-3">ผู้รับ</figcaption>
+                        </figure>
+                    </div>
+                </div>
+
+                <!-- Button -->
+                <div class="text-center">
+                    <a href="" id="nextButton" class="btn btn-primary btn-lg disabled mb-2 mt-1 fs-4" onclick="handleNextButtonClick(event)">เริ่มต้นกระบวนการ</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+<!-- Add any JavaScript files or scripts here -->
+<script src="{% static 'js/role_selection.js' %}"></script>
+{% endblock %}

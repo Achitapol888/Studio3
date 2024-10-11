@@ -56,7 +56,12 @@ background-color: rgba(128, 128, 128, 0.5);
 
                                 <div data-mdb-input-init class="form-outline mb-4">                    
                                     <label class="form-label" for="form3Example3cg">อีเมล</label>
-                                    <input type="password" id="form3Example3cg" class="form-control form-control-lg" />
+                                    <input type="email" id="form3Example3cg" class="form-control form-control-lg" />
+                                </div>
+
+                                <div data-mdb-input-init class="form-outline mb-4">                    
+                                    <label class="form-label" for="form3Example3cg">เบอร์โทร</label>
+                                    <input type="tel" id="form3Example3cg" class="form-control form-control-lg" />
                                 </div>
 
                                 <div data-mdb-input-init class="form-outline mb-4">                    
@@ -64,7 +69,11 @@ background-color: rgba(128, 128, 128, 0.5);
                                     <input type="password" id="form3Example3cg" class="form-control form-control-lg" />
                                 </div>
 
-                                <a href="{% url 'select-prefer' %}" class="btn btn-primary btn-block btn-lg gradient-custom-4 text-white" data-mdb-button-init data-mdb-ripple-init>ต่อไป</a>
+                                <div class = "text-end">
+                                    <a href="{% url 'select-prefer' %}" class="btn btn-primary btn-block 
+                                    btn-lg gradient-custom-4 text-white">ต่อไป</a>
+                                </div>
+                                
 
                             </form>
                         </div>
