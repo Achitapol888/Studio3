@@ -1,4 +1,4 @@
-{% extends 'myweb/base.html' %}
+{% extends 'myweb/base2.html' %}
 
 {% load static %} 
 
@@ -10,64 +10,137 @@
 background-color: rgba(0, 0, 0);
 {% endblock %}
 
+{% block styles %}
+<style>
+    .clicked {
+        opacity: 0.5;
+        transition: opacity 0.7s ease-in;
+    }
+
+    .unclicked {
+        opacity: 1;
+        transition: opacity 0.7s ease-out;
+    }
+
+    .active {
+        opacity: 1;
+        transition: opacity 0.8s ease-in;
+    }
+
+    .disabled {
+        opacity: 0.5;
+        transition: opacity 0.8s ease-in;
+    } 
+</style>
+{% endblock %}
+
 {% block content %}
 
-    <h1 class="fw-light text-center text-light mt-4 mb-0">เลือกประเภทสิ่งของที่คุณสนใจ</h1>
+<h1 class="fw-light text-center text-light mt-4 mb-0">เลือกประเภทสิ่งของที่คุณสนใจ</h1>
 
-    <hr class="mt-1 mb-3">
+<h1 class="fw-light text-center text-light mt-0 mb-0">(สูงสุด 3 ประเภท)</h1>
 
-    <!-- First row (3 columns) -->
-    <div class="row text-center text-lg-start">
-        <div class="col-lg-4 col-md-4 col-12">
-            <figure class="d-block mb-4 h-100">
-                <img class="img-fluid img-thumbnail" src="{% static 'images/sofa.png' %}" alt="">
-                <figcaption class="text-light text-center">ข้อความที่ 1</figcaption>
-            </figure>
-        </div>
 
-        <div class="col-lg-4 col-md-4 col-12">
-            <figure class="d-block mb-4 h-100">
-                <img class="img-fluid img-thumbnail" src="{% static 'images/sofa.png' %}" alt="">
-                <figcaption class="text-light text-center">ข้อความที่ 2</figcaption>
-            </figure>
-        </div>
+<hr class="mt-1 mb-3">
 
-        <div class="col-lg-4 col-md-4 col-12">
-            <figure class="d-block mb-4 h-100">
-                <img class="img-fluid img-thumbnail" src="{% static 'images/sofa.png' %}" alt="">
-                <figcaption class="text-light text-center">ข้อความที่ 3</figcaption>
-            </figure>
-        </div>
+<!-- First row (3 columns) -->
+<div class="row text-center text-lg-start">
+    <div class="col-lg-4 col-md-4 col-12">
+        <figure class="d-block mb-4 h-100 unclicked" onclick="selectRole(this)" data-url="{% url 'login' %}">
+            <img class="img-fluid img-thumbnail" src="{% static 'images/sofa.png' %}" alt="">
+            <figcaption class="text-light text-center mt-2">เครื่องใช้ไฟฟ้า</figcaption>
+        </figure>
     </div>
 
-    <!-- Second row (3 columns) -->
-    <div class="row text-center text-lg-start">
-        <div class="col-lg-4 col-md-4 col-12">
-            <figure class="d-block mb-4 h-100">
-                <img class="img-fluid img-thumbnail" src="{% static 'images/sofa.png' %}" alt="">
-                <figcaption class="text-light text-center">ข้อความที่ 4</figcaption>
-            </figure>
-        </div>
-
-        <div class="col-lg-4 col-md-4 col-12">
-            <figure class="d-block mb-4 h-100">
-                <img class="img-fluid img-thumbnail" src="{% static 'images/sofa.png' %}" alt="">
-                <figcaption class="text-light text-center">ข้อความที่ 5</figcaption>
-            </figure>
-        </div>
-
-        <div class="col-lg-4 col-md-4 col-12">
-            <figure class="d-block mb-4 h-100">
-                <img class="img-fluid img-thumbnail" src="{% static 'images/sofa.png' %}" alt="">
-                <figcaption class="text-light text-center">ข้อความที่ 6</figcaption>
-            </figure>
-        </div>
+    <div class="col-lg-4 col-md-4 col-12">
+        <figure class="d-block mb-4 h-100 unclicked" onclick="selectRole(this)" data-url="{% url 'login' %}">
+            <img class="img-fluid img-thumbnail" src="{% static 'images/sofa.png' %}" alt="">
+            <figcaption class="text-light text-center mt-2">เสื้อผ้า</figcaption>
+        </figure>
     </div>
 
-    <!-- Button placed below content with margin -->
-    <div class="text-center mb-4">
-        <a href="{% url "login" %}" class="btn btn-primary fs-5">เสร็จสิ้น</a>
+    <div class="col-lg-4 col-md-4 col-12">
+        <figure class="d-block mb-4 h-100 unclicked" onclick="selectRole(this)" data-url="{% url 'login' %}">
+            <img class="img-fluid img-thumbnail" src="{% static 'images/sofa.png' %}" alt="">
+            <figcaption class="text-light text-center mt-2">อุปกรณ์เสริมสวย</figcaption>
+        </figure>
     </div>
-
 </div>
+
+<!-- Second row (3 columns) -->
+<div class="row text-center text-lg-start">
+    <div class="col-lg-4 col-md-4 col-12">
+        <figure class="d-block mb-4 h-100 unclicked" onclick="selectRole(this)" data-url="{% url 'login' %}">
+            <img class="img-fluid img-thumbnail" src="{% static 'images/sofa.png' %}" alt="">
+            <figcaption class="text-light text-center mt-2">หนังสือ</figcaption>
+        </figure>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-12">
+        <figure class="d-block mb-4 h-100 unclicked" onclick="selectRole(this)" data-url="{% url 'login' %}">
+            <img class="img-fluid img-thumbnail" src="{% static 'images/sofa.png' %}" alt="">
+            <figcaption class="text-light text-center mt-2">เครื่องครัว</figcaption>
+        </figure>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-12">
+        <figure class="d-block mb-4 h-100 unclicked" onclick="selectRole(this)" data-url="{% url 'login' %}">
+            <img class="img-fluid img-thumbnail" src="{% static 'images/sofa.png' %}" alt="">
+            <figcaption class="text-light text-center mt-2">อุปกรณ์สำหรับสัตว์เลี้ยง</figcaption>
+        </figure>
+    </div>
+</div>
+
+<!-- Button placed below content with margin -->
+<div class="text-center mb-4">
+    <a id="nextButton" href="" class="btn btn-primary fs-5 disabled">เสร็จสิ้น</a>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    function selectRole(figureElement) {
+        const button = document.getElementById('nextButton');
+    
+        // Get the URL of the clicked figure
+        const newUrl = figureElement.getAttribute('data-url');
+    
+        // Check if the clicked figure is already selected
+        const isAlreadyClicked = figureElement.classList.contains('clicked');
+    
+        // Get all selected figures
+        const selectedFigures = document.querySelectorAll('figure.clicked');
+        
+        // Check if the maximum number of selections (3) has been reached
+        if (!isAlreadyClicked && selectedFigures.length >= 3) {
+            alert('You can only select up to 3 categories.');
+            return;
+        }
+    
+        // Toggle the clicked and unclicked classes based on the figure's current state
+        if (isAlreadyClicked) {
+            figureElement.classList.remove('clicked');
+            figureElement.classList.add('unclicked');
+        } else {
+            figureElement.classList.remove('unclicked');
+            figureElement.classList.add('clicked');
+        }
+    
+        // Get updated list of selected figures after toggling
+        const updatedSelectedFigures = document.querySelectorAll('figure.clicked');
+    
+        // Enable or disable the button based on the number of selected figures
+        if (updatedSelectedFigures.length > 0) {
+            button.classList.remove("disabled");
+            button.classList.add("active");
+            button.href = newUrl;  // You might want to modify this if there's a dynamic URL behavior
+        } else {
+            button.classList.remove("active");
+            button.classList.add("disabled");
+            button.href = '';  // Reset the button URL if no selection
+        }
+    }
+    
+</script>
 {% endblock %}
