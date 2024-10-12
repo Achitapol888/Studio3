@@ -17,9 +17,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from myapp import views
-from django.conf.urls.i18n import i18n_patterns
-
-
 
 urlpatterns = [
     path('base/', views.base, name = 'base'),
@@ -33,7 +30,7 @@ urlpatterns = [
     path('giver/', views.giver, name='giver'),
     path('profile/', views.profile, name= 'profile'),
     path('review/', views.review, name= 'review'),
-    path('result/', views.result, name= 'result'),
+    path('result_for_receiver/', views.result_for_receiver, name= 'result_for_receiver'),
+    path('result_for_giver/', views.result_for_giver, name= 'result_for_giver'),
     path('verify/', views.verify, name= 'verify'),
-
 ]

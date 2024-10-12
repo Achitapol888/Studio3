@@ -117,7 +117,7 @@ background-color: rgba(0, 0, 0);
                                         <label for="location" class="mb-0">สถานที่ให้สิ่งของ</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" placeholder="กรุณาระบุอย่างละเอียด" required readonly>
+                                        <input type="text" class="form-control" placeholder="กรุณาระบุอย่างละเอียด" required>
                                     </div>
                                 </div>
                                 <hr>
@@ -139,7 +139,7 @@ background-color: rgba(0, 0, 0);
 
             <!-- process Button -->
             <div class="text-end">
-                <a href="#" id="nextButton" class="btn btn-primary btn-lg disabled mb-2 mt-1 fs-4" onclick="handleNextButtonClick(event)">เริ่มต้นกระบวนการ</a>
+                <a href="{% url "result_for_giver" %}" id="nextButton" class="btn btn-primary btn-lg disabled mb-2 mt-1 fs-4" onclick="handleNextButtonClick(event)">เริ่มต้นกระบวนการ</a>
             </div>
         </div>
     </div>
@@ -201,13 +201,17 @@ background-color: rgba(0, 0, 0);
 
     // Prevent default form submission on clicking the button
     document.getElementById('nextButton').addEventListener('click', function (event) {
-        event.preventDefault();
         const form = document.getElementById('giverForm');
         if (form.checkValidity()) {
-            // Here you can handle form submission, e.g., using AJAX or redirection
-            alert("Form submitted!"); // Placeholder for actual submission logic
+            // Form is valid, allow redirection
+            return true; // This will allow the default behavior, which is following the URL
+        } else {
+            // Prevent navigation if the form is invalid
+            event.preventDefault();
+            alert("Please complete the form before proceeding."); // Optionally show an alert
         }
     });
+    
 
     const dateInput = document.getElementById('date');
     const formattedDateDisplay = document.getElementById('formattedDate');

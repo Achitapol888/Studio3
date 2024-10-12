@@ -35,8 +35,11 @@ def giver(reqest):
 def review(request):
     return render(request, "myweb/review.html")
 
-def result(request):
-    return render(request, "myweb/result.html")
+def result_for_receiver(request):
+    return render(request, "myweb/result_for_receiver.html")
+
+def result_for_giver(request):
+    return render(request, "myweb/result_for_giver.html")
 
 def verify(request):
     return render(request, "myweb/verify.html")
