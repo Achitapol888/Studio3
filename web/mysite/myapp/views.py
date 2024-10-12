@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
-from django.utils import translation
 from django.shortcuts import redirect
 
 def placeholder_view(request):
@@ -33,9 +32,11 @@ def reciver(reqest):
 def giver(reqest):
     return render(reqest, "myweb/giver.html")
 
-def set_language(request):
-    language = request.GET.get('language', None)
-    if language:
-        translation.activate(language)
-        request.session['django_language'] = language 
-    return redirect(request.META.get('HTTP_REFERER', '/'))
+def review(request):
+    return render(request, "myweb/review.html")
+
+def result(request):
+    return render(request, "myweb/result.html")
+
+def verify(request):
+    return render(request, "myweb/verify.html")

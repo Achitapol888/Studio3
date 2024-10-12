@@ -7,32 +7,62 @@
 {% endblock %}
 
 {% block background_style %}
-background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://www.goodmove-th.com/images/editor/Blog/blog_6_1.jpeg'); 
+background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('https://www.goodmove-th.com/images/editor/Blog/blog_6_1.jpeg'); 
 background-size: cover;
 background-repeat: no-repeat;
+
 {% endblock %}
 
 {% block styles %}
 
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/new_home.css' %}">
 
 {% endblock %}
 
 {% block content %}
-    <div class="vh-100">
-        <div class="container d-flex flex-column justify-content-end align-items-end text-end mt-5">
-            <div class="col-12 col-md-8 col-lg-6">
-                <h1 class="text-uppercase mb-3 text-white welcome-heading">ยินดีต้อนรับสู่</h1>
-                <h1 class="word text-primary welcome-heading">Dorm<span class="text-warning">Exchange</span></h1>
-                <p class="text-white welcome-text fs-5">คุณต้องการบริจาคสิ่งของหรือรับสิ่งของ แต่ยังไม่มีช่องทาง? ใช้แพลตฟอร์ม <span>Dorm</span><span>Exchange</span> สิ
-                    ร่วมแบ่งปันสิ่งของที่ไม่ใช้แล้วให้กับเพื่อนๆ ในหอพักเดียวกันหรือหอพักอื่นได้ง่ายๆ ไม่ว่าจะเป็นหนังสือ เสื้อผ้า หรือเครื่องใช้ไฟฟ้า ทั้งหมดนี้ฟรีไม่มีค่าใช้จ่าย ช่วยลดการสูญเปล่าและสร้างความสุขให้กับคนที่ต้องการ รับ-ให้ได้อย่างสะดวก รวดเร็ว และปลอดภัย
-                    <p>
+<div class="vh-100">
+    <div class="container d-flex flex-column justify-content-end align-items-end text-end mt-5">
+        
+        <!-- Row 1: Heading -->
+        <div class="col-12 mb-2">
+            <h1 class="text-uppercase display-1 text-white welcome-heading"><span class="left">ยินดีต้อน</span><span class="right">รับสู่</span></h1>
+        </div>
+
+        <!-- Row 2: Image -->
+        <div class="col-12">
+            <img src="{% static 'images/logo.png' %}" alt="logo" class="bg-white logo-image img-fluid img-thumbnail custom-thumbnail">
+        </div>
+        
+
+        <!-- Row 3: Greeting text -->
+        <div class="col-12 col-md-8 col-lg-6 mb-3 mt-4 text-white welcome-text fs-5">
+            <p> คุณต้องการบริจาคสิ่งของหรือรับสิ่งของ แต่ยังไม่มีช่องทาง?
+                ใช้แพลตฟอร์ม <b><span class="left">Dorm</span><span class="right">Exchange</span></b> สิ ร่วมแบ่งปันสิ่งของที่ไม่ใช้แล้วให้กับเพื่อนๆ
+                ในหอพักเดียวกันหรือหอพักอื่นได้ง่ายๆ ไม่ว่าจะเป็นหนังสือ เสื้อผ้า หรือเครื่องใช้ไฟฟ้า 
+                ทั้งหมดนี้ฟรีไม่มีค่าใช้จ่าย ช่วยลดการสูญเปล่าและสร้างความสุขให้กับคนที่ต้องการ 
+                รับ-ให้ได้อย่างสะดวก รวดเร็ว และปลอดภัย
+            </p>
+        </div>
+        
+        <!-- Button -->
+        <div class="col-12 col-md-4 col-lg-3 mt-2 d-flex justify-content-end">
+            <div class="me-4 col-6">
+                <a href="{% url 'register' %}">
+                    <button class="btn btn-primary rounded-pill btn-learn-more"><b>สมัครใช้งานเลย</b></button>
+                </a>
             </div>
-            
-            <div class="col-12 col-md-4 col-lg-3 mt-4 d-flex justify-content-end">
-                <a href="{% url "register" %}"><button class="btn btn-primary rounded-pill px-4 py-2 btn-learn-more"><b>ลงทะเบียนเลย</b></button></a>
+            <div class="col-6">
+                <a href="{% url 'login' %}">
+                    <button class="btn btn-secondary rounded-pill btn-learn-more"><b>ฉันมีบัญชีอยู่เเล้ว</b></button>
+                </a>
             </div>
         </div>
+        
+        
+
     </div>
+</div>
+
+
 
 {% endblock %}

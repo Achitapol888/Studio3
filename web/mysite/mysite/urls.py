@@ -32,4 +32,8 @@ urlpatterns = [
     path('reciver/', views.reciver, name='reciver'),
     path('giver/', views.giver, name='giver'),
     path('profile/', views.profile, name= 'profile'),
+    path('review/', views.review, name= 'review'),
+    path('result/', views.result, name= 'result'),
+    path('verify/', views.verify, name= 'verify'),
+
 ]

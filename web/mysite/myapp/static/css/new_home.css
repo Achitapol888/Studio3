@@ -1,0 +1,25 @@
+.logo-image {
+    margin: 10px;
+    width: 500px;
+    padding-left: 25px;
+    padding-right: 25px;
+
+}
+
+.custom-thumbnail {
+    border-radius: 20px;
+}
+
+.right {
+    color: #fe8564;
+}
+
+.left {
+    color: #7093ea;
+}
+
+p.welcome-text {
+    line-height: 1.4;
+    
+}
+

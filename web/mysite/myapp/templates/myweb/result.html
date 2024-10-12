@@ -1,0 +1,123 @@
+{% extends 'myweb/base2.html' %}
+
+{% load static %}
+
+{% block title %}
+ผลลัพธ์
+{% endblock %}
+
+{% block background_style %}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Left Card: User Profile -->
+        <div class="col-md-6 mb-5">
+            <div class="card">
+                <div class="card-header">
+                    <h5>ผู้ใช้ที่ตรงกัน</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-12 text-center">
+                            <img src="{% static 'images/user2.png' %}" alt="Item Image" class="img-fluid rounded-circle"> <!-- Image -->
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-sm-12 text-center"> <!-- Centered text -->
+                            <p class="text-muted mb-0">ปลา ส้มร้าย</p> <!-- Username -->
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-12 text-center"> <!-- Centered buttons -->
+                            <a href="#" class="btn btn-primary me-2">ติดต่อ</a> <!-- First Button -->
+                            <a href="#" class="btn btn-secondary">ดูโปรไฟล์</a> <!-- Second Button -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+
+        <!-- Right Card: Matched Item -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>รายการที่ตรงกัน</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-12 text-center">
+                            <img src="{% static 'images/fan.png' %}" alt="Item Image" class="img-fluid" style="max-width: 100%; height: auto;"> <!-- Replace with your image path -->
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0">ชื่อสิ่งของ:</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">พัดลม</p> <!-- Replace with actual data -->
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0">ประเภท:</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">เครื่องใช้ไฟฟ้า</p> <!-- Replace with actual data -->
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0">รายละเอียด:</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">สภาพดี ใช้งานได้ 100%</p> <!-- Replace with actual data -->
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0">ตำหนิ:</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">ไม่มี๊จริง ๆ</p> <!-- Replace with actual data -->
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0">สถานที่ให้สิ่งของ:</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">ข้าง ๆบ้านยายสปีด</p> <!-- Replace with actual data -->
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0">วันเวลา:</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">วันนั้นเเหละ</p> <!-- Replace with actual data -->
+                            <div id="formattedDate" class="mt-2 text-secondary"></div> <!-- Display formatted date -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-sm-12 text-center">
+                <a href="{% url "verify" %}" class="btn btn-success">ยืนยันการจับคู่</a> <!-- Confirm Match Button -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
