@@ -22,7 +22,19 @@ const language = {
         currentLanguage: {
             about: "About us",
             help: "Help",
-            contact: "Contact", 
+            contact: "Contact",
+            services: "Services",
+        },
+        header: {
+            title: "Welcome to Our Platform",
+            subtitle: "Your place for sharing and exchanging",
+        },
+        home: { // New section for home page
+            welcomePart1: "Welcome",
+            welcomePart2: "to",
+            greetingText: "Do you want to donate or receive items but have no way? Use the Dorm Exchange platform to share unwanted items with friends in the same dorm or other dorms easily. Whether it's books, clothes, or electronics, all for free. Help reduce waste and create happiness for those who want to give and receive conveniently, quickly, and safely.",
+            registerButton: "Sign Up Now",
+            loginButton: "I Already Have an Account",
         }
     },
     th: {
@@ -48,10 +60,23 @@ const language = {
         currentLanguage: {
             about: "เกี่ยวกับเรา",
             help: "ช่วยเหลือ",
-            contact: "ติดต่อ"
+            contact: "ติดต่อ",
+            services: "บริการ",
+        },
+        header: {
+            title: "ยินดีต้อนรับสู่แพลตฟอร์มของเรา",
+            subtitle: "สถานที่ของคุณสำหรับการแบ่งปันและแลกเปลี่ยน",
+        },
+        home: { // New section for home page
+            welcomePart1: "ยินดีต้อน",
+            welcomePart2: "รับสู่",
+            greetingText: "คุณต้องการบริจาคสิ่งของหรือรับสิ่งของ แต่ยังไม่มีช่องทาง? ใช้แพลตฟอร์ม Dorm Exchange สิ ร่วมแบ่งปันสิ่งของที่ไม่ใช้แล้วให้กับเพื่อนๆ ในหอพักเดียวกันหรือหอพักอื่นได้ง่ายๆ ไม่ว่าจะเป็นหนังสือ เสื้อผ้า หรือเครื่องใช้ไฟฟ้า ทั้งหมดนี้ฟรีไม่มีค่าใช้จ่าย ช่วยลดการสูญเปล่าและสร้างความสุขให้กับคนที่ต้องการ รับ-ให้ได้อย่างสะดวก รวดเร็ว และปลอดภัย",
+            registerButton: "สมัครใช้งานเลย",
+            loginButton: "ฉันมีบัญชีอยู่เเล้ว",
         }
     }
 };
+
 
 // Set the default language to Thai
 let currentLanguage = 'th';
@@ -93,19 +118,39 @@ function changeLanguage(lang) {
         contact: 'contactNav',
         services: 'servicesNav'
     };
+
+    // New section for header
+    const headerItems = {
+        title: 'headerTitle',
+        subtitle: 'headerSubtitle'
+    };
+
+    // New section for home
+    const homeItems = {
+        welcomePart1: 'welcomePart1',
+        welcomePart2: 'welcomePart2',
+        greetingText: 'greetingText',
+        registerButton: 'registerButton',
+        loginButton: 'loginButton',
+    };
+
+    // Update all text elements
+    for (const key in footerItems) {
+        document.getElementById(footerItems[key]).innerText = language[lang].footer[key];
+    }
     
-    // Update content dynamically
-    Object.keys(footerItems).forEach(key => {
-        const element = document.getElementById(footerItems[key]);
-        if (element) {
-            element.textContent = language[lang].footer[key];
-        }
-    });
-    
-    Object.keys(navbarItems).forEach(key => {
-        const element = document.getElementById(navbarItems[key]);
-        if (element) {
-            element.textContent = language[lang].currentLanguage[key];
-        }
-    });
+    for (const key in navbarItems) {
+        document.getElementById(navbarItems[key]).innerText = language[lang].currentLanguage[key];
+    }
+
+    // Update header elements
+    for (const key in headerItems) {
+        document.getElementById(headerItems[key]).innerText = language[lang].header[key];
+    }
+
+    // Update home elements
+    for (const key in homeItems) {
+        document.getElementById(homeItems[key]).innerText = language[lang].home[key];
+    }
 }
+
