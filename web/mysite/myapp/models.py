@@ -1,40 +1,40 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
-class Dorm(models.Model):
-    dorm_ID = models.AutoField(primary_key=True)
-    dorm_name = models.CharField(max_length=100)
 
 class UserProfile(models.Model):
+    user_ID = models.AutoField(primary_key=True)  # Auto-incrementing unique ID
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    username = models.CharField(max_length = 30, blank=True, null=True)
-    first_name = models.CharField(max_length = 30, blank=True, null=True)
-    surname = models.CharField(max_length = 30, blank=True, null=True)
-    nick_name = models.CharField(max_length = 30, blank=True, null=True)
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
-    prefer_items = models.TextField(default='[]')  # Store as JSON or comma-separated values
-    history = models.TextField(default='[]')  # Same as above
+    first_name = models.CharField(max_length=30, default='Anonymous')
+    surname = models.CharField(max_length=30, default='Anonymous')
+    phone_number = models.CharField(max_length=15, default='Anonymous')
     student_ID = models.CharField(max_length=15, unique=True)
     kku_mail = models.EmailField(max_length=100, unique=True)
-    dorm = models.ForeignKey(Dorm, on_delete=models.SET_NULL, null=True)
+    dorm = models.CharField(max_length=30, default='Anonymous')
 
-class Post(models.Model):
-    POST_TYPE_CHOICES = [
-        ('giver', 'Giver'),
-        ('receiver', 'Receiver'),
-    ]
+    def __str__(self):
+        return f"{self.first_name} {self.surname}"
+
+
+
+
+
+
+"""class Post(models.Model):
+    POST_TYPE_CHOICES = [('giver', 'Giver'), ('receiver', 'Receiver')]
     post_ID = models.AutoField(primary_key=True)
     post_type = models.CharField(max_length=10, choices=POST_TYPE_CHOICES)
     item_type = models.CharField(max_length=100)
     item_name = models.CharField(max_length=100)
     photo_image = models.ImageField(upload_to='images/')
-    detail = models.CharField(max_length=300)
+    detail = models.TextField()  # Using TextField for longer details
     quantity = models.IntegerField()
-    flaw = models.CharField(max_length=300)
+    flaw = models.TextField()  # Changed to TextField for flexibility
     date_limit = models.DateTimeField()
-    post_time = models.TimeField()
+    post_time = models.DateTimeField(auto_now_add=True)  # Using DateTime for timestamp
     dorm = models.ForeignKey(Dorm, on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    is_active = models.BooleanField(default=True)  # New field
+    is_active = models.BooleanField(default=True)
 
 
 class Chat(models.Model):
@@ -57,4 +57,4 @@ class Review(models.Model):
     content = models.TextField()
     verify = models.ForeignKey(Verify, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)"""

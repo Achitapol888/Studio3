@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from django.shortcuts import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect, HttpResponse
+from django.contrib.auth.models import User
+from .forms import UserProfile
+
+
 
 def placeholder_view(request):
     return HttpResponse("This is a placeholder for the home page.")
@@ -14,8 +16,30 @@ def home(request):
 def login(request):
     return render(request, "myweb/login.html")
 
+
 def register(request):
-    return render(request, "myweb/register.html")
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        surname = request.POST['surname']
+        student_ID = request.POST['student_ID']
+        dorm = request.POST['dorm']
+        kku_mail = request.POST['kku_mail']
+        phone_number = request.POST['phone_number']
+        password = request.POST['password']
+
+        user = User.objects.create_user(username=kku_mail, email=kku_mail, password=password)
+        UserProfile.objects.create(
+            user=user,
+            first_name=first_name,
+            surname=surname,
+            student_ID=student_ID,
+            dorm=dorm,
+            phone_number=phone_number
+        )
+
+        return redirect('success')  # Redirect to a success page
+    return render(request, 'myweb/register.html')
+
 
 def select_prefer(request):
     return render(request, "myweb/select_prefer.html")
