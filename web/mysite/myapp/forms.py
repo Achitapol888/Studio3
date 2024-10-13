@@ -1,13 +1,13 @@
-from django import forms
+"""from django import forms
 from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import Profile
 
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label='รหัสผ่าน')
     confirm_password = forms.CharField(widget=forms.PasswordInput, label='ป้อนรหัสผ่านอีกครั้ง')
 
     class Meta:
-        model = UserProfile
+        model = Profile
         fields = ['first_name', 'surname', 'phone_number', 'kku_mail', 'student_ID', 'dorm']
     
     def clean(self):
@@ -30,3 +30,4 @@ class UserRegistrationForm(forms.ModelForm):
             user_profile.save()
         return user_profile
 
+"""

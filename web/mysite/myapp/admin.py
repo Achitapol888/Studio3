@@ -1,4 +1,4 @@
-from django.contrib import admin
+"""from django.contrib import admin
 from .models import UserProfile
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -9,4 +9,4 @@ class UserProfileAdmin(admin.ModelAdmin):
         return super().get_queryset(request)
 
 admin.site.register(UserProfile, UserProfileAdmin)
-
+"""

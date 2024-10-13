@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.models import User
-from .forms import UserProfile
+#from .forms import UserProfile
 
 
 
@@ -17,7 +17,7 @@ def login(request):
     return render(request, "myweb/login.html")
 
 
-def register(request):
+"""def register(request):
     if request.method == 'POST':
         first_name = request.POST['first_name']
         surname = request.POST['surname']
@@ -38,7 +38,7 @@ def register(request):
         )
 
         return redirect('success')  # Redirect to a success page
-    return render(request, 'myweb/register.html')
+    return render(request, 'myweb/register.html')"""
 
 
 def select_prefer(request):
