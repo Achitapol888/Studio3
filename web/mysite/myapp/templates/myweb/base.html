@@ -46,13 +46,14 @@
     </div>
 </nav>
 
+
+
 <div class="container">
     {% block content %}
     
     {% endblock %}
 </div>
 
-<<<<<<< HEAD
 
 <footer class="bg-light text-center text-lg-start mt-5">
     <div class="container p-4">
@@ -92,72 +93,11 @@
 </footer>
 
 
-=======
->>>>>>> parent of d3ad714 (Normal)
 <!-- Include Bootstrap's JS bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-<!-- Language switching script -->
-<script>
-    const language = {
-        eng: {
-            about: "About us",
-            help: "Help",
-            contact: "Contact"
-        },
-        th: {
-            about: "เกี่ยวกับเรา",
-            help: "ช่วยเหลือ",
-            contact: "ติดต่อ"
-        }
-    };
 
-    // Set the default language to Thai
-    let currentLanguage = 'th';
-
-    // Update language immediately on page load
-    changeLanguage(currentLanguage);
-
-    function toggleLanguage() {
-        const switchElement = document.getElementById('languageSwitch');
-        currentLanguage = switchElement.checked ? 'th' : 'eng';
-        updateLanguageDisplay();
-        changeLanguage(currentLanguage);
-    }
-
-    function changeLanguage(lang) {
-        const aboutUsLink = document.getElementById('aboutUsLink');
-        const helpLink = document.getElementById('helpLink');
-        const contactLink = document.getElementById('contactLink');
-
-        aboutUsLink.textContent = language[lang].about;
-        helpLink.textContent = language[lang].help;
-        contactLink.textContent = language[lang].contact;
-
-        // Update language display
-        updateLanguageDisplay();
-    }
-
-    function updateLanguageDisplay() {
-        const langTH = document.getElementById('langTH');
-        const langENG = document.getElementById('langENG');
-
-        if (currentLanguage === 'th') {
-            langTH.classList.add('text-primary');
-            langTH.classList.remove('text-secondary');
-            langENG.classList.add('text-secondary');
-            langENG.classList.remove('text-primary');
-        } else {
-            langTH.classList.add('text-secondary');
-            langTH.classList.remove('text-primary');
-            langENG.classList.add('text-primary');
-            langENG.classList.remove('text-secondary');
-        }
-    }
-</script>
-
-<!-- Block for additional scripts -->
 {% block script %}
 {% endblock %}
 </body>

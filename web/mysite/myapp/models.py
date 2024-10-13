@@ -1,7 +1,9 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 
-class Profile(models.Model):
+class UserProfile(models.Model):
+    user_ID = models.AutoField(primary_key=True)  # Auto-incrementing unique ID
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30, default='Anonymous')
     surname = models.CharField(max_length=30, default='Anonymous')
