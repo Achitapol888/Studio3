@@ -1,25 +1,18 @@
-import uuid
 from django.db import models
 from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=30, default='Anonymous')
-    surname = models.CharField(max_length=30, default='Anonymous')
-    phone_number = models.CharField(max_length=15, default='Anonymous')
-    student_ID = models.CharField(max_length=15, unique=True, primary_key=True)
-    kku_mail = models.EmailField(max_length=100, unique=True)
-    dorm = models.CharField(max_length=30, default='Anonymous')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    dorm = models.CharField(max_length=100)
+    phone_number = models.IntegerField()
+    student_ID = models.IntegerField()
 
     def __str__(self):
-        return f"{self.first_name} {self.surname}"
+        return self.user.username
 
 
-
-
-
-
-"""class Post(models.Model):
+"""
+class Post(models.Model):
     POST_TYPE_CHOICES = [('giver', 'Giver'), ('receiver', 'Receiver')]
     post_ID = models.AutoField(primary_key=True)
     post_type = models.CharField(max_length=10, choices=POST_TYPE_CHOICES)
@@ -56,4 +49,5 @@ class Review(models.Model):
     content = models.TextField()
     verify = models.ForeignKey(Verify, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)"""
+    updated_at = models.DateTimeField(auto_now=True)
+"""

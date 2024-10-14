@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.models import User
-from .forms import UserProfile
-
+from .forms import SignUpForm
+from .models import UserProfile
 
 
 def placeholder_view(request):
@@ -17,29 +17,22 @@ def login(request):
     return render(request, "myweb/login.html")
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from .forms import SignUpForm
+
 def register(request):
     if request.method == 'POST':
-        first_name = request.POST['first_name']
-        surname = request.POST['surname']
-        student_ID = request.POST['student_ID']
-        dorm = request.POST['dorm']
-        kku_mail = request.POST['kku_mail']
-        phone_number = request.POST['phone_number']
-        password = request.POST['password']
-
-        user = User.objects.create_user(username=kku_mail, email=kku_mail, password=password)
-        UserProfile.objects.create(
-            user=user,
-            first_name=first_name,
-            surname=surname,
-            student_ID=student_ID,
-            dorm=dorm,
-            phone_number=phone_number
-        )
-
-        return redirect('success')  # Redirect to a success page
-    return render(request, 'myweb/register.html')
-
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            print("User created:", user)  # Debugging line
+            return redirect('home')
+        else:
+            print(form.errors)  # Check if form validation errors are happening
+    else:
+        form = SignUpForm()
+    return render(request, 'myweb/register.html', {'form': form})
 
 def select_prefer(request):
     return render(request, "myweb/select_prefer.html")

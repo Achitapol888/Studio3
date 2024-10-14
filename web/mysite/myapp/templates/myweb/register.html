@@ -19,62 +19,22 @@ background-size: cover;
                         <div class="text-center mb-4">
                             <img src="{% static 'images/icon_accout.png' %}" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
                         </div>
-                        <form method="POST" onsubmit="return validateForm();">
+                        <form method="POST">
                             {% csrf_token %}
-                        
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="first_name">ชื่อ</label>
-                                <input type="text" name="first_name" id="first_name" class="form-control form-control-lg" required />
-                            </div>
-                        
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="surname">นามสกุล</label>
-                                <input type="text" name="surname" id="surname" class="form-control form-control-lg" required />
-                            </div>
-
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="student_id">รหัสนักศึกษา</label>
-                                <input type="text" name="student_ID" id="student_id" class="form-control form-control-lg" required />
-                            </div>
-                        
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="dorm">หอพัก</label>
-                                <input type="text" name="dorm" id="dorm" class="form-control form-control-lg" required />
-                            </div>
-                        
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="kku_mail">KKU mail ของคุณ</label>
-                                <input type="email" name="kku_mail" id="kku_mail" class="form-control form-control-lg" required />
-                            </div>
-                        
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="phone_number">เบอร์โทร</label>
-                                <input type="tel" name="phone_number" id="phone_number" class="form-control form-control-lg" required />
-                            </div>
-                        
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="password">รหัสผ่าน</label>
-                                <input type="password" name="password" id="password" class="form-control form-control-lg" required />
-                            </div>
-                        
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="confirm_password">ป้อนรหัสผ่านอีกครั้ง</label>
-                                <input type="password" name="confirm_password" id="confirm_password" class="form-control form-control-lg" required />
-                            </div>
-                        
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-primary btn-block btn-lg gradient-custom-4 text-white">ต่อไป</button>
-                            </div>
-                        </form>
+                            {{ form.as_p }}
+                            {% if form.errors %}
+                                <div class="errors">
+                                    {{ form.errors }}
+                                </div>
+                            {% endif %}
+                            <button type="submit">Register</button>
+                        </form>         
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-
 {% endblock %}
 
 {% block script %}
@@ -106,6 +66,5 @@ background-size: cover;
     function validateForm() {
         return validateEmail() && validatePassword();
     }
-    </script>
-
+</script>
 {% endblock %}
