@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from .forms import SignUpForm
 from .models import UserProfile
 from django.contrib.auth.views import LoginView
+from django.contrib import messages
+
 
 class CustomLoginView(LoginView):
     template_name = 'myweb/login.html'
@@ -24,12 +26,15 @@ def register(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            print("User created:", user)  # Debugging line
+            messages.success(request, "Registration successful! You can now log in.")
+            print("User created:", user) 
             return redirect('login')
         else:
-            print(form.errors)  # Check if form validation errors are happening
+            messages.error(request, "Please correct the errors below.")
+            print(form.errors)
     else:
         form = SignUpForm()
+
     return render(request, 'myweb/register.html', {'form': form})
 
 def select_prefer(request):

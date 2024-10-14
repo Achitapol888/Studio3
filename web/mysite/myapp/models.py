@@ -2,10 +2,20 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
+    USER_PREFERENCES = [
+        ('เครื่องใช้ไฟฟ้า', 'เครื่องใช้ไฟฟ้า (Electronics)'),
+        ('เสื้อผ้า', 'เสื้อผ้า (Clothing)'),
+        ('อุปกรณ์เสริมสวย', 'อุปกรณ์เสริมสวย (Beauty accessories)'),
+        ('หนังสือ', 'หนังสือ (Books)'),
+        ('เครื่องครัว', 'เครื่องครัว (Kitchenware)'),
+        ('อุปกรณ์สำหรับสัตว์เลี้ยง', 'อุปกรณ์สำหรับสัตว์เลี้ยง (Pet care supplies)'),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     dorm = models.CharField(max_length=100)
     phone_number = models.IntegerField()
     student_ID = models.IntegerField()
+    preferences = models.JSONField(null=True, default=list) 
 
     def __str__(self):
         return self.user.username
