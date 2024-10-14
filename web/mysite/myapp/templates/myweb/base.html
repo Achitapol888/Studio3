@@ -18,6 +18,27 @@
     
     {% endblock %}
     <style>
+
+        .form-check-input:checked {
+            background-color: #383838; /* Change to your desired color */
+            border-color: #383838; /* Match the border color to the background */
+        }
+    
+        /* Change the color of the slider thumb */
+        .form-check-input:checked:focus {
+            box-shadow: 0 0 0 0.2rem rgba(140, 140, 140, 0.5); /* Change shadow color to match */
+        }
+    
+        /* Styling for the switch when unchecked */
+        .form-check-input {
+            background-color: ##ffffff; /* Background color when unchecked */
+            border-color: ##ffffff; /* Border color when unchecked */
+        }
+    
+        .form-check-input:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.5); /* Focus shadow for the unchecked state */
+        }
+
         /* Additional styles for dark mode */
         .text-light a {
             color: rgba(255, 255, 255, 0.8);
@@ -45,17 +66,18 @@
         </a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" id="aboutUsLink" href="#">About us</a></li>
-                <li class="nav-item"><a class="nav-link" id="helpLink" href="#">Help</a></li>
-                <li class="nav-item"><a class="nav-link" id="contactLink" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" id="aboutUsLink" href="#">เกี่ยวกับเรา</a></li>
+                <li class="nav-item"><a class="nav-link" id="helpLink" href="#">ความช่วยเหลือ</a></li>
+                <li class="nav-item"><a class="nav-link" id="contactLink" href="#">ติดต่อ</a></li>
             </ul>
-            <div class="d-flex align-items-center">
-                <span id = "light_span" class="me-2">Light</span>
+            <div class="d-flex align-items-center bg-black rounded-pill p-2">
+                <span id="light_span" class="me-2 text-warning"><b>Light</b></span>
                 <div class="form-check form-switch mx-2">
-                    <input class="form-check-input" type="checkbox" id="themeSwitch" onchange="toggleTheme()" aria-label="Toggle dark/light mode">
+                    <input class="form-check-input" type="checkbox" id="themeSwitch" onchange="toggleTheme()" aria-label="Toggle dark/light mode" data-bs-toggle="tooltip" data-bs-placement="top" title="Toggle Dark/Light Mode">
                 </div>
-                <span id = "dark_span" class="">Dark</span>
+                <span id="dark_span" class="text-secondary"><b>Dark</b></span>
             </div>
+            
         </div>
     </div>
 </nav>
@@ -66,7 +88,7 @@
     {% endblock %}
 </div>
 
-<footer class="bg-light text-center text-lg-start mt-5">
+<footer id="footer_bg" class="bg-light text-center text-lg-start mt-5">
     <div class="container p-4">
         <div class="row">
             <div class="col-md-4 mb-4">
@@ -108,55 +130,72 @@
 <script>
     function toggleTheme() {
         const body = document.body;
-        const isDark = body.classList.toggle('bg-dark');
+        
+        // Toggle body classes for dark mode
+        body.classList.toggle('bg-dark');
         body.classList.toggle('text-white');
-
+    
         const footer_below = document.getElementById('footer_below');
+        
+        // Ensure footer background toggles correctly
         footer_below.classList.toggle('bg-info');
-        footer_below.classList.toggle('bg-black');
-
+        footer_below.classList.toggle('bg-black');  // This line should ensure footer turns black
+    
+        // Ensure this ID exists in your HTML
         const profile_bg = document.getElementById('profile_bg');
         if (profile_bg) {
             profile_bg.classList.toggle('bg-black');
         }
-
-        // Toggle link colors
+    
+        // Toggle link colors for better readability
         const links = document.querySelectorAll('a');
         links.forEach(link => {
-            link.classList.toggle('text-white', isDark); // Change to white in dark mode
-            link.classList.toggle('text-dark', !isDark); // Change to dark in light mode
+            link.classList.toggle('text-white'); // Change to light color
+            link.classList.toggle('text-dark');  // Change to dark color
         });
-
+    
         const navbar = document.querySelector('.navbar');
-        navbar.classList.toggle('navbar-dark', isDark);
-        navbar.classList.toggle('bg-black', isDark);
-        navbar.classList.toggle('navbar-light', !isDark);
-        navbar.classList.toggle('bg-body-tertiary', !isDark);
-
+        // Toggle navbar classes
+        navbar.classList.toggle('navbar-dark');
+        navbar.classList.toggle('bg-black');
+        navbar.classList.toggle('navbar-light');
+        navbar.classList.toggle('bg-body-tertiary');
+    
+        // Toggle light span colors
         const light_span = document.getElementById("light_span");
-        light_span.classList.toggle('text-primary', !isDark);
-        light_span.classList.toggle('text-secondary', isDark);
-
+        if (light_span) {  // Added check to prevent errors
+            light_span.classList.toggle('text-warning');
+            light_span.classList.toggle('text-secondary');
+        }
+    
+        // Toggle dark span colors
         const dark_span = document.getElementById("dark_span");
-        dark_span.classList.toggle('text-secondary', !isDark);
-        dark_span.classList.toggle('text-primary', isDark);
+        if (dark_span) {  // Added check to prevent errors
+            dark_span.classList.toggle('text-secondary');
+            dark_span.classList.toggle('text-white');
+        }
+    
+        // Toggle footer styles - make sure this toggles correctly
+        const footer = document.getElementById("footer_bg")
+        footer.classList.toggle('bg-light');  // Ensure footer also changes to black if needed
+        footer.classList.toggle('bg-black');  // Ensure footer also changes to black if needed
 
-        const footer = document.querySelector('footer');
-        footer.classList.toggle('bg-black', isDark);
-        footer.classList.toggle('text-white', isDark);
-        
-        // Ensure this ID exists in your HTML if you're using it
+        // Ensure this ID exists in your HTML
         const profile_modal = document.getElementById('editProfileModalLabel');
         if (profile_modal) {
-            profile_modal.classList.toggle('text-back');
+            profile_modal.classList.toggle('text-back');  // Ensure correct color is toggled
         }
-
+    
         const profile_text = document.getElementById('profile_text');
         if (profile_text) {
-            profile_text.classList.toggle('text-white', isDark);
+            profile_text.classList.toggle('text-white');
         }
+    
     }
+    
+    
 </script>
+
 
 
 <!-- Include Bootstrap's JS bundle -->
