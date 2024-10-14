@@ -143,9 +143,10 @@ background-color: rgba(0, 0, 0);
                 </div>
 
                 <!-- Logout Button -->
-                <div class="mb-4">
-                    <a href="{% url 'logout' %}" class="btn btn-danger btn-lg">ออกจากระบบ</a>
-                </div>
+                <form action="{% url 'logout' %}" method="post" class="mb-4">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-lg">ออกจากระบบ</button>
+                </form>
             </div>
         </div>
     </div>
@@ -153,7 +154,6 @@ background-color: rgba(0, 0, 0);
 
 {% block script %}
 <script>
-alert("yeah")
 function selectRole(figureElement) {
     const button = document.getElementById('nextButton');
 
