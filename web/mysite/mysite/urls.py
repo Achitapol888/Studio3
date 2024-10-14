@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from myapp import views
 from myapp.views import CustomLoginView
+from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     path('base/', views.base, name = 'base'),
@@ -27,11 +29,13 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('select-prefer/', views.select_prefer, name="select-prefer"), 
     path('role-selection/', views.role_selection, name='role-selection'),
-    path('reciver/', views.reciver, name='reciver'),
+    path('receiver/', views.receiver, name='receiver'),
     path('giver/', views.giver, name='giver'),
     path('profile/', views.profile, name= 'profile'),
     path('review/', views.review, name= 'review'),
     path('result_for_receiver/', views.result_for_receiver, name= 'result_for_receiver'),
     path('result_for_giver/', views.result_for_giver, name= 'result_for_giver'),
     path('verify/', views.verify, name= 'verify'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
 ]

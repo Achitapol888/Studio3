@@ -1,4 +1,4 @@
-{% extends 'myweb/base2.html' %}
+{% extends 'myweb/base.html' %}
 
 {% load static %}
 
@@ -11,8 +11,30 @@ background-color: rgba(0, 0, 0);
 {% endblock %}
 
 {% block styles %}
-<!-- Add more CSS files here -->
-<link rel="stylesheet" href="{% static 'css/role_selection.css' %}">
+<!-- Add more CSS here -->
+ <style>
+.clicked {
+    opacity: 0.5;
+    transition: opacity 0.7s ease-in;
+}
+
+.unclicked {
+    opacity: 1;
+    transition: opacity 0.7s ease-out;
+}
+
+.active {
+    opacity: 1;
+    transition: opacity 0.8s ease-in;
+
+}
+
+.disabled {
+    opacity: 0.5;
+    transition: opacity 0.8s ease-in;
+}</style>
+
+
 {% endblock %}
 
 {% block content %}      
@@ -23,9 +45,9 @@ background-color: rgba(0, 0, 0);
                     <div class="card mb-4">
                         <div class="card-body text-center">
                             <img src="{% static 'images/icon_accout.png' %}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                            <h5 class="my-3">อิอิ ไม่บอก</h5>
+                            <h5 class="my-3">{{ user.first_name }} {{ user.last_name }}</h5>
                             <div class="d-flex justify-content-center mb-2">
-                                <a href="" class="btn btn-outline-primary ms-1">แก้ไขโปรไฟล์</a>
+                                <a href="#" class="btn btn-outline-primary ms-1">แก้ไขโปรไฟล์</a>
                             </div>
                         </div>
                     </div>
@@ -39,7 +61,7 @@ background-color: rgba(0, 0, 0);
                                     <p class="mb-0">ชื่อ</p>
                                 </div>
                                 <div class="col-sm-8">
-                                    <p class="text-muted mb-0">อิอิ</p>
+                                    <p class="text-muted mb-0">{{ user.first_name }}</p>
                                 </div>
                             </div>
                             <hr>
@@ -48,7 +70,7 @@ background-color: rgba(0, 0, 0);
                                     <p class="mb-0">นามสกุล</p>
                                 </div>
                                 <div class="col-sm-8">
-                                    <p class="text-muted mb-0">ไม่บอก
+                                    <p class="text-muted mb-0">{{ user.last_name }}</p>
                                 </div>
                             </div>
                             <hr>
@@ -57,7 +79,7 @@ background-color: rgba(0, 0, 0);
                                     <p class="mb-0">อีเมล</p>
                                 </div>
                                 <div class="col-sm-8">
-                                    <p class="text-muted mb-0">xxx@kkumail.com</p>
+                                    <p class="text-muted mb-0">{{ user.email }}</p>
                                 </div>
                             </div>
                             <hr>
@@ -66,7 +88,7 @@ background-color: rgba(0, 0, 0);
                                     <p class="mb-0">เบอร์โทรศัพท์</p>
                                 </div>
                                 <div class="col-sm-8">
-                                    <p class="text-muted mb-0">xxxxxxx</p>
+                                    <p class="text-muted mb-0">0{{ user_profile.phone_number }}</p>
                                 </div>
                             </div>
                             <hr>
@@ -75,7 +97,16 @@ background-color: rgba(0, 0, 0);
                                     <p class="mb-0">หอพักของคุณ</p>
                                 </div>
                                 <div class="col-sm-8">
-                                    <p class="text-muted mb-0">หอไรอ่ะ</p>
+                                    <p class="text-muted mb-0">{{ user_profile.dorm }}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <p class="mb-0">รหัสประจำตัวนักศึกษา</p>
+                                </div>
+                                <div class="col-sm-8">
+                                    <p class="text-muted mb-0">{{ user_profile.student_ID }}</p>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +130,7 @@ background-color: rgba(0, 0, 0);
 
                     <!-- Receiver -->
                     <div class="col-lg-5 col-md-6 col-sm-8 mb-3">
-                        <figure class="d-block h-100" data-url="{% url 'reciver' %}" onclick="selectRole(this)">
+                        <figure class="d-block h-100" data-url="{% url 'receiver' %}" onclick="selectRole(this)">
                             <img class="img-fluid img-thumbnail large-image" src="{% static 'images/sofa.png' %}" alt="Receiver">
                             <figcaption class="text-dark text-center fs-5 mt-3">ผู้รับ</figcaption>
                         </figure>
@@ -110,12 +141,55 @@ background-color: rgba(0, 0, 0);
                 <div class="text-center">
                     <a href="" id="nextButton" class="btn btn-primary btn-lg disabled mb-2 mt-1 fs-4" onclick="handleNextButtonClick(event)">เริ่มต้นกระบวนการ</a>
                 </div>
+
+                <!-- Logout Button -->
+                <div class="mb-4">
+                    <a href="{% url 'logout' %}" class="btn btn-danger btn-lg">ออกจากระบบ</a>
+                </div>
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block script %}
-<!-- Add any JavaScript files or scripts here -->
-<script src="{% static 'js/role_selection.js' %}"></script>
+<script>
+alert("yeah")
+function selectRole(figureElement) {
+    const button = document.getElementById('nextButton');
+
+    // Get the URL of the clicked figure
+    const newUrl = figureElement.getAttribute('data-url');
+
+    // Check if the clicked figure is already selected
+    const isAlreadyClicked = figureElement.classList.contains('clicked');
+
+    // Remove the clicked class from all figures and add unclicked class
+    const figures = document.querySelectorAll('figure');
+    figures.forEach((figure) => {
+        figure.classList.remove('clicked');
+        figure.classList.add('unclicked');
+    });
+    button.classList.remove("disabled")
+    button.classList.add("active")
+
+
+    // If it was already clicked, reset the button URL
+    if (isAlreadyClicked) {
+        button.href = ''; // Reset the button URL
+        button.classList.remove("active")
+        button.classList.add("disabled")
+        return; // Exit the function
+    }
+
+    // Set the href of the button to the new URL and add the clicked class to the current figure
+    button.href = newUrl;
+    figureElement.classList.remove('unclicked'); // Remove unclicked state for the new selection
+    figureElement.classList.add('clicked'); // Add clicked class to the currently selected figure
+
+}
+
+
+
+
+</script>
 {% endblock %}

@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, HttpResponse
-from django.contrib.auth.models import User
 from .forms import SignUpForm
 from .models import UserProfile
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile, User
 
 class CustomLoginView(LoginView):
     template_name = 'myweb/login.html'
@@ -40,14 +40,21 @@ def register(request):
 def select_prefer(request):
     return render(request, "myweb/select_prefer.html")
 
+@login_required
 def profile(request):
-    return render(request, "myweb/profile.html")
+    user = request.user  # Get the currently logged-in user
+    user_profile = user.profile
+    context = {
+        'user': user,
+        'user_profile': user_profile,
+    }
+    return render(request, 'myweb/profile.html', context)
 
 def role_selection(reqest):
     return render(reqest, "myweb/role_selection.html")
 
-def reciver(reqest):
-    return render(reqest, "myweb/reciver.html")
+def receiver(reqest):
+    return render(reqest, "myweb/receiver.html")
 
 def giver(reqest):
     return render(reqest, "myweb/giver.html")

@@ -1,3 +1,4 @@
+alert("yeah")
 function selectRole(figureElement) {
     const button = document.getElementById('nextButton');
 
