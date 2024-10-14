@@ -17,12 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from myapp import views
+from myapp.views import CustomLoginView
 
 urlpatterns = [
     path('base/', views.base, name = 'base'),
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('login/', views.login, name='login'),
+    path('login/', CustomLoginView.as_view(), name='login'),
     path('register/', views.register, name='register'),
     path('select-prefer/', views.select_prefer, name="select-prefer"), 
     path('role-selection/', views.role_selection, name='role-selection'),

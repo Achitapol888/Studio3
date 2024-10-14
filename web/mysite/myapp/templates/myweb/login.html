@@ -1,7 +1,5 @@
 {% extends 'myweb/base2.html' %}
-
 {% load static %}
-
 {% block title %}
 Login
 {% endblock %}
@@ -10,7 +8,6 @@ Login
 background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('https://www.goodmove-th.com/images/editor/Blog/blog_6_1.jpeg'); 
 background-size: cover;
 background-repeat: no-repeat;
-
 {% endblock %}
 
 {% block content %}
@@ -25,21 +22,40 @@ background-repeat: no-repeat;
                             <div class="text-center mb-4">
                                 <img src="{% static 'images/icon_accout.png' %}" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
                             </div>
-                            <form>
+
+                            <!-- Form with Django's login view -->
+                            <form method="post">
+                                {% csrf_token %}
+                                {% if form.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>เข้าสู่ระบบล้มเหลว:</strong>
+                                        <ul>
+                                            {% for field in form %}
+                                                {% for error in field.errors %}
+                                                    <li>{{ error }}</li>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                                
                                 <div data-mdb-input-init class="form-outline mb-4">
-                                    <label class="form-label" for="form3Example1cg">ชื่อผู้ใช้</label>
-                                    <input type="text" id="form3Example1cg" class="form-control form-control-lg" />
+                                    <label class="form-label" for="username">ชื่อผู้ใช้</label>
+                                    <input type="text" id="username" name="username" class="form-control form-control-lg" required />
                                 </div>
-                                <div data-mdb-input-init class="form-outline mb-4">                    
-                                    <label class="form-label" for="form3Example3cg">รหัสผ่าน</label>
-                                    <input type="password" id="form3Example3cg" class="form-control form-control-lg" />
+
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <label class="form-label" for="password">รหัสผ่าน</label>
+                                    <input type="password" id="password" name="password" class="form-control form-control-lg" required />
                                 </div>
+
                                 <div class="d-flex justify-content-center">
-                                    <a href="{% url "profile" %}" class="btn btn-primary btn-lg mb-2 mt-1">เข้าสู่ระบบ</a>
+                                    <button type="submit" class="btn btn-primary btn-lg mb-2 mt-1">เข้าสู่ระบบ</button>
                                 </div>
-                                <p class="text-center text-muted mt-5 mb-0">ยังไม่ได้สมัครเหรอ? <a href="{% url 'register' %}"
-                                    class="fw-bold text-body"><u>สร้างบัญชีเลย</u></a></p>
+
+                                <p class="text-center text-muted mt-5 mb-0">ยังไม่ได้สมัครเหรอ? <a href="{% url 'register' %}" class="fw-bold text-body"><u>สร้างบัญชีเลย</u></a></p>
                             </form>
+
                         </div>
                     </div>
                 </div>

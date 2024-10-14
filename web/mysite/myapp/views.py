@@ -2,7 +2,10 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.models import User
 from .forms import SignUpForm
 from .models import UserProfile
+from django.contrib.auth.views import LoginView
 
+class CustomLoginView(LoginView):
+    template_name = 'myweb/login.html'
 
 def placeholder_view(request):
     return HttpResponse("This is a placeholder for the home page.")
@@ -16,18 +19,13 @@ def home(request):
 def login(request):
     return render(request, "myweb/login.html")
 
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
-from .forms import SignUpForm
-
 def register(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
             print("User created:", user)  # Debugging line
-            return redirect('home')
+            return redirect('login')
         else:
             print(form.errors)  # Check if form validation errors are happening
     else:
