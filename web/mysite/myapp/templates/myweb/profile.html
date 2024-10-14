@@ -1,4 +1,4 @@
-{% extends 'myweb/base2.html' %}
+{% extends 'myweb/base.html' %}
 
 {% load static %}
 
@@ -37,7 +37,7 @@ background-color: rgba(0, 0, 0);
 {% block content %}      
     <!--User profile-->
     <div class="container my-4">
-        <div class="bg-light rounded-5 shadow-sm p-4">
+        <div class="bg-light rounded-5 shadow-sm p-4" id ="profile_bg">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="card mb-4">
@@ -116,24 +116,24 @@ background-color: rgba(0, 0, 0);
             </div>
 
             <div class="text-center col-12">
-                <div class="mb-4">
+                <div class="mb-4" id = "profile_text">
                     <h5>เลือกบทบาทของคุณ</h5>
                 </div>
                 
                 <div class="row justify-content-center">
                     <!-- Giver -->
-                    <div class="col-lg-5 col-md-6 col-sm-8 mb-3">
-                        <figure class="d-block h-100" data-url="{% url 'giver' %}" onclick="selectRole(this)">
+                    <div class="col-lg-5 col-md-6 col-sm-8 mb-3" id = "profile_text">
+                        <figure  id = "profile_text" class="d-block h-100" data-url="{% url 'giver' %}" onclick="selectRole(this)">
                             <img class="img-fluid img-thumbnail large-image" src="{% static 'images/sofa.png' %}" alt="Giver">
-                            <figcaption class="text-dark text-center fs-5 mt-3">ผู้ให้</figcaption>
+                            <figcaption class="text-center fs-5 mt-3">ผู้ให้</figcaption>
                         </figure>
                     </div>
 
                     <!-- Receiver -->
-                    <div class="col-lg-5 col-md-6 col-sm-8 mb-3">
-                        <figure class="d-block h-100" data-url="{% url 'receiver' %}" onclick="selectRole(this)">
+                    <div class="col-lg-5 col-md-6 col-sm-8 mb-3id = " id = "profile_text">
+                        <figure  id = "profile_text" class="d-block h-100" data-url="{% url 'receiver' %}" onclick="selectRole(this)">
                             <img class="img-fluid img-thumbnail large-image" src="{% static 'images/sofa.png' %}" alt="Receiver">
-                            <figcaption class="text-dark text-center fs-5 mt-3">ผู้รับ</figcaption>
+                            <figcaption class="text-center fs-5 mt-3">ผู้รับ</figcaption>
                         </figure>
                     </div>
                 </div>
@@ -190,7 +190,9 @@ background-color: rgba(0, 0, 0);
                         <label for="studentID" class="form-label">รหัสประจำตัวนักศึกษา</label>
                         <input type="text" class="form-control" id="studentID" name="student_ID" value="{{ user_profile.student_ID }}" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+                    <div class="text-end"> <!-- Aligns the button to the right -->
+                        <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+                    </div>
                 </form>
             </div>
         </div>
