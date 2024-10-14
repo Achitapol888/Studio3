@@ -1,0 +1,121 @@
+{% extends 'myweb/base2.html' %}
+
+{% load static %}
+
+{% block title %}
+เลือกสิ่งที่คุณชอบ
+{% endblock %}
+
+{% block background_style %}
+background-color: rgba(0, 0, 0);
+{% endblock %}
+
+{% block styles %}
+<style>
+    .clicked {
+        opacity: 0.5;
+        transition: opacity 0.7s ease-in;
+    }
+
+    .unclicked {
+        opacity: 1;
+        transition: opacity 0.7s ease-out;
+    }
+
+    .active {
+        opacity: 1;
+        transition: opacity 0.8s ease-in;
+    }
+
+    .disabled {
+        opacity: 0.5;
+        transition: opacity 0.8s ease-in;
+    } 
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="text-center mb-4">
+    <form id="preferencesForm" method="post" action="{% url 'select_preferences' %}">
+        {% csrf_token %}
+        <input type="hidden" name="is_like_electronics" value="false">
+        <input type="hidden" name="is_like_clothing" value="false">
+        <input type="hidden" name="is_like_beauty_accessories" value="false">
+        <input type="hidden" name="is_like_books" value="false">
+        <input type="hidden" name="is_like_kitchenware" value="false">
+        <input type="hidden" name="is_like_petcare" value="false">
+
+        <div>
+            <figure onclick="toggleCategory(this)">
+                <img src="{% static 'images/sofa.png' %}" alt="เครื่องใช้ไฟฟ้า">
+                <figcaption>เครื่องใช้ไฟฟ้า</figcaption>
+            </figure>
+            <figure onclick="toggleCategory(this)">
+                <img src="{% static 'images/sofa.png' %}" alt="เสื้อผ้า">
+                <figcaption>เสื้อผ้า</figcaption>
+            </figure>
+            <figure onclick="toggleCategory(this)">
+                <img src="{% static 'images/sofa.png' %}" alt="อุปกรณ์เสริมสวย">
+                <figcaption>อุปกรณ์เสริมสวย</figcaption>
+            </figure>
+            <figure onclick="toggleCategory(this)">
+                <img src="{% static 'images/sofa.png' %}" alt="หนังสือ">
+                <figcaption>หนังสือ</figcaption>
+            </figure>
+            <figure onclick="toggleCategory(this)">
+                <img src="{% static 'images/sofa.png' %}" alt="เครื่องครัว">
+                <figcaption>เครื่องครัว</figcaption>
+            </figure>
+            <figure onclick="toggleCategory(this)">
+                <img src="{% static 'images/sofa.png' %}" alt="อุปกรณ์สำหรับสัตว์เลี้ยง">
+                <figcaption>อุปกรณ์สำหรับสัตว์เลี้ยง</figcaption>
+            </figure>
+        </div>
+
+        <a id="nextButton" href="#" class="btn btn-primary fs-5 disabled" onclick="submitPreferences()">เสร็จสิ้น</a>
+    </form>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+    function toggleCategory(figure) {
+        figure.classList.toggle('clicked');
+    }
+
+    function submitPreferences() {
+        const selectedFigures = document.querySelectorAll('figure.clicked');
+        
+        // Update the hidden input values based on the selections
+        selectedFigures.forEach(figure => {
+            const caption = figure.querySelector('figcaption').innerText;
+            switch(caption) {
+                case 'เครื่องใช้ไฟฟ้า':
+                    document.getElementsByName('is_like_electronics')[0].value = 'true';
+                    break;
+                case 'เสื้อผ้า':
+                    document.getElementsByName('is_like_clothing')[0].value = 'true';
+                    break;
+                case 'อุปกรณ์เสริมสวย':
+                    document.getElementsByName('is_like_beauty_accessories')[0].value = 'true';
+                    break;
+                case 'หนังสือ':
+                    document.getElementsByName('is_like_books')[0].value = 'true';
+                    break;
+                case 'เครื่องครัว':
+                    document.getElementsByName('is_like_kitchenware')[0].value = 'true';
+                    break;
+                case 'อุปกรณ์สำหรับสัตว์เลี้ยง':
+                    document.getElementsByName('is_like_petcare')[0].value = 'true';
+                    break;
+            }
+        });
+
+        // Submit the form
+        document.getElementById('preferencesForm').submit();
+    }
+</script>
+{% endblock %}
+
