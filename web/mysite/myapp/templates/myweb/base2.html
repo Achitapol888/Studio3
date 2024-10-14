@@ -35,14 +35,14 @@
                 <li class="nav-item"><a class="nav-link" id="helpLink" href="#">Help</a></li>
                 <li class="nav-item"><a class="nav-link" id="contactLink" href="#">Contact</a></li>
             </ul>
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center mx-5">
                 <span id="langTH" class="language-label text-primary" onclick="changeLanguage('th')" style="cursor: pointer;">TH</span>
                 <div class="form-check form-switch mx-2">
                     <input class="form-check-input" type="checkbox" id="languageSwitch" onchange="toggleLanguage()" checked>
                 </div>
                 <span id="langENG" class="language-label text-secondary" onclick="changeLanguage('eng')" style="cursor: pointer;">ENG</span>
             </div>
-            <div class="mb-2">
+            <div class="mb-2 ">
                 <a href="{% url 'logout' %}" class="btn btn-danger mt-2 ms-1 btn-lg">ออกจากระบบ</a>
             </div>           
         </div>

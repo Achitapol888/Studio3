@@ -37,5 +37,7 @@ urlpatterns = [
     path('result_for_giver/', views.result_for_giver, name= 'result_for_giver'),
     path('verify/', views.verify, name= 'verify'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('edit-profile/', views.edit_profile, name='edit_profile'),
+
 
 ]

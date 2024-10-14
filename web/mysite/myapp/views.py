@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .forms import SignUpForm
+from .forms import SignUpForm, UserForm, UserProfileForm
 from .models import UserProfile
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
@@ -49,6 +49,32 @@ def profile(request):
         'user_profile': user_profile,
     }
     return render(request, 'myweb/profile.html', context)
+
+@login_required
+def edit_profile(request):
+    user_profile, created = UserProfile.objects.get_or_create(user=request.user)  # Ensure profile exists
+    
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, instance=user_profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your profile has been updated successfully!')
+            return redirect('profile')
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=user_profile)
+
+    # Ensure preferences are passed to the form for the template
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+    }
+    return render(request, 'myweb/edit.html', context)
+
+
 
 def role_selection(reqest):
     return render(reqest, "myweb/role_selection.html")

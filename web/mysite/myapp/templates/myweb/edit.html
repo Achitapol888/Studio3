@@ -1,0 +1,50 @@
+{% extends 'myweb/base2.html' %}
+
+{% block title %}
+แก้ไขโปรไฟล์
+{% endblock %}
+
+{% block content %}
+    <div class="container my-4">
+        <div class="bg-light rounded-5 shadow-sm p-4">
+            <h2 class="text-center mb-4">แก้ไขโปรไฟล์</h2>
+            <form method="POST">
+                {% csrf_token %}
+                
+                <!-- User Information Form -->
+                <div class="form-group mb-3">
+                    <label for="first_name">ชื่อ</label>
+                    {{ user_form.first_name }}
+                </div>
+                <div class="form-group mb-3">
+                    <label for="last_name">นามสกุล</label>
+                    {{ user_form.last_name }}
+                </div>
+                <div class="form-group mb-3">
+                    <label for="email">อีเมล</label>
+                    {{ user_form.email }}
+                </div>
+
+                <!-- User Profile Form -->
+                <div class="form-group mb-3">
+                    <label for="dorm">หอพักของคุณ</label>
+                    {{ profile_form.dorm }}
+                </div>
+                <div class="form-group mb-3">
+                    <label for="phone_number">เบอร์โทรศัพท์</label>
+                    {{ profile_form.phone_number }}
+                </div>
+                <div class="form-group mb-3">
+                    <label for="student_ID">รหัสประจำตัวนักศึกษา</label>
+                    {{ profile_form.student_ID }}
+                </div>            
+
+                <!-- Submit Button -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success">บันทึกการเปลี่ยนแปลง</button>
+                    <a href="{% url 'profile' %}" class="btn btn-secondary">ยกเลิก</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

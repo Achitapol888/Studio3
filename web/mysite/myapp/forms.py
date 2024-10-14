@@ -10,15 +10,11 @@ class SignUpForm(UserCreationForm):
     dorm = forms.CharField(required=True)
     phone_number = forms.IntegerField(required=True)
     student_ID = forms.IntegerField(required=True)
-    preferences = forms.MultipleChoiceField(
-        choices=UserProfile.USER_PREFERENCES,
-        widget=forms.CheckboxSelectMultiple(),
-        required=True,
-    )
+   
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'dorm', 'phone_number', 'student_ID', 'preferences', 'password1', 'password2']
+        fields = ['username', 'email', 'first_name', 'last_name', 'dorm', 'phone_number', 'student_ID', 'password1', 'password2']
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -26,12 +22,6 @@ class SignUpForm(UserCreationForm):
             if not (email.endswith('@kkumail.com') or email.endswith('@kku.ac.th')):
                 raise forms.ValidationError("Email must end with '@kkumail.com' or '@kku.ac.th'.")
         return email
-
-    def clean_preferences(self):
-        preferences = self.cleaned_data.get('preferences')
-        if preferences and len(preferences) > 3:
-            raise forms.ValidationError("You can select a maximum of 3 preferences.")
-        return preferences
 
     def save(self, commit=True):
         user = super(SignUpForm, self).save(commit=False)
@@ -45,6 +35,23 @@ class SignUpForm(UserCreationForm):
                 dorm=self.cleaned_data['dorm'],
                 phone_number=self.cleaned_data['phone_number'],
                 student_ID=self.cleaned_data['student_ID'],
-                preferences=self.cleaned_data['preferences'],
             )
         return user
+
+#Below are for edit profile pages
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['dorm', 'phone_number', 'student_ID']
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email:
+            if not (email.endswith('@kkumail.com') or email.endswith('@kku.ac.th')):
+                raise forms.ValidationError("Email must end with '@kkumail.com' or '@kku.ac.th'.")
+        return email
