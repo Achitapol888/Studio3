@@ -52,22 +52,23 @@ def profile(request):
 
 @login_required
 def edit_profile(request):
-    user_profile, created = UserProfile.objects.get_or_create(user=request.user)  # Ensure profile exists
-    
+    user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = UserProfileForm(request.POST, instance=user_profile)
 
+        # Check if the forms are valid
         if user_form.is_valid() and profile_form.is_valid():
+            # Save the forms
             user_form.save()
             profile_form.save()
             messages.success(request, 'Your profile has been updated successfully!')
-            return redirect('profile')
+            return redirect('profile')  # Redirect to the profile page after success
     else:
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=user_profile)
 
-    # Ensure preferences are passed to the form for the template
     context = {
         'user_form': user_form,
         'profile_form': profile_form,

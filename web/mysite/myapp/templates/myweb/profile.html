@@ -35,6 +35,7 @@ background-color: rgba(0, 0, 0);
 {% endblock %}
 
 {% block content %}      
+    <!--User profile-->
     <div class="container my-4">
         <div class="bg-light rounded-5 shadow-sm p-4">
             <div class="row">
@@ -44,7 +45,9 @@ background-color: rgba(0, 0, 0);
                             <img src="{% static 'images/icon_accout.png' %}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
                             <h5 class="my-3">{{ user.username }}</h5>
                             <div class="d-flex justify-content-center mb-2">
-                                <a href="{% url "edit_profile" %}" class="btn btn-outline-primary ms-1">แก้ไขโปรไฟล์</a>
+                                <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                    แก้ไขโปรไฟล์
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -148,6 +151,52 @@ background-color: rgba(0, 0, 0);
             </div>
         </div>
     </div>
+<!-- Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">แก้ไขโปรไฟล์</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'edit_profile' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">ชื่อผู้ใช้</label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">ชื่อ</label>
+                        <input type="text" class="form-control" id="firstName" name="first_name" value="{{ user.first_name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">นามสกุล</label>
+                        <input type="text" class="form-control" id="lastName" name="last_name" value="{{ user.last_name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">อีเมล</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">เบอร์โทรศัพท์</label>
+                        <input type="text" class="form-control" id="phone" name="phone_number" value="{{ user_profile.phone_number }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dorm" class="form-label">หอพักของคุณ</label>
+                        <input type="text" class="form-control" id="dorm" name="dorm" value="{{ user_profile.dorm }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="studentID" class="form-label">รหัสประจำตัวนักศึกษา</label>
+                        <input type="text" class="form-control" id="studentID" name="student_ID" value="{{ user_profile.student_ID }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>>
+
 {% endblock %}
 
 {% block script %}
@@ -185,5 +234,20 @@ function selectRole(figureElement) {
     figureElement.classList.add('clicked'); // Add clicked class to the currently selected figure
 
 }
+
+function toggleEditProfile() {
+    const profileView = document.getElementById('profile-view');
+    const editProfile = document.getElementById('edit-profile');
+
+    if (profileView.style.display === 'none') {
+        profileView.style.display = 'block';
+        editProfile.style.display = 'none';
+    } else {
+        profileView.style.display = 'none';
+        editProfile.style.display = 'block';
+    }
+}
+
+
 </script>
 {% endblock %}
