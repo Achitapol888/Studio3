@@ -31,8 +31,16 @@ background-color: rgba(0, 0, 0);
     opacity: 0.5;
     transition: opacity 0.8s ease-in;
 }
+
+.img-thumbnail {
+    border: 0;
+}
+
+
 </style>
 {% endblock %}
+
+
 
 {% block content %}      
     <!--User profile-->
@@ -42,13 +50,17 @@ background-color: rgba(0, 0, 0);
                 <div class="col-lg-6">
                     <div class="card mb-4">
                         <div class="card-body text-center">
-                            <img src="{% static 'images/icon_accout.png' %}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                            <h5 class="my-3">{{ user.username }}</h5>
-                            <div class="d-flex justify-content-center mb-2">
-                                <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                                    แก้ไขโปรไฟล์
-                                </button>
-                            </div>
+                        {% if user_profile.profile_picture %}
+                            <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" style="width: 150px;">
+                        {% else %}
+                            <img src="{% static 'images/icon_accout.png' %}" alt="Default Profile Picture" class="rounded-circle" style="width: 150px;">
+                        {% endif %}
+                        <h5 class="my-3">{{ user.username }}</h5>
+                        <div class="d-flex justify-content-center mb-2">
+                            <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                แก้ไขโปรไฟล์
+                            </button>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -122,22 +134,22 @@ background-color: rgba(0, 0, 0);
                 
                 <div class="row justify-content-center">
                     <!-- Giver -->
-                    <div class="col-lg-5 col-md-6 col-sm-8 mb-3" id = "profile_text">
-                        <figure  id = "profile_text" class="d-block h-100" data-url="{% url 'giver' %}" onclick="selectRole(this)">
-                            <img class="img-fluid img-thumbnail large-image" src="{% static 'images/sofa.png' %}" alt="Giver">
-                            <figcaption class="text-center fs-5 mt-3">ผู้ให้</figcaption>
+                    <div class="col-lg-5 col-md-6 col-sm-8 mb-3 mx-4 " id="profile_text">
+                        <figure class="d-block h-100 text-center" data-url="{% url 'giver' %}" onclick="selectRole(this)">
+                            <img class="img-fluid img-thumbnail bg-primary" src="{% static 'images/package.png' %}" alt="Giver">
+                            <figcaption class="fs-5 mt-3">ผู้ให้</figcaption>
                         </figure>
                     </div>
-
+                
                     <!-- Receiver -->
-                    <div class="col-lg-5 col-md-6 col-sm-8 mb-3id = " id = "profile_text">
-                        <figure  id = "profile_text" class="d-block h-100" data-url="{% url 'receiver' %}" onclick="selectRole(this)">
-                            <img class="img-fluid img-thumbnail large-image" src="{% static 'images/sofa.png' %}" alt="Receiver">
-                            <figcaption class="text-center fs-5 mt-3">ผู้รับ</figcaption>
+                    <div class="col-lg-5 col-md-6 col-sm-8 mb-3 mx-4" id="profile_text">
+                        <figure class="d-block h-100 text-center" data-url="{% url 'receiver' %}" onclick="selectRole(this)">
+                            <img class="img-fluid img-thumbnail bg-warning" src="{% static 'images/receiver.png' %}" alt="Receiver">
+                            <figcaption class="fs-5 mt-3">ผู้รับ</figcaption>
                         </figure>
                     </div>
                 </div>
-
+                
                 <!-- Button -->
                 <div class="text-center">
                     <a href="" id="nextButton" class="btn btn-primary btn-lg disabled mb-2 mt-1 fs-4" onclick="handleNextButtonClick(event)">เริ่มต้นกระบวนการ</a>
@@ -160,8 +172,19 @@ background-color: rgba(0, 0, 0);
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{% url 'edit_profile' %}">
+                <form method="POST" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
                     {% csrf_token %}
+
+                    <!-- Profile Picture Upload Section -->
+                    <div class="mb-3">
+                        <label for="profile_picture" class="form-label">รูปโปรไฟล์</label>
+                        <div class="upload-area" style="border: 2px dotted #007bff; padding: 20px; text-align: center;">
+                            <input type="file" name="profile_picture" id="profile_picture" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                            <img id="profileImagePreview" src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" style="max-width: 50%; height: auto; border-radius: 50%;">
+                            <label for="profile_picture" style="cursor: pointer; display: block; margin-top: 10px;">คลิกที่นี่เพื่ออัปโหลดรูปภาพ</label>
+                        </div>
+                    </div>
+
                     <div class="mb-3">
                         <label for="username" class="form-label">ชื่อผู้ใช้</label>
                         <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
@@ -190,6 +213,9 @@ background-color: rgba(0, 0, 0);
                         <label for="studentID" class="form-label">รหัสประจำตัวนักศึกษา</label>
                         <input type="text" class="form-control" id="studentID" name="student_ID" value="{{ user_profile.student_ID }}" required>
                     </div>
+
+                    
+
                     <div class="text-end"> <!-- Aligns the button to the right -->
                         <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
                     </div>
@@ -203,6 +229,17 @@ background-color: rgba(0, 0, 0);
 
 {% block script %}
 <script>
+    
+function previewImage(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('profileImagePreview').src = e.target.result;
+    }
+    reader.readAsDataURL(file);
+}
+
+
 function selectRole(figureElement) {
     const button = document.getElementById('nextButton');
 

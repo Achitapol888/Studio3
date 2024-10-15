@@ -19,6 +19,8 @@ from django.urls import path
 from myapp import views
 from myapp.views import CustomLoginView
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -38,6 +40,4 @@ urlpatterns = [
     path('verify/', views.verify, name= 'verify'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
-
-
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

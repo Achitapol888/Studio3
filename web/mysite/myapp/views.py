@@ -23,7 +23,7 @@ def login(request):
 
 def register(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = SignUpForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
             messages.success(request, "Registration successful! You can now log in.")
@@ -56,7 +56,7 @@ def edit_profile(request):
 
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
-        profile_form = UserProfileForm(request.POST, instance=user_profile)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
 
         # Check if the forms are valid
         if user_form.is_valid() and profile_form.is_valid():

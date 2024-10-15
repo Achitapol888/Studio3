@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import UserProfile
 
+
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
     first_name = forms.CharField(max_length=30, required=True)  # Add first name field
@@ -10,11 +11,13 @@ class SignUpForm(UserCreationForm):
     dorm = forms.CharField(required=True)
     phone_number = forms.IntegerField(required=True)
     student_ID = forms.IntegerField(required=True)
-   
+    profile_picture = forms.ImageField(required=False)  # Correctly define this field here
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'dorm', 'phone_number', 'student_ID', 'password1', 'password2']
+        fields = ['username', 'email', 'first_name', 'last_name', 
+                  'dorm', 'phone_number', 'student_ID',
+                  'password1', 'password2']  # Removed 'profile_picture' from User fields
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -30,19 +33,22 @@ class SignUpForm(UserCreationForm):
         user.last_name = self.cleaned_data['last_name']    # Save last name
         if commit:
             user.save()
+            # Save profile data in UserProfile
             user_profile = UserProfile.objects.create(
                 user=user,
                 dorm=self.cleaned_data['dorm'],
                 phone_number=self.cleaned_data['phone_number'],
                 student_ID=self.cleaned_data['student_ID'],
+                profile_picture=self.cleaned_data.get('profile_picture')  # Corrected profile_picture
             )
         return user
+
 
 #Below are for edit profile pages
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['dorm', 'phone_number', 'student_ID']
+        fields = ['dorm', 'phone_number', 'student_ID', 'profile_picture']
 
 class UserForm(forms.ModelForm):
     class Meta:

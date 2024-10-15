@@ -34,6 +34,10 @@ STATICFILES_DIRS = [
 
 # Application definition
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
