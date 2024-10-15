@@ -1,6 +1,8 @@
-{% extends 'myweb/base2.html' %}
+{% extends 'myweb/base.html' %}
 
 {% load static %}
+
+{% load form_tags %}
 
 {% block title %}
 ผู้รับ
@@ -14,115 +16,90 @@ background-color: rgba(0, 0, 0);
 <!-- Add more CSS files here -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<style>
-    .drag-drop-area {
-        border: 2px dashed #007bff; /* Bootstrap primary color */
-        border-radius: 10px;
-        padding: 60px; /* Increased padding for a larger area */
-        text-align: center;
-        transition: background-color 0.3s;
-        min-height: 250px; /* Set a minimum height for better appearance */
-    }
-
-    .drag-drop-area.hover {
-        background-color: rgba(0, 123, 255, 0.1); /* Light blue on hover */
-    }
-
-    #preview {
-        width: 200px; /* Increased width for the preview image */
-        height: 200px; /* Set a height for the preview image */
-        object-fit: cover; /* Ensure the image covers the area nicely */
-        display: block; /* Ensure it's displayed as a block element */
-        margin: 0 auto; /* Center the image */
-    }
-
-    /* Centering the form and button */
-    .centered-content {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        text-align: center;
-    }
-
-    .centered-form {
-        max-width: 800px; /* Increased max-width to make the form wider */
-        width: 100%;
-    }
-</style>
 {% endblock %}
 
-{% block content %}      
-    <div class="container centered-content">
-        <div class="bg-light rounded-5 shadow-sm p-4 centered-form">
-            <div class="col-lg-12">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <form id="giverForm">
-                            <div class="row mb-3">
-                                <div class="col-sm-4">
-                                    <label for="itemName" class="mb-0">ชื่อสิ่งของ</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <input type="text" id="itemName" class="form-control" placeholder="เช่น พัดลม, ลิฟสติก, ชื่อหนังสือ" required>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row mb-3">
-                                <div class="col-sm-4">
-                                    <label for="itemType" class="mb-0">ประเภท</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <select id="itemType" class="form-control" required>
-                                        <option value="electronic">เครื่องใช้ไฟฟ้า</option>
-                                        <option value="clothes">เสื้อผ้า</option>
-                                        <option value="beauty">อุปกรณ์เสริมสวย</option>
-                                        <option value="book">หนังสือ</option>
-                                        <option value="kitchenware">เครื่องครัว</option>
-                                        <option value="furniture">เฟอร์นิเจอร์</option>
-                                        <option value="Pet_care">อุปกรณ์สำหรับสัตว์เลี้ยง</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row mb-3">
-                                <div class="col-sm-4">
-                                    <label for="description" class="mb-0">รายละเอียด</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <textarea id="description" class="form-control" placeholder="เช่น ชื่อรุ่น ,ยี่ห้อ เเละอื่น ๆ" rows="3" required></textarea>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row mb-3">
-                                <div class="col-sm-4">
-                                    <label for="condition" class="mb-0">ตำหนิ</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <input type="text" id="condition" class="form-control" placeholder="เช่น มีตำหนิที่ใดบ้าง" required>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row mb-3">
-                                <div class="col-sm-4">
-                                    <label for="date" class="mb-0">วันเวลา</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <input type="datetime-local" id="date" class="form-control" required>
-                                    <div id="formattedDate" class="mt-2 text-secondary"></div> <!-- Display formatted date -->
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+{% block content %} 
+    <div class="container mt-5 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title text-center">เเบบฟอร์มของผู้ต้องการรับสิ่งของ</h5>
             </div>
-            <!-- Centered process Button -->
-            <div class="text-center">
-                <a href="{% url "result_for_receiver" %}" id="nextButton" class="btn btn-primary btn-lg mb-2 mt-1 fs-4" onclick="handleNextButtonClick(event)">เริ่มต้นกระบวนการ</a>
+            <div class="card-body">
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <strong>กรุณาใส่เเบบฟอร์มให้ถูกต้อง:</strong>
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.stuff_name.id_for_label }}" class="form-label">ชื่อสิ่งของ</label>
+                        {{ form.stuff_name|add_class:"form-control" }}
+                        {% for error in form.stuff_name.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.categories.id_for_label }}" class="form-label">ประเภท</label>
+                        {{ form.categories|add_class:"form-control" }}
+                        {% for error in form.categories.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">รายละเอียด</label>
+                        {{ form.description|add_class:"form-control" }}
+                        {% for error in form.description.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.defect.id_for_label }}" class="form-label">ตำหนิ</label>
+                        {{ form.defect|add_class:"form-control" }}
+                        {% for error in form.defect.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.place.id_for_label }}" class="form-label">สถานที่</label>
+                        {{ form.place|add_class:"form-control" }}
+                        {% for error in form.place.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.date_limit.id_for_label }}" class="form-label">ต้องการรับภายในวันที่</label>
+                        {{ form.date_limit|add_class:"form-control" }}
+                        {% for error in form.date_limit.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">โพสต์</button>
+                    </div>
+                    
+                </form>
             </div>
         </div>
     </div>
+
 {% endblock %}
 
 {% block script %}

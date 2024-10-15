@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import UserProfile
+import datetime
+from .models import UserProfile, PostGiver, PostReceiver
+
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -56,7 +58,7 @@ class SignUpForm(UserCreationForm):
         return user
 
 
-#Below are for edit profile pages
+#edit profile forms
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
@@ -79,3 +81,45 @@ class UserForm(forms.ModelForm):
             if not (email.endswith('@kkumail.com') or email.endswith('@kku.ac.th')):
                 raise forms.ValidationError("Email must end with '@kkumail.com' or '@kku.ac.th'.")
         return email
+    
+# Post Giver Form
+class PostGiverForm(forms.ModelForm):
+    class Meta:
+        model = PostGiver
+        fields = ['stuff_name', 'categories', 'stuff_picture', 'description', 'defect', 'place', 'date_limit']
+        widgets = {
+            'stuff_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'categories': forms.Select(attrs={'class': 'form-control'}),
+            'stuff_picture': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'defect': forms.Select(attrs={'class': 'form-control'}),
+            'place': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+            'date_limit': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        }
+
+    def clean_date_limit(self):
+        date_limit = self.cleaned_data.get('date_limit')
+        if date_limit and date_limit <= datetime.date.today():
+            raise forms.ValidationError("The date must be in the future.")
+        return date_limit
+
+
+# Post Receiver Form
+class PostReceiverForm(forms.ModelForm):
+    class Meta:
+        model = PostReceiver
+        fields = ['stuff_name', 'categories', 'description', 'defect', 'place', 'date_limit']
+        widgets = {
+            'stuff_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'categories': forms.Select(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'defect': forms.Select(attrs={'class': 'form-control'}),
+            'place': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+            'date_limit': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        }
+
+    def clean_date_limit(self):
+        date_limit = self.cleaned_data.get('date_limit')
+        if date_limit and date_limit <= datetime.date.today():
+            raise forms.ValidationError("The date must be in the future.")
+        return date_limit

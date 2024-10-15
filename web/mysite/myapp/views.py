@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .forms import SignUpForm, UserForm, UserProfileForm
+from .forms import SignUpForm, UserForm, UserProfileForm, PostGiverForm, PostReceiverForm
 from .models import UserProfile
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
@@ -77,14 +77,35 @@ def edit_profile(request):
 
 
 
-def role_selection(reqest):
-    return render(reqest, "myweb/role_selection.html")
+def role_selection(request):
+    return render(request, "myweb/role_selection.html")
 
-def receiver(reqest):
-    return render(reqest, "myweb/receiver.html")
+@login_required
+def receiver(request):
+    if request.method == 'POST':
+        form = PostReceiverForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user_profile = request.user.profile
+            post.save()
+            return redirect('profile')
+    else:
+        form = PostReceiverForm()
+    return render(request, "myweb/receiver.html", {'form': form})
 
-def giver(reqest):
-    return render(reqest, "myweb/giver.html")
+@login_required
+def giver(request):
+    if request.method == 'POST':
+        form = PostGiverForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)  # Create an instance but don't save it yet
+            post.user_profile = request.user.profile  # Associate the current user's profile
+            post.save()  # Now save the instance
+            return redirect('profile')
+    else:
+        form = PostGiverForm()
+    
+    return render(request, "myweb/giver.html", {'form': form})
 
 def review(request):
     return render(request, "myweb/review.html")
