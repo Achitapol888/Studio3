@@ -51,6 +51,24 @@
         .bg-light a {
             color: rgba(0, 0, 0, 0.8);
         }
+
+        body {
+            transition: background-color 0.6s ease, color 0.6s ease; /* Smooth transition for background and text color */
+        }
+        
+        /* Transition for other elements */
+        .navbar, #footer_bg, #profile_bg, #profile_text {
+            transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition for background and text color */
+        }
+        
+        .text-warning, .text-secondary {
+            transition: color 0.5s ease; /* Smooth transition for text color */
+        }
+        
+        /* Transition for links */
+        a {
+            transition: color 0.5s ease; /* Smooth transition for link color */
+        }
     </style>
 </head>
 
