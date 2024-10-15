@@ -163,6 +163,7 @@ background-color: rgba(0, 0, 0);
             </div>
         </div>
     </div>
+    
 <!-- Modal -->
 <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -180,7 +181,9 @@ background-color: rgba(0, 0, 0);
                         <label for="profile_picture" class="form-label">รูปโปรไฟล์</label>
                         <div class="upload-area" style="border: 2px dotted #007bff; padding: 20px; text-align: center;">
                             <input type="file" name="profile_picture" id="profile_picture" accept="image/*" style="display: none;" onchange="previewImage(event)">
-                            <img id="profileImagePreview" src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" style="max-width: 50%; height: auto; border-radius: 50%;">
+                            <img id="profileImagePreview" 
+                                 src="{% if user_profile.profile_picture %}{{ user_profile.profile_picture.url }}{% else %}{% static 'images/icon_account.png' %}{% endif %}" 
+                                 alt="Profile Picture" style="max-width: 50%; height: auto; border-radius: 50%;">
                             <label for="profile_picture" style="cursor: pointer; display: block; margin-top: 10px;">คลิกที่นี่เพื่ออัปโหลดรูปภาพ</label>
                         </div>
                     </div>
@@ -214,8 +217,6 @@ background-color: rgba(0, 0, 0);
                         <input type="text" class="form-control" id="studentID" name="student_ID" value="{{ user_profile.student_ID }}" required>
                     </div>
 
-                    
-
                     <div class="text-end"> <!-- Aligns the button to the right -->
                         <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
                     </div>
@@ -224,6 +225,7 @@ background-color: rgba(0, 0, 0);
         </div>
     </div>
 </div>
+
 
 {% endblock %}
 

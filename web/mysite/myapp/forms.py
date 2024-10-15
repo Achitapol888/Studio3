@@ -3,21 +3,34 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import UserProfile
 
-
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    first_name = forms.CharField(max_length=30, required=True)  # Add first name field
-    last_name = forms.CharField(max_length=30, required=True)   # Add last name field
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
     dorm = forms.CharField(required=True)
     phone_number = forms.IntegerField(required=True)
     student_ID = forms.IntegerField(required=True)
-    profile_picture = forms.ImageField(required=False)  # Correctly define this field here
+    profile_picture = forms.ImageField(required=False)
 
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 
                   'dorm', 'phone_number', 'student_ID',
-                  'password1', 'password2']  # Removed 'profile_picture' from User fields
+                  'password1', 'password2']
+
+        # Customize widgets to add Bootstrap classes
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
+            'dorm': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Dorm'}),
+            'phone_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+            'student_ID': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Student ID'}),
+            'password1': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
+            'password2': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
+            'profile_picture': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -29,17 +42,16 @@ class SignUpForm(UserCreationForm):
     def save(self, commit=True):
         user = super(SignUpForm, self).save(commit=False)
         user.email = self.cleaned_data['email']
-        user.first_name = self.cleaned_data['first_name']  # Save first name
-        user.last_name = self.cleaned_data['last_name']    # Save last name
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
         if commit:
             user.save()
-            # Save profile data in UserProfile
-            user_profile = UserProfile.objects.create(
+            UserProfile.objects.create(
                 user=user,
                 dorm=self.cleaned_data['dorm'],
                 phone_number=self.cleaned_data['phone_number'],
                 student_ID=self.cleaned_data['student_ID'],
-                profile_picture=self.cleaned_data.get('profile_picture')  # Corrected profile_picture
+                profile_picture=self.cleaned_data.get('profile_picture')
             )
         return user
 
