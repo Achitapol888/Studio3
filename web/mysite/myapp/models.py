@@ -37,12 +37,12 @@ class PostGiver(models.Model):
     stuff_name = models.CharField(max_length=50)
     categories = models.CharField(max_length=50, choices=CATEGORIES)
     stuff_picture = models.ImageField(upload_to='stuff_picture/', blank=True, null=True)
-    description = models.TextField()  # For longer text
-    defect = models.CharField(max_length=50, choices=DEFECT)  # Options: ไม่มี, น้อย, ปานกลาง, มาก
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)  # Link to UserProfile
-    place = models.TextField()  # For longer text
+    description = models.TextField()  
+    defect = models.CharField(max_length=50, choices=DEFECT)  
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)  
+    place = models.TextField()  
     date_limit = models.DateField()
-    created_at = models.DateTimeField(default=timezone.now)  # Set default value to now
+    created_at = models.DateTimeField(default=timezone.now)  
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -52,12 +52,12 @@ class PostReceiver(models.Model):
     post_ID = models.AutoField(primary_key=True)
     stuff_name = models.CharField(max_length=50)
     categories = models.CharField(max_length=50, choices=CATEGORIES)
-    description = models.TextField()  # For longer text
-    defect = models.CharField(max_length=50, choices=DEFECT)  # Options: ไม่มี, น้อย, ปานกลาง, มาก
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)  # Link to UserProfile
-    place = models.TextField()  # For longer text
+    description = models.TextField()  
+    defect = models.CharField(max_length=50, choices=DEFECT) 
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    place = models.TextField() 
     date_limit = models.DateField()
-    created_at = models.DateTimeField(default=timezone.now)  # Set default value to now
+    created_at = models.DateTimeField(default=timezone.now)  
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):

@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse,  get_object_or_404
 from .forms import SignUpForm, UserForm, UserProfileForm, PostGiverForm, PostReceiverForm
-from .models import UserProfile
+from .models import UserProfile, PostGiver, PostReceiver
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile, User
+from datetime import timezone
 
 class CustomLoginView(LoginView):
     template_name = 'myweb/login.html'
@@ -41,11 +42,10 @@ def select_prefer(request):
     return render(request, "myweb/select_prefer.html")
 
 @login_required
-def profile(request):
-    user = request.user  # Get the currently logged-in user
-    user_profile = user.profile
+def profile(request, id):
+    user_profile = get_object_or_404(UserProfile, id=id)  # Get profile based on ID
     context = {
-        'user': user,
+        'user': request.user,
         'user_profile': user_profile,
     }
     return render(request, 'myweb/profile.html', context)
@@ -58,13 +58,11 @@ def edit_profile(request):
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
 
-        # Check if the forms are valid
         if user_form.is_valid() and profile_form.is_valid():
-            # Save the forms
             user_form.save()
             profile_form.save()
             messages.success(request, 'Your profile has been updated successfully!')
-            return redirect('profile')  # Redirect to the profile page after success
+            return redirect('profile')
     else:
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=user_profile)
@@ -88,7 +86,7 @@ def receiver(request):
             post = form.save(commit=False)
             post.user_profile = request.user.profile
             post.save()
-            return redirect('profile')
+            return redirect('results_receiver')
     else:
         form = PostReceiverForm()
     return render(request, "myweb/receiver.html", {'form': form})
@@ -98,10 +96,10 @@ def giver(request):
     if request.method == 'POST':
         form = PostGiverForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save(commit=False)  # Create an instance but don't save it yet
-            post.user_profile = request.user.profile  # Associate the current user's profile
-            post.save()  # Now save the instance
-            return redirect('profile')
+            post = form.save(commit=False) 
+            post.user_profile = request.user.profile 
+            post.save() 
+            return redirect('results')
     else:
         form = PostGiverForm()
     
@@ -110,11 +108,42 @@ def giver(request):
 def review(request):
     return render(request, "myweb/review.html")
 
+@login_required
 def result_for_receiver(request):
     return render(request, "myweb/result_for_receiver.html")
 
+@login_required
 def result_for_giver(request):
     return render(request, "myweb/result_for_giver.html")
 
 def verify(request):
     return render(request, "myweb/verify.html")
+
+@login_required
+def search_matches_receiver(request):
+     # Fetch the latest PostReceiver entry
+    try:
+        latest_receiver_post = PostReceiver.objects.latest('created_at')  # Or 'post_ID'
+    except PostReceiver.DoesNotExist:
+        latest_receiver_post = None
+
+    matching_givers = PostGiver.objects.none()  # Initialize empty queryset
+    matching_receivers = None  # Initialize receiver as None
+
+    if latest_receiver_post:
+        # Get the category of the latest receiver post
+        receiver_category = latest_receiver_post.categories
+        
+        # Search for matching givers based on the category
+        matching_givers = PostGiver.objects.filter(categories=receiver_category)
+
+        # Optionally, you can pass the latest receiver post as well
+        matching_receivers = latest_receiver_post
+    
+    context = {
+        'matching_givers': matching_givers,
+        'matching_receivers': matching_receivers
+    }
+    print(context)
+
+    return render(request, 'myweb/results_receiver.html', context)

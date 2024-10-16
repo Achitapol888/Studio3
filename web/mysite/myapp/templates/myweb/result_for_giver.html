@@ -15,11 +15,10 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="row justify-content-center"> <!-- Center the entire content horizontally -->
-        <!-- Left Card: User Profile -->
+    <div class="row justify-content-center"> 
         <div class="col-md-6 mb-5">
             <div class="card">
-                <div class="card-header text-center"> <!-- Center the header -->
+                <div class="card-header text-center">
                     <h5>ผู้ใช้ที่ตรงกัน</h5>
                 </div>
                 <div class="card-body">
@@ -29,30 +28,29 @@
                         </div>
                     </div>
                     <div class="row mb-5">
-                        <div class="col-sm-12 text-center"> <!-- Centered text -->
-                            <p class="text-muted mb-0">โจรูโน่ โจวาน่า</p> <!-- Username -->
+                        <div class="col-sm-12 text-center">
+                            <p class="text-muted mb-0">โจรูโน่ โจวาน่า</p>
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-sm-12 text-center"> <!-- Centered buttons -->
-                            <a href="#" class="btn btn-primary me-2">ติดต่อ</a> <!-- First Button -->
-                            <a href="#" class="btn btn-secondary">ดูโปรไฟล์</a> <!-- Second Button -->
+                        <div class="col-sm-12 text-center">
+                            <a href="#" class="btn btn-primary me-2">ติดต่อ</a> 
+                            <a href="#" class="btn btn-secondary">ดูโปรไฟล์</a>
                         </div>
                     </div>
-                    <div class="row mt-5 date-container"> <!-- Left-aligned date -->
+                    <div class="row mt-5 date-container">
                         <div class="col-sm-4">
                             <p class="mb-0">วันเวลา:</p>
                         </div>
                         <div class="col-sm-8">
-                            <p class="text-muted mb-0">โจรูโน่ โจวาน่า ผู้นี้มีความฝัน</p> <!-- Replace with actual data -->
-                            <div id="formattedDate" class="mt-2 text-secondary"></div> <!-- Display formatted date -->
+                            <p class="text-muted mb-0">โจรูโน่ โจวาน่า ผู้นี้มีความฝัน</p> 
+                            <div id="formattedDate" class="mt-2 text-secondary"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Confirm Match Button -->
         <div class="row mb-5">
             <div class="col-sm-12 text-center">
                 <a href="{% url "verify" %}" class="btn btn-success">ยืนยันการจับคู่</a> <!-- Confirm Match Button -->
