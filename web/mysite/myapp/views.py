@@ -4,11 +4,22 @@ from .models import UserProfile, PostGiver, PostReceiver
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import UserProfile, User
-from datetime import timezone
+from .models import UserProfile
+from django.urls import reverse
+
+from django.contrib.auth.views import LoginView
+from django.urls import reverse
+from django.shortcuts import redirect
 
 class CustomLoginView(LoginView):
     template_name = 'myweb/login.html'
+
+    def get_success_url(self):
+        # Check if the user has a profile
+        if hasattr(self.request.user, 'profile'):
+            return reverse('profile', args=[self.request.user.profile.id])
+        else:
+            return reverse('login') 
 
 def placeholder_view(request):
     return HttpResponse("This is a placeholder for the home page.")
@@ -43,11 +54,12 @@ def select_prefer(request):
 
 @login_required
 def profile(request, id):
-    user_profile = get_object_or_404(UserProfile, id=id)  # Get profile based on ID
+    user_profile = get_object_or_404(UserProfile, id=id)
     context = {
         'user': request.user,
         'user_profile': user_profile,
     }
+    print(context)
     return render(request, 'myweb/profile.html', context)
 
 @login_required
@@ -73,11 +85,6 @@ def edit_profile(request):
     }
     return render(request, 'myweb/edit.html', context)
 
-
-
-def role_selection(request):
-    return render(request, "myweb/role_selection.html")
-
 @login_required
 def receiver(request):
     if request.method == 'POST':
@@ -99,7 +106,7 @@ def giver(request):
             post = form.save(commit=False) 
             post.user_profile = request.user.profile 
             post.save() 
-            return redirect('results')
+            return redirect('results_giver')
     else:
         form = PostGiverForm()
     
@@ -147,3 +154,33 @@ def search_matches_receiver(request):
     print(context)
 
     return render(request, 'myweb/results_receiver.html', context)
+
+@login_required
+def search_matches_giver(request):
+    # Fetch the latest PostGiver entry
+    try:
+        latest_giver_post = PostGiver.objects.latest('created_at')  # Fetch the latest giver post
+    except PostGiver.DoesNotExist:
+        latest_giver_post = None
+
+    matching_receivers = PostReceiver.objects.none()  # Initialize empty queryset
+    matching_givers = None  # Initialize giver as None
+
+    if latest_giver_post:
+        # Get the category of the latest giver post
+        giver_category = latest_giver_post.categories
+        
+        # Search for matching receivers based on the category
+        matching_receivers = PostReceiver.objects.filter(categories=giver_category)
+
+        # Optionally, you can pass the latest giver post as well
+        matching_givers = latest_giver_post
+    
+    context = {
+        'matching_givers': matching_givers,  # This will hold the latest giver post
+        'matching_receivers': matching_receivers  # This will hold the list of matching receivers
+    }
+    print(context)
+
+    return render(request, 'myweb/results_giver.html', context)  # Make sure to update the template name
+

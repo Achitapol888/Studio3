@@ -1,0 +1,95 @@
+{% extends 'myweb/base.html' %}
+
+{% load static %}
+{% load form_tags %}
+
+{% block title %}
+ผลลัพธ์
+{% endblock %}
+
+{% block background_style %}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="row">
+        <div class="card-header mx-3 mb-4">
+            <h5 class="card-title">ผลลัพธ์</h5>
+        </div>
+        {% for receiver in matching_receivers %}
+        <div class="col-md-6 mb-5">
+            <div class="card">
+                <div class="card-header">
+                    <h5>ผู้ใช้ที่ตรงกัน</h5> <!-- "Matching User" -->
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-12 text-center">
+                            <!-- Receiver's Profile Picture -->
+                            {% if receiver.user_profile.profile_picture %}
+                                <img src="{{ receiver.user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle">
+                            {% else %}
+                                <img src="{% static 'images/icon_accout.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-sm-12 text-center">
+                            <p class="text-muted mb-0">{{ receiver.user_profile.user.username }}</p> <!-- Receiver's Username -->
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-12 text-center">
+                            {% if receiver.user_profile.id %}
+                                <a href="{% url 'profile' receiver.user_profile.id %}" class="btn btn-primary">กดดูโปรไฟล์</a>
+                            {% else %}
+                                <p class="text-danger">Profile not available</p>
+                            {% endif %}
+                        </div>
+                        <div class="mt-3">
+                            <p>ชื่อ: {{ receiver.user_profile.user.first_name }}</p> 
+                            <p>นามสกุล: {{ receiver.user_profile.user.last_name }}</p> 
+                            <p>หอพัก: {{ receiver.user_profile.dorm }}</p> 
+                            <p>เบอร์โทร: 0{{ receiver.user_profile.phone_number }}</p>
+                            <p>รหัสนักศึกษา: {{ receiver.user_profile.student_ID }}</p>
+                            <p>ออนไลน์ล่าสุด: {{ receiver.user_profile.user.last_login|date_thai }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Display the corresponding item for each receiver -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>รายการที่ตรงกัน</h5> <!-- "Matched Item" -->
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <p>ชื่อสิ่งของ: {{ receiver.stuff_name }}</p> <!-- Item Name -->
+                        <p>รายละเอียด: {{ receiver.description }}</p> <!-- Item Description -->
+                        <p>ประเภท: {{ receiver.categories }}</p> <!-- Item Category -->
+                        <p>สถานที่: {{ receiver.place }}</p> <!-- Item Place -->
+                        <p>ตำหนิ: {{ receiver.defect }}</p> <!-- Item Defect -->
+                        <p>วันสิ้นสุด: {{ receiver.date_limit|date_thai }}</p> <!-- Format date in Thai -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Back Button -->
+    <div class="text-center mt-4">
+        {% if matching_givers %}
+            <a href="{% url 'profile' matching_givers.user_profile.id %}" class="btn btn-danger">ย้อนกลับ</a> <!-- Redirect to giver's profile -->
+        {% endif %}
+        <a href="{% url 'verify' %}" class="btn btn-success">ยืนยันการจับคู่</a> <!-- Confirm Match Button -->
+    </div>
+</div>
+
+{% endblock %}

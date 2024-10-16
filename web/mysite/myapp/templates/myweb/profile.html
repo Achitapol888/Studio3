@@ -50,17 +50,19 @@ background-color: rgba(0, 0, 0);
                 <div class="col-lg-6">
                     <div class="card mb-4">
                         <div class="card-body text-center">
-                        {% if user_profile.profile_picture %}
-                            <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" style="width: 150px;">
-                        {% else %}
-                            <img src="{% static 'images/icon_accout.png' %}" alt="Default Profile Picture" class="rounded-circle" style="width: 150px;">
-                        {% endif %}
-                        <h5 class="my-3">{{ user.username }}</h5>
-                        <div class="d-flex justify-content-center mb-2">
-                            <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                                แก้ไขโปรไฟล์
-                            </button>
-                        </div>
+                            {% if user_profile.profile_picture %}
+                                <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" style="width: 150px;">
+                            {% else %}
+                                <img src="{% static 'images/icon_accout.png' %}" alt="Default Profile Picture" class="rounded-circle" style="width: 150px;">
+                            {% endif %}
+                            <h5 class="my-3">{{ user_profile.user.username }}</h5>
+                            <div class="d-flex justify-content-center mb-2">
+                                {% if user.id == user_profile.user.id %}
+                                    <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                        แก้ไขโปรไฟล์
+                                    </button>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -74,7 +76,7 @@ background-color: rgba(0, 0, 0);
                                     <p class="mb-0">ชื่อ</p>
                                 </div>
                                 <div class="col-sm-8">
-                                    <p class="text-muted mb-0">{{ user.first_name }}</p>
+                                    <p class="text-muted mb-0">{{ user_profile.user.first_name }}</p>
                                 </div>
                             </div>
                             <hr>
@@ -83,7 +85,7 @@ background-color: rgba(0, 0, 0);
                                     <p class="mb-0">นามสกุล</p>
                                 </div>
                                 <div class="col-sm-8">
-                                    <p class="text-muted mb-0">{{ user.last_name }}</p>
+                                    <p class="text-muted mb-0">{{ user_profile.user.last_name }}</p>
                                 </div>
                             </div>
                             <hr>
@@ -92,7 +94,7 @@ background-color: rgba(0, 0, 0);
                                     <p class="mb-0">อีเมล</p>
                                 </div>
                                 <div class="col-sm-8">
-                                    <p class="text-muted mb-0">{{ user.email }}</p>
+                                    <p class="text-muted mb-0">{{ user_profile.user.email }}</p>
                                 </div>
                             </div>
                             <hr>
@@ -126,43 +128,53 @@ background-color: rgba(0, 0, 0);
                     </div>
                 </div>
             </div>
-
-            <div class="text-center col-12">
-                <div class="mb-4" id = "profile_text">
-                    <h5>เลือกบทบาทของคุณ</h5>
-                </div>
-                
-                <div class="row justify-content-center">
-                    <!-- Giver -->
-                    <div class="col-lg-5 col-md-6 col-sm-8 mb-3 mx-4 " id="profile_text">
-                        <figure class="d-block h-100 text-center" data-url="{% url 'giver' %}" onclick="selectRole(this)">
-                            <img class="img-fluid img-thumbnail bg-primary" src="{% static 'images/package.png' %}" alt="Giver">
-                            <figcaption class="fs-5 mt-3">ผู้ให้</figcaption>
-                        </figure>
+    
+            {% if user.id == user_profile.user.id %}
+                <div class="text-center col-12">
+                    <div class="mb-4" id = "profile_text">
+                        <h5>เลือกบทบาทของคุณ</h5>
                     </div>
-                
-                    <!-- Receiver -->
-                    <div class="col-lg-5 col-md-6 col-sm-8 mb-3 mx-4" id="profile_text">
-                        <figure class="d-block h-100 text-center" data-url="{% url 'receiver' %}" onclick="selectRole(this)">
-                            <img class="img-fluid img-thumbnail bg-warning" src="{% static 'images/receiver.png' %}" alt="Receiver">
-                            <figcaption class="fs-5 mt-3">ผู้รับ</figcaption>
-                        </figure>
+                    
+                    <div class="row justify-content-center">
+                        <!-- Giver -->
+                        <div class="col-lg-5 col-md-6 col-sm-8 mb-3 mx-4 " id="profile_text">
+                            <figure class="d-block h-100 text-center" data-url="{% url 'giver' %}" onclick="selectRole(this)">
+                                <img class="img-fluid img-thumbnail bg-primary" src="{% static 'images/package.png' %}" alt="Giver">
+                                <figcaption class="fs-5 mt-3">ผู้ให้</figcaption>
+                            </figure>
+                        </div>
+                    
+                        <!-- Receiver -->
+                        <div class="col-lg-5 col-md-6 col-sm-8 mb-3 mx-4" id="profile_text">
+                            <figure class="d-block h-100 text-center" data-url="{% url 'receiver' %}" onclick="selectRole(this)">
+                                <img class="img-fluid img-thumbnail bg-warning" src="{% static 'images/receiver.png' %}" alt="Receiver">
+                                <figcaption class="fs-5 mt-3">ผู้รับ</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    
+                    <!-- Button -->
+                    <div class="text-center">
+                        <a href="" id="nextButton" class="btn btn-primary btn-lg disabled mb-2 mt-1 fs-4" onclick="handleNextButtonClick(event)">เริ่มต้นกระบวนการ</a>
                     </div>
                 </div>
-                
-                <!-- Button -->
-                <div class="text-center">
-                    <a href="" id="nextButton" class="btn btn-primary btn-lg disabled mb-2 mt-1 fs-4" onclick="handleNextButtonClick(event)">เริ่มต้นกระบวนการ</a>
-                </div>
-
-                <!-- Logout Button -->
-                <form action="{% url 'logout' %}" method="post" class="mb-4">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-lg text-white">ออกจากระบบ</button>
-                </form>
+            {% endif %}
+    
+            <!-- Logout Button -->
+            {% if user_profile.user.id == user.id %}
+            <form action="{% url 'logout' %}" method="post" class="mb-4">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-lg text-white">ออกจากระบบ</button>
+            </form>
+        {% else %}
+            <div class="text-end">
+                <a href="javascript:history.back()" class="btn btn-secondary btn-lg">ย้อนกลับ</a>
             </div>
-        </div>
+        {% endif %}
     </div>
+</div>
+    
+    
     
 <!-- Modal -->
 <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
