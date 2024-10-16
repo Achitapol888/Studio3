@@ -162,7 +162,7 @@ background-color: rgba(0, 0, 0);
     
             <!-- Logout Button -->
             {% if user_profile.user.id == user.id %}
-            <form action="{% url 'logout' %}" method="post" class="mb-4">
+            <form action="{% url 'logout' %}" method="post" class="mb-4 text-center">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger btn-lg text-white">ออกจากระบบ</button>
             </form>
