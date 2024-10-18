@@ -6,10 +6,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
 from django.urls import reverse
+from fuzzywuzzy import fuzz
+from django.db.models import Q
+from datetime import timedelta, timezone
 
-from django.contrib.auth.views import LoginView
-from django.urls import reverse
-from django.shortcuts import redirect
 
 class CustomLoginView(LoginView):
     template_name = 'myweb/login.html'
@@ -74,7 +74,7 @@ def edit_profile(request):
             user_form.save()
             profile_form.save()
             messages.success(request, 'Your profile has been updated successfully!')
-            return redirect('profile')
+            return redirect('profile', id=user_profile.id)
     else:
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=user_profile)
@@ -85,14 +85,23 @@ def edit_profile(request):
     }
     return render(request, 'myweb/edit.html', context)
 
+
 @login_required
 def receiver(request):
     if request.method == 'POST':
-        form = PostReceiverForm(request.POST)
+        form = PostReceiverForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.user_profile = request.user.profile
             post.save()
+
+            match_history = MatchHistory.objects.create(
+                user_profile=request.user.profile,
+                receiver_post=post,
+                giver_post= None,
+                is_matched=False
+            )
+            print(match_history)
             return redirect('results_receiver')
     else:
         form = PostReceiverForm()
@@ -103,13 +112,22 @@ def giver(request):
     if request.method == 'POST':
         form = PostGiverForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save(commit=False) 
-            post.user_profile = request.user.profile 
-            post.save() 
+            # Save the PostGiver data
+            post = form.save(commit=False)
+            post.user_profile = request.user.profile
+            post.save()
+
+            # Create a MatchHistory entry with only the giver_post
+            match_history = MatchHistory.objects.create(
+                user_profile=request.user.profile,
+                giver_post=post,
+                is_matched=False  # Set to False, since the receiver hasn't been matched yet
+            )
+            print(match_history)
             return redirect('results_giver')
     else:
         form = PostGiverForm()
-    
+
     return render(request, "myweb/giver.html", {'form': form})
 
 def review(request):
@@ -155,32 +173,58 @@ def search_matches_receiver(request):
 
     return render(request, 'myweb/results_receiver.html', context)
 
+
+
 @login_required
-def search_matches_giver(request):
-    # Fetch the latest PostGiver entry
-    try:
-        latest_giver_post = PostGiver.objects.latest('created_at')  # Fetch the latest giver post
-    except PostGiver.DoesNotExist:
-        latest_giver_post = None
+def search_matches_giver(request, post_id):
+    # Fetch the PostGiver entry using the provided post_id
+    current_giver_post = get_object_or_404(PostGiver, post_ID=post_id)
 
-    matching_receivers = PostReceiver.objects.none()  # Initialize empty queryset
-    matching_givers = None  # Initialize giver as None
+    # Get the current user
+    current_user = request.user
+    best_match = None  # Initialize best_match
 
-    if latest_giver_post:
-        # Get the category of the latest giver post
-        giver_category = latest_giver_post.categories
-        
-        # Search for matching receivers based on the category
-        matching_receivers = PostReceiver.objects.filter(categories=giver_category)
+    similarity_threshold = 70  # Set the similarity threshold
 
-        # Optionally, you can pass the latest giver post as well
-        matching_givers = latest_giver_post
-    
+    if current_giver_post:
+        # Get the category, item name, and date limit of the current giver post
+        giver_category = current_giver_post.categories
+        giver_item_name = current_giver_post.stuff_name
+        giver_date_limit = current_giver_post.date_limit
+
+        # Search for matching receivers based on category and valid date,
+        # and exclude the current user's posts
+        matching_receivers = PostReceiver.objects.filter(
+            categories=giver_category,
+            date_limit__gte=timezone.now().date(),  # Ensure the date limit is in the future
+            user_profile__user__ne=current_user  # Exclude the current user
+        )
+
+        # Filter matching receivers based on item name similarity
+        filtered_receivers = []
+        for receiver in matching_receivers:
+            similarity = fuzz.token_set_ratio(giver_item_name, receiver.stuff_name)
+            if similarity >= similarity_threshold:
+                # Calculate the difference in days between giver and receiver date limits
+                date_difference = (receiver.date_limit - giver_date_limit).days
+                # Only consider future dates
+                if date_difference >= 0:
+                    filtered_receivers.append((receiver, similarity, date_difference))  # Store receiver with its similarity score and date difference
+
+        # Select the receiver with the highest similarity score and the smallest date difference
+        if filtered_receivers:
+            # Sort by similarity score first, then by date difference
+            filtered_receivers.sort(key=lambda x: (-x[1], x[2]))  # Sort by similarity descending, then by date difference ascending
+            best_match = filtered_receivers[0][0]  # Get the receiver with the best score
+
     context = {
-        'matching_givers': matching_givers,  # This will hold the latest giver post
-        'matching_receivers': matching_receivers  # This will hold the list of matching receivers
+        'matching_givers': current_giver_post,  # This will hold the current giver post
+        'best_match': best_match,  # This will hold the best matching receiver
     }
     print(context)
 
-    return render(request, 'myweb/results_giver.html', context)  # Make sure to update the template name
+    return render(request, 'myweb/results_giver.html', context)  # Update the template name as needed
+
+
+
 
