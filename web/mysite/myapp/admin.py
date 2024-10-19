@@ -26,14 +26,13 @@ class PostGiverAdmin(admin.ModelAdmin):
         'categories',
         'user_profile',
         'stuff_picture_display',
-        'description',   # Included
-        'defect',        # Included
-        'place',         # Included
-        'date_limit',    # Included
+        'description',   
+        'defect',        
+        'place',         
         'created_at',
         'updated_at',
-        'is_matched',    # Included
-        'is_verify'      # Included
+        'is_matched',    
+        'is_verify'      
     )
     search_fields = ('stuff_name', 'user_profile__user__username')
     list_filter = ('categories', 'defect', 'created_at')
@@ -50,14 +49,14 @@ class PostReceiverAdmin(admin.ModelAdmin):
         'stuff_name',
         'categories',
         'user_profile',
-        'description',   # Included
-        'defect',        # Included
-        'place',         # Included
-        'date_limit',    # Included
+        'description',  
+        'defect',       
+        'place',         
+        'date_limit',    
         'created_at',
         'updated_at',
-        'is_matched',    # Included
-        'is_verify'      # Included
+        'is_matched',    
+        'is_verify'      
     )
     search_fields = ('stuff_name', 'user_profile__user__username')
     list_filter = ('categories', 'defect', 'created_at')

@@ -33,7 +33,6 @@ urlpatterns = [
     path('receiver/', views.receiver, name='receiver'),
     path('giver/', views.giver, name='giver'),
     path('profile/<int:id>/', views.profile, name='profile'),
-    path('review/', views.review, name= 'review'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
     path('results-receiver/<int:post_ID>/', views.search_matches_receiver, name='results_receiver'),

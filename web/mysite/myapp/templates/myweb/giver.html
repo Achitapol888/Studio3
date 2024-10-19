@@ -140,14 +140,12 @@ background-color: rgba(0, 0, 0);
                 </div>
                 {% endif %}
                 
-              
-                
                 <div class="mb-3 form-check">
                     <input type="checkbox" id="donationCheckbox" class="form-check-input">
                     <label for="donationCheckbox" class="form-check-label">สำหรับบริจาคเท่านั้น</label>
                 </div>
-
-                <button type="submit" class="btn btn-primary" id="submitButton">โพสต์</button>
+        
+                <button type="submit" class="btn btn-primary disabled" id="submitButton" disabled>โพสต์</button>
             </form>
         </div>
     </div>
@@ -161,6 +159,19 @@ background-color: rgba(0, 0, 0);
     const fileLabel = document.getElementById('fileLabel');
     const fileNameSpan = document.getElementById('fileName');
     const previewImage = document.getElementById('preview-image');
+    const checkbox = document.getElementById("donationCheckbox");
+    const submitButton = document.getElementById("submitButton");
+
+        // Event listener to enable or disable the submit button
+        checkbox.addEventListener("change", function() {
+            if (this.checked) {
+                submitButton.disabled = false; // Enable button if checked
+                submitButton.classList.remove("disabled"); // Remove Bootstrap disabled class
+            } else {
+                submitButton.disabled = true; // Disable button if unchecked
+                submitButton.classList.add("disabled"); // Add Bootstrap disabled class
+            }
+        });
 
     // Update file label and show file name
     stuffPictureInput.addEventListener('change', function(event) {

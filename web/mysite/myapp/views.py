@@ -114,6 +114,7 @@ def giver(request):
     return render(request, "myweb/giver.html", {'form': form})
 
 
+@login_required
 def post_history(request, profile_id):
     # Retrieve the user profile based on the provided profile_id
     user_profile = get_object_or_404(UserProfile, id=profile_id)
@@ -145,6 +146,7 @@ def post_history(request, profile_id):
 
 
 # Edit Giver Post
+@login_required
 def edit_giver_post(request, post_ID):
     post = get_object_or_404(PostGiver, post_ID=post_ID)
     user_profile = get_object_or_404(UserProfile, user=request.user)
@@ -153,19 +155,18 @@ def edit_giver_post(request, post_ID):
         form = PostGiverForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            # Redirect to the user's post history
             return redirect('post_history', profile_id=user_profile.id) 
     else:
         form = PostGiverForm(instance=post)
 
-    # Pass user_profile into the template for URL usage
     return render(request, 'myweb/edit_giver_post.html', {
         'form': form,
         'post': post,
-        'user_profile': user_profile  # Make sure user_profile is available in the template
+        'user_profile': user_profile 
     })
 
 # Edit Receiver Post
+@login_required
 def edit_receiver_post(request, post_ID):
     post = get_object_or_404(PostReceiver, post_ID=post_ID)
     user_profile = get_object_or_404(UserProfile, user=request.user)
@@ -187,6 +188,7 @@ def edit_receiver_post(request, post_ID):
     })
 
 # Delete Receiver Post
+@login_required
 def delete_receiver_post(request, post_ID):
     post = get_object_or_404(PostReceiver, post_ID=post_ID)
 
@@ -200,12 +202,12 @@ def delete_receiver_post(request, post_ID):
 
 
 # Delete Giver Post
+@login_required
 def delete_giver_post(request, post_ID):
     post = get_object_or_404(PostGiver, post_ID=post_ID)
 
     if request.method == 'POST':
         post.delete()
-        # Use the related_name to access the user profile
         if hasattr(request.user, 'profile'):
             return redirect('post_history', profile_id=request.user.profile.id) 
 
@@ -224,23 +226,21 @@ def search_matches_receiver(request, post_ID):
     matching_givers = PostGiver.objects.filter(
         categories=receiver_category,
         date_limit__gte=timezone.now().date(),  
-    ).exclude(user_profile__user=current_user)  
+    ).exclude(user_profile__user=current_user).exclude(is_matched=True) 
 
-    print(f"Number of matching givers: {matching_givers.count()}")  # Log count
+    print(f"Number of matching givers: {matching_givers.count()}") 
 
     filtered_givers = []
     for giver in matching_givers:
         similarity = fuzz.token_set_ratio(receiver_item_name, giver.stuff_name)
         date_difference = (receiver_date_limit - giver.date_limit).days
-        
-        print(f"Giver ID: {giver.post_ID}, Similarity: {similarity}, Date Difference: {date_difference}")  # Log details
-        
+                
         if similarity > 0:
             filtered_givers.append((giver, similarity, date_difference))
 
     if filtered_givers:
         filtered_givers.sort(key=lambda x: (-x[1], x[2]))
-        best_match = filtered_givers[0][0]  # Get the best match giver
+        best_match = filtered_givers[0][0]  
 
     context = {
         'matching_givers': matching_givers,
@@ -251,99 +251,79 @@ def search_matches_receiver(request, post_ID):
 
     if best_match:
         request.session['best_match_id'] = best_match.post_ID
-        print(best_match.post_ID)
-    else:
-        print("No best match found.")
+
     print(current_receiver_post.post_ID)
+    if best_match:  
+        print(best_match.post_ID)
+    
     return render(request, 'myweb/results_receiver.html', context)
 
 
 
+@login_required
 def search_matches_giver(request, post_ID):
-    # Get the current giver post based on the post_ID
     current_giver_post = get_object_or_404(PostGiver, post_ID=post_ID)
     current_user = request.user
     best_match = None 
 
-    # Check if the current giver post exists
     if current_giver_post:
         giver_category = current_giver_post.categories
         giver_item_name = current_giver_post.stuff_name
         giver_date_limit = current_giver_post.date_limit
         
-        # Filter matching receivers based on the category and date limit
         matching_receivers = PostReceiver.objects.filter(
             categories=giver_category,
             date_limit__gte=timezone.now().date(),  
-        ).exclude(user_profile__user=current_user)  
+        ).exclude(user_profile__user=current_user).exclude(is_matched=True)
 
-        filtered_receivers = []  # This will store tuples of (receiver, similarity, date_difference)
+        filtered_receivers = []  
         for receiver in matching_receivers:
-            # Calculate similarity between the giver's item and each receiver's item
             similarity = fuzz.token_set_ratio(giver_item_name, receiver.stuff_name)
-            # Calculate the date difference between giver and receiver posts
             date_difference = (giver_date_limit - receiver.date_limit).days
             
-            # Append the tuple to the filtered list if similarity is above the threshold
-            if similarity > 0:  # Consider all positive similarities
+            if similarity > 0:  
                 filtered_receivers.append((receiver, similarity, date_difference)) 
 
-        # Check if we have any filtered receivers
         if filtered_receivers:
-            # Sort by similarity (descending) and then by date_difference (ascending)
             filtered_receivers.sort(key=lambda x: (-x[1], x[2])) 
-            best_match = filtered_receivers[0][0]  # Get the best match receiver
+            best_match = filtered_receivers[0][0] 
 
-    # Prepare context for rendering
     context = {
-        'matching_givers': current_giver_post,  # Include the current giver post for context
+        'matching_givers': current_giver_post,  
         'best_match': best_match,  
-        'filtered_receivers': filtered_receivers,  # Include all filtered receivers for display
-        'current_giver_post': current_giver_post,  # Include the current receiver post for context
+        'filtered_receivers': filtered_receivers, 
+        'current_giver_post': current_giver_post,  
     }
     
-    # Store the best match in the session
     if best_match:
         request.session['best_match_id'] = best_match.post_ID
 
     print(current_giver_post.post_ID)
-    if best_match:  # Check if best_match is not None before accessing it
+    if best_match:  
         print(best_match.post_ID)
 
-    # Render the results
     return render(request, 'myweb/results_giver.html', context)
 
-def review(request):
-    return render(request, "myweb/review.html")
-
-
-
-
+@login_required
 def verify_match(request, giver_post_id, receiver_post_id):
-    # Get the current giver post
     current_giver_post = get_object_or_404(PostGiver, post_ID=giver_post_id)
-    # Get the receiver post based on the provided ID
     current_receiver_post = get_object_or_404(PostReceiver, post_ID=receiver_post_id)
 
-    # Set is_matched to True for both the current giver and receiver posts
     current_giver_post.is_matched = True
     current_giver_post.save()
 
     current_receiver_post.is_matched = True
     current_receiver_post.save()
 
-    # Create a new matched post record
     matched_post = MatchPost.objects.create(
         giver_post=current_giver_post,
         receiver_post=current_receiver_post
     )
-    matched_post.confirmation_date = timezone.now()  # Set confirmation date if necessary
-    matched_post.save()  # Save the matched post record
-
-    # Redirect to a specific page or render the verify page
+    matched_post.confirmation_date = timezone.now()  
+    matched_post.save() 
     return render(request, "myweb/verify.html", {'matched_post': matched_post})
 
-
+@login_required
 def confirm_verification(request, match_ID):
     match_post = get_object_or_404(MatchPost, match_ID=match_ID)
 
