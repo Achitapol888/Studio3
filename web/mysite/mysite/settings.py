@@ -133,3 +133,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'profile'  # Redirect to the profile page after login
 LOGOUT_REDIRECT_URL = 'login'    # Redirect to the home page after logout
+
+Debug = False
+ALLOWED_HOSTS = ['yourdomain.tld']
+CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = [
+    'yourdomain.tld',
+]
