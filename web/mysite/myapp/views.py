@@ -8,7 +8,7 @@ from .models import UserProfile
 from django.urls import reverse
 from fuzzywuzzy import fuzz
 from django.db.models import Q
-from datetime import timedelta, timezone
+from django.utils import timezone
 
 
 class CustomLoginView(LoginView):
@@ -94,14 +94,6 @@ def receiver(request):
             post = form.save(commit=False)
             post.user_profile = request.user.profile
             post.save()
-
-            match_history = MatchHistory.objects.create(
-                user_profile=request.user.profile,
-                receiver_post=post,
-                giver_post= None,
-                is_matched=False
-            )
-            print(match_history)
             return redirect('results_receiver')
     else:
         form = PostReceiverForm()
@@ -116,33 +108,82 @@ def giver(request):
             post = form.save(commit=False)
             post.user_profile = request.user.profile
             post.save()
-
-            # Create a MatchHistory entry with only the giver_post
-            match_history = MatchHistory.objects.create(
-                user_profile=request.user.profile,
-                giver_post=post,
-                is_matched=False  # Set to False, since the receiver hasn't been matched yet
-            )
-            print(match_history)
-            return redirect('results_giver')
+            # Redirect to the results_giver view with the new post_id
+            return redirect('results_giver', post_id=post.post_ID)  # Pass the post_id here
     else:
         form = PostGiverForm()
 
     return render(request, "myweb/giver.html", {'form': form})
 
-def review(request):
-    return render(request, "myweb/review.html")
 
-@login_required
-def result_for_receiver(request):
-    return render(request, "myweb/result_for_receiver.html")
+def post_history(request, profile_id):
+    # Retrieve the user profile based on the provided profile_id
+    user_profile = get_object_or_404(UserProfile, id=profile_id)
 
-@login_required
-def result_for_giver(request):
-    return render(request, "myweb/result_for_giver.html")
+    # Query posts for the specified user profile
+    giver_posts = PostGiver.objects.filter(user_profile=user_profile)
+    receiver_posts = PostReceiver.objects.filter(user_profile=user_profile)
 
-def verify(request):
-    return render(request, "myweb/verify.html")
+    context = {
+        'giver_posts': giver_posts,
+        'receiver_posts': receiver_posts,
+        'user_profile': user_profile,
+    }
+
+    return render(request, "myweb/post_history.html", context)
+
+
+
+# Edit Giver Post
+def edit_giver_post(request, post_ID):
+    post = get_object_or_404(PostGiver, post_ID=post_ID)
+    if request.method == 'POST':
+        form = PostGiverForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            if hasattr(request.user, 'profile'):
+                return redirect('post_history', profile_id=request.user.profile.id) 
+    else:
+        form = PostGiverForm(instance=post)
+    return render(request, 'myweb/edit_receiver_post.html', {'form': form, 'post': post})
+
+# Edit Receiver Post
+def edit_receiver_post(request, post_ID):
+    post = get_object_or_404(PostReceiver, post_ID=post_ID)
+    if request.method == 'POST':
+        form = PostReceiverForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            if hasattr(request.user, 'profile'):
+                return redirect('post_history', profile_id=request.user.profile.id) 
+    else:
+        form = PostReceiverForm(instance=post)
+    return render(request, 'myweb/edit_receiver_post.html', {'form': form, 'post': post})
+
+# Delete Receiver Post
+def delete_receiver_post(request, post_ID):
+    post = get_object_or_404(PostReceiver, post_ID=post_ID)
+
+    if request.method == 'POST':
+        post.delete()
+        # Use the related_name to access the user profile
+        if hasattr(request.user, 'profile'):
+            return redirect('post_history', profile_id=request.user.profile.id)  
+
+    return render(request, 'myweb/delete_post_confirmation.html', {'post': post})
+
+
+# Delete Giver Post
+def delete_giver_post(request, post_ID):
+    post = get_object_or_404(PostReceiver, post_ID=post_ID)
+
+    if request.method == 'POST':
+        post.delete()
+        # Use the related_name to access the user profile
+        if hasattr(request.user, 'profile'):
+            return redirect('post_history', profile_id=request.user.profile.id) 
+        
+    return render(request, 'myweb/delete_post_confirmation.html', {'post': post})
 
 @login_required
 def search_matches_receiver(request):
@@ -197,8 +238,7 @@ def search_matches_giver(request, post_id):
         matching_receivers = PostReceiver.objects.filter(
             categories=giver_category,
             date_limit__gte=timezone.now().date(),  # Ensure the date limit is in the future
-            user_profile__user__ne=current_user  # Exclude the current user
-        )
+        ).exclude(user_profile__user=current_user)  # Exclude the current user
 
         # Filter matching receivers based on item name similarity
         filtered_receivers = []
@@ -225,6 +265,10 @@ def search_matches_giver(request, post_id):
 
     return render(request, 'myweb/results_giver.html', context)  # Update the template name as needed
 
+def review(request):
+    return render(request, "myweb/review.html")
 
 
 
+def verify(request):
+    return render(request, "myweb/verify.html")

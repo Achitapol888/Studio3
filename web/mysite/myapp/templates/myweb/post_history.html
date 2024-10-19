@@ -1,0 +1,90 @@
+<h2>Your Post History</h2>
+
+<h3>Giver Posts</h3>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Stuff Name</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Defect</th>
+            <th>Place</th>
+            <th>Date Limit</th>
+            <th>Created At</th>
+            <th>Matched</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in giver_posts %}
+        <tr>
+            <td>{{ post.post_ID }}</td>
+            <td>{{ post.stuff_name }}</td>
+            <td>{{ post.categories }}</td>
+            <td>{{ post.description }}</td>
+            <td>{{ post.defect }}</td>
+            <td>{{ post.place }}</td>
+            <td>{{ post.date_limit }}</td>
+            <td>{{ post.created_at }}</td>
+            <td>{{ post.is_matched }}</td>
+            <td>
+                <a href="{% url 'edit_giver_post' post.post_ID %}">Edit Giver Post</a>
+                <form action="{% url 'delete_giver_post' post.post_ID %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="10">No giver posts available.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Receiver Posts</h3>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Stuff Name</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Defect</th>
+            <th>Place</th>
+            <th>Date Limit</th>
+            <th>Created At</th>
+            <th>Matched</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in receiver_posts %}
+        <tr>
+            <td>{{ post.post_ID }}</td>
+            <td>{{ post.stuff_name }}</td>
+            <td>{{ post.categories }}</td>
+            <td>{{ post.description }}</td>
+            <td>{{ post.defect }}</td>
+            <td>{{ post.place }}</td>
+            <td>{{ post.date_limit }}</td>
+            <td>{{ post.created_at }}</td>
+            <td>{{ post.is_matched }}</td>
+            <td>
+                <a href="{% url 'edit_receiver_post' post.post_ID %}">Edit Receiver Post</a>
+                <form action="{% url 'delete_receiver_post' post.post_ID %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="10">No receiver posts found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
