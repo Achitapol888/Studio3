@@ -22,7 +22,7 @@ background-color: rgba(0, 0, 0);
         </div>
         <div class="row">
             {% for post in giver_posts %}
-            <div class="col-md-4 mb-4">
+            <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card">
                     <div class="card-body">
                         <img src="{{ post.stuff_picture.url }}" class="card-img-top" alt="{{ post.stuff_name }}" 
@@ -35,7 +35,7 @@ background-color: rgba(0, 0, 0);
                         <p class="card-text"><strong>วันครบกำหนด:</strong> {{ post.date_limit|date_thai }}</p>
                         <p class="card-text"><strong>โพสต์เมื่อ:</strong> {{ post.created_at|date_thai }}</p>
 
-                        <p class="card-text"><strong>สถานะการจับคู่:</strong> 
+                        <p class="card-text"><strong>สถานะการจับคู่:</strong>
                         {% if post.is_matched %}
                             แมตช์แล้ว
                         {% else %}
@@ -43,7 +43,7 @@ background-color: rgba(0, 0, 0);
                         {% endif %}
                         </p>
                         <p class="card-text"><strong>สถานะการยืนยัน:</strong> 
-                            {% if post.is_verify %}
+                            {% if post.is_confirm %}
                                 ยืนยันแล้ว
                             {% else %}
                                 ยังไม่ยืนยัน
@@ -52,6 +52,13 @@ background-color: rgba(0, 0, 0);
 
                     {% if user.id == user_profile.user.id %}
                         <div class="d-flex justify-content-end">
+                            {% if not post.is_matched %}
+                                <!-- Button to re-match the post -->
+                                <a href="{% url 'results_giver' post.post_ID %}" 
+                                class="btn btn-success me-3">จับคู่อีกครั้ง</a>
+                            {% endif %}
+                        
+
                             <!-- Edit button only for matched but not verified posts -->
                             {% if not post.is_matched and not post.is_verify %}
                                 <a href="{% url 'edit_giver_post' post.post_ID %}" class="btn btn-primary">เเก้ไข</a>
@@ -60,14 +67,14 @@ background-color: rgba(0, 0, 0);
                     
                             <!-- Confirmation button for matched posts -->
                             {% for matched in matched_posts %}
-                            {% if matched.is_matched and not matched.is_verify %}
-                                <form action="{% url 'confirm_verification' matched.match_ID %}" method="POST" class="d-inline">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-success">ยืนยันการจับคู่</button>
-                                </form>
-                            {% elif matched.is_verify %}
-                                <span>การจับคู่ได้รับการยืนยันแล้ว</span>
-                            {% endif %}
+                                {% if not matched.is_confirm %}
+                                    <form action="{% url 'confirm_verification' matched.match_ID %}" method="POST" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success">ยืนยันการให้</button>
+                                    </form>
+                                {% elif matched.is_confirm %}
+
+                                {% endif %}
                             {% endfor %}
 
                             <!-- Delete post form -->
@@ -75,7 +82,6 @@ background-color: rgba(0, 0, 0);
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">ลบโพสต์</button>
                             </form>
-                            
                         </div>
                     {% endif %}
                     
@@ -98,7 +104,7 @@ background-color: rgba(0, 0, 0);
         </div>
         <div class="row">
             {% for post in receiver_posts %}
-            <div class="col-md-4 mb-4">
+            <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card">
                     <div class="card-body">
                         <p class="card-text"><strong>ชื่อสิ่งของ:</strong> {{ post.stuff_name }}</p>
@@ -116,7 +122,7 @@ background-color: rgba(0, 0, 0);
                             {% endif %}
                             </p>
                             <p class="card-text"><strong>สถานะการยืนยัน:</strong> 
-                                {% if post.is_verify %}
+                                {% if post.is_confirm %}
                                     ยืนยันแล้ว
                                 {% else %}
                                     ยังไม่ยืนยัน
@@ -124,23 +130,30 @@ background-color: rgba(0, 0, 0);
                             </p>
 
                             {% if user.id == user_profile.user.id %}
+                            
                                 <div class="d-flex justify-content-end">
+                                    {% if not post.is_matched %}
+                                        <!-- Button to re-match the post -->
+                                        <a href="{% url 'results_receiver' post.post_ID %}" 
+                                        class="btn btn-success me-3">จับคู่อีกครั้ง</a>
+                                    {% endif %}
+
                                     <!-- Edit button only for matched but not verified posts -->
                                     {% if not post.is_matched and not post.is_verify %}
-                                        <a href="{% url 'edit_receiver_post' post.post_ID %}" class="btn btn-primary">เเก้ไข</a>
+                                        <a href="{% url 'edit_receiver_post' post.post_ID %}" 
+                                        class="btn btn-primary">เเก้ไข</a>
                                     {% endif %}
-                                
 
                                     <!-- Confirmation button for matched posts -->
                                     {% for matched in matched_posts %}
-                                    {% if matched.giver_post.is_matched and not matched.giver_post.is_verify %}
-                                        <form  form action="{% url 'confirm_verification' matched.match_ID %}" method="POST" class="d-inline">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-success">ยืนยันการจับคู่</button>
-                                        </form>
-                                    {% elif matched.is_verify %}
-                                        <span>การจับคู่ได้รับการยืนยันแล้ว</span>
-                                    {% endif %}
+                                        {% if not matched.is_confirm %}
+                                            <form action="{% url 'confirm_verification' matched.match_ID %}" method="POST" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success">ยืนยันการให้</button>
+                                            </form>
+                                        {% elif matched.is_confirm %}
+
+                                        {% endif %}
                                     {% endfor %}
 
                                     <!-- Delete post form -->
@@ -148,11 +161,6 @@ background-color: rgba(0, 0, 0);
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger">ลบโพสต์</button>
                                     </form>
-
-                                    {% if not post.is_matched %}
-                                        <!-- Button to re-match the post -->
-                                        <a href="{% url 'results_receiver' post.post_ID %}" class="btn btn-success ms-3">จับคู่อีกครั้ง</a>
-                                    {% endif %}
                                 </div>
                             {% endif %}
                     </div>
@@ -160,7 +168,7 @@ background-color: rgba(0, 0, 0);
             </div>
             {% endfor %}
             {% if not receiver_posts %}
-            <div class="col-12 text-center mx-auto">
+            <div class="col-4 text-center mx-auto">
                 <div class="alert alert-info">ไม่มีโพสต์</div>
             </div>
             {% endif %}

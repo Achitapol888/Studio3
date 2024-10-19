@@ -141,7 +141,10 @@ def post_history(request, profile_id):
         'user_profile': user_profile,
         'matched_posts': matched_posts,
     }
-
+    
+    print(receiver_posts)
+    print(giver_posts)
+    
     return render(request, "myweb/post_history.html", context)
 
 
@@ -234,7 +237,7 @@ def search_matches_receiver(request, post_ID):
     for giver in matching_givers:
         similarity = fuzz.token_set_ratio(receiver_item_name, giver.stuff_name)
         date_difference = (receiver_date_limit - giver.date_limit).days
-                
+        
         if similarity > 0:
             filtered_givers.append((giver, similarity, date_difference))
 
@@ -255,7 +258,8 @@ def search_matches_receiver(request, post_ID):
     print(current_receiver_post.post_ID)
     if best_match:  
         print(best_match.post_ID)
-    
+        print(filtered_givers)
+
     return render(request, 'myweb/results_receiver.html', context)
 
 
@@ -301,7 +305,7 @@ def search_matches_giver(request, post_ID):
     print(current_giver_post.post_ID)
     if best_match:  
         print(best_match.post_ID)
-
+        print(best_match)
     return render(request, 'myweb/results_giver.html', context)
 
 @login_required
@@ -319,7 +323,7 @@ def verify_match(request, giver_post_id, receiver_post_id):
         giver_post=current_giver_post,
         receiver_post=current_receiver_post
     )
-    matched_post.confirmation_date = timezone.now()  
+    matched_post.match_date = timezone.now()  
     matched_post.save() 
     return render(request, "myweb/verify.html", {'matched_post': matched_post})
 
@@ -328,15 +332,19 @@ def confirm_verification(request, match_ID):
     match_post = get_object_or_404(MatchPost, match_ID=match_ID)
 
     match_post.confirmation_date = timezone.now()  
+    match_post.is_confirm = True
     match_post.save()
 
     giver_post = match_post.giver_post
     receiver_post = match_post.receiver_post
 
-    giver_post.is_verify = True
+    giver_post.is_confirm = True
     giver_post.save()
-
-    receiver_post.is_verify = True
+    
+    receiver_post.is_confirm = True
     receiver_post.save()
+    
+    print(giver_post)
+    print(receiver_post)
 
     return redirect('post_history', profile_id=request.user.profile.id)

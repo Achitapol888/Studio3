@@ -47,7 +47,7 @@ class PostGiver(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     is_matched = models.BooleanField(default=False)
-    is_verify = models.BooleanField(default=False)
+    is_confirm = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.stuff_name} by {self.user_profile.user.username}"
@@ -65,7 +65,7 @@ class PostReceiver(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     is_matched = models.BooleanField(default=False)
-    is_verify = models.BooleanField(default=False)
+    is_confirm = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.stuff_name} by {self.user_profile.user.username}"
@@ -77,7 +77,9 @@ class MatchPost(models.Model):
     receiver_post = models.ForeignKey(PostReceiver, on_delete=models.CASCADE)
     match_date = models.DateTimeField(default=timezone.now)
     confirmation_date = models.DateTimeField(null=True, blank=True)  # To store the confirmation date
+    is_confirm = models.BooleanField(default=False)
 
+    
     def __str__(self):
         return f"Match ID: {self.match_ID} between {self.giver_post} and {self.receiver_post}"
 
