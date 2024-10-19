@@ -1,90 +1,125 @@
-<h2>Your Post History</h2>
+{% extends 'myweb/base.html' %}
 
-<h3>Giver Posts</h3>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Stuff Name</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Defect</th>
-            <th>Place</th>
-            <th>Date Limit</th>
-            <th>Created At</th>
-            <th>Matched</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for post in giver_posts %}
-        <tr>
-            <td>{{ post.post_ID }}</td>
-            <td>{{ post.stuff_name }}</td>
-            <td>{{ post.categories }}</td>
-            <td>{{ post.description }}</td>
-            <td>{{ post.defect }}</td>
-            <td>{{ post.place }}</td>
-            <td>{{ post.date_limit }}</td>
-            <td>{{ post.created_at }}</td>
-            <td>{{ post.is_matched }}</td>
-            <td>
-                <a href="{% url 'edit_giver_post' post.post_ID %}">Edit Giver Post</a>
-                <form action="{% url 'delete_giver_post' post.post_ID %}" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="10">No giver posts available.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% load static %}
 
-<h3>Receiver Posts</h3>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Stuff Name</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Defect</th>
-            <th>Place</th>
-            <th>Date Limit</th>
-            <th>Created At</th>
-            <th>Matched</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for post in receiver_posts %}
-        <tr>
-            <td>{{ post.post_ID }}</td>
-            <td>{{ post.stuff_name }}</td>
-            <td>{{ post.categories }}</td>
-            <td>{{ post.description }}</td>
-            <td>{{ post.defect }}</td>
-            <td>{{ post.place }}</td>
-            <td>{{ post.date_limit }}</td>
-            <td>{{ post.created_at }}</td>
-            <td>{{ post.is_matched }}</td>
-            <td>
-                <a href="{% url 'edit_receiver_post' post.post_ID %}">Edit Receiver Post</a>
-                <form action="{% url 'delete_receiver_post' post.post_ID %}" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="10">No receiver posts found.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% load form_tags %}
 
+{% block title %}
+ประวัติการโพสต์
+{% endblock %}
+
+{% block background_style %}
+background-color: rgba(0, 0, 0);
+{% endblock %}
+
+{% block content %}
+<div class="card mt-4">
+    
+    <div class="card-body">
+        <h2>ประวัติการโพสต์</h2>
+        <hr>
+        <div class="mb-3">
+            <h3>ประวัติการโพสต์การเป็นผู้ให้</h3>
+        </div>
+        <div class="row">
+            {% for post in giver_posts %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="{{ post.stuff_picture.url }}" class="card-img-top" alt="{{ post.stuff_name }}" 
+                        style="width: 200px; height: auto; display: block; margin: 0 auto;">
+                        <p class="card-text pt-3"><strong>ชื่อสิ่งของ:</strong> {{ post.stuff_name }}</p>
+                        <p class="card-text"><strong>ประเภท:</strong> {{ post.categories }}</p>
+                        <p class="card-text"><strong>รายละเอียด:</strong> {{ post.description }}</p>
+                        <p class="card-text"><strong>ตำหนิ:</strong> {{ post.defect }}</p>
+                        <p class="card-text"><strong>สถานที่:</strong> {{ post.place }}</p>
+                        <p class="card-text"><strong>วันครบกำหนด:</strong> {{ post.date_limit|date_thai }}</p>
+                        <p class="card-text"><strong>โพสต์เมื่อ:</strong> {{ post.created_at|date_thai }}</p>
+                        <p class="card-text"><strong>สถานะการจับคู่:</strong> 
+                            {% if post.is_matched %}
+                                แมตช์แล้ว
+                            {% else %}
+                                ยังไม่แมตช์
+                            {% endif %}
+                        </p>
+                        <p class="card-text"><strong>สถานะการยืนยัน:</strong> 
+                            {% if post.is_verify %}
+                                ยืนยันแล้ว
+                            {% else %}
+                                ยังไม่ยืนยัน
+                            {% endif %}
+                        </p>
+                        <div class="d-flex justify-content-end mx-3"> <!-- Change to justify-content-end -->
+                            <a href="{% url 'edit_giver_post' post.post_ID %}" class="btn btn-primary">เเก้ไข</a>
+                            <form action="{% url 'delete_giver_post' post.post_ID %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger ms-3">ลบโพสต์</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-4 text-center mx-auto">
+                <div class="alert alert-info">ไม่มีโพสต์</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4 mt-4"> <!-- Main card for Receiver Posts -->
+    <div class="card-body">
+        <div class="mb-3">
+            <h3>ประวัติการโพสต์การเป็นผู้รับ</h3>
+        </div>
+        <div class="row">
+            {% for post in receiver_posts %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text"><strong>ชื่อสิ่งของ:</strong> {{ post.stuff_name }}</p>
+                        <p class="card-text"><strong>ประเภท:</strong> {{ post.categories }}</p>
+                        <p class="card-text"><strong>รายละเอียด:</strong> {{ post.description }}</p>
+                        <p class="card-text"><strong>ตำหนิ:</strong> {{ post.defect }}</p>
+                        <p class="card-text"><strong>สถานที่:</strong> {{ post.place }}</p>
+                        <p class="card-text"><strong>วันครบกำหนด:</strong> {{ post.date_limit|date_thai }}</p>
+                        <p class="card-text"><strong>โพสต์เมื่อ:</strong> {{ post.created_at|date_thai }}</p>
+                        <p class="card-text"><strong>สถานะการจับคู่:</strong> 
+                            {% if post.is_matched %}
+                                แมตช์แล้ว
+                            {% else %}
+                                ยังไม่แมตช์
+                            {% endif %}
+                        </p>
+                        <p class="card-text"><strong>สถานะการยืนยัน:</strong> 
+                            {% if post.is_verify %}
+                                ยืนยันแล้ว
+                            {% else %}
+                                ยังไม่ยืนยัน
+                            {% endif %}
+                        </p>
+                        <div class="d-flex justify-content-end"> <!-- Change to justify-content-end -->
+                            <a href="{% url 'edit_receiver_post' post.post_ID %}" class="btn btn-primary">เเก้ไข</a>
+                            <form action="{% url 'delete_receiver_post' post.post_ID %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger ms-3">ลบโพสต์</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-4 text-center mx-auto">
+                <div class="alert alert-info">ไม่มีโพสต์</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Return Button -->
+<div class="mb-4 text-end">
+    <a href="{% url 'profile' request.user.profile.id %}" class="btn btn-secondary">กลับไปที่โปรไฟล์</a>
+</div>
+
+{% endblock %}

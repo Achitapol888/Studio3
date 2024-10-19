@@ -137,28 +137,44 @@ def post_history(request, profile_id):
 # Edit Giver Post
 def edit_giver_post(request, post_ID):
     post = get_object_or_404(PostGiver, post_ID=post_ID)
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
     if request.method == 'POST':
         form = PostGiverForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            if hasattr(request.user, 'profile'):
-                return redirect('post_history', profile_id=request.user.profile.id) 
+            # Redirect to the user's post history
+            return redirect('post_history', profile_id=user_profile.id) 
     else:
         form = PostGiverForm(instance=post)
-    return render(request, 'myweb/edit_receiver_post.html', {'form': form, 'post': post})
+
+    # Pass user_profile into the template for URL usage
+    return render(request, 'myweb/edit_giver_post.html', {
+        'form': form,
+        'post': post,
+        'user_profile': user_profile  # Make sure user_profile is available in the template
+    })
 
 # Edit Receiver Post
 def edit_receiver_post(request, post_ID):
     post = get_object_or_404(PostReceiver, post_ID=post_ID)
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
     if request.method == 'POST':
         form = PostReceiverForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            if hasattr(request.user, 'profile'):
-                return redirect('post_history', profile_id=request.user.profile.id) 
+            # Redirect to the user's post history
+            return redirect('post_history', profile_id=user_profile.id) 
     else:
         form = PostReceiverForm(instance=post)
-    return render(request, 'myweb/edit_receiver_post.html', {'form': form, 'post': post})
+
+    # Pass user_profile into the template for URL usage
+    return render(request, 'myweb/edit_receiver_post.html', {
+        'form': form,
+        'post': post,
+        'user_profile': user_profile  # Make sure user_profile is available in the template
+    })
 
 # Delete Receiver Post
 def delete_receiver_post(request, post_ID):
@@ -175,14 +191,14 @@ def delete_receiver_post(request, post_ID):
 
 # Delete Giver Post
 def delete_giver_post(request, post_ID):
-    post = get_object_or_404(PostReceiver, post_ID=post_ID)
+    post = get_object_or_404(PostGiver, post_ID=post_ID)
 
     if request.method == 'POST':
         post.delete()
         # Use the related_name to access the user profile
         if hasattr(request.user, 'profile'):
             return redirect('post_history', profile_id=request.user.profile.id) 
-        
+
     return render(request, 'myweb/delete_post_confirmation.html', {'post': post})
 
 @login_required

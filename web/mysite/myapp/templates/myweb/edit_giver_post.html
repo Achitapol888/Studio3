@@ -1,15 +1,150 @@
 {% extends 'myweb/base.html' %}
 
 {% block title %}
-Edit Giver Post
+เเก้ไขโพสต์การเป็นผู้ให้
 {% endblock %}
 
-{% block content %}
-<h2>Edit Giver Post</h2>
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Save changes</button>
-</form>
-<a href="{% url 'your_post_history' %}">Cancel</a>
+{% block background_style %}
+background-color: rgba(0, 0, 0);
+{% endblock %}
+
+{% load static %}
+
+<style>
+    /* Hide the default file input */
+    .custom-file-input input[type="file"] {
+        display: none;
+    }
+    
+    /* Style the custom file input label */
+    .custom-file-input label {
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    
+    /* Change the button style when hovered */
+    .custom-file-input label:hover {
+        background-color: #007bff;
+        border-color: #0056b3;
+        color: white;
+    }
+    
+    /* Style the file name span */
+    #fileName {
+        font-size: 14px;
+        color: #6c757d;
+        font-style: italic;
+    }
+ </style>
+
+{% block content %}        
+<div class="row justify-content-center"> <!-- Added this row for centering -->
+    <div class="col-lg-6 col-md-8 col-sm-10"> <!-- Added responsive column classes -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h2>เเก้ไขโพสต์การเป็นผู้ให้</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="col-12 mb-3">
+                        <label for="stuff_picture" class="form-label">รูปภาพสิ่งของ</label>
+
+                        <!-- Image preview -->
+                        <div class="mb-3 text-center">
+                            <img id="preview-image" src="{{ post.stuff_picture.url }}" 
+                                alt="Image Preview" class="img-fluid img-thumbnail" style="max-height: 200px;">
+                        </div>
+
+                        <!-- Custom file input styling -->
+                        <div class="custom-file-input text-center">
+                            <input type="file" id="stuffPicture" name="{{ form.stuff_picture.name }}" style="display: none;">
+                            <label for="stuffPicture" id="fileLabel" class="btn btn-outline-primary">Choose File</label>
+                            <span id="fileName" class="ml-2">No file chosen</span>
+                        </div>    
+
+                        <!-- Stuff Name -->
+                        <div class="col-12 mb-3">
+                            <label for="stuff_name" class="form-label">ชื่อสิ่งของ</label>
+                            {{ form.stuff_name }}
+                        </div>
+
+                        <!-- Categories -->
+                        <div class="col-12 mb-3">
+                            <label for="categories" class="form-label">ประเภท</label>
+                            {{ form.categories }}
+                        </div>
+
+                        <div class="row">                            
+                            <!-- Description -->
+                            <div class="col-12 mb-3">
+                                <label for="description" class="form-label">รายละเอียด</label>
+                                {{ form.description }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Defect -->
+                            <div class="col-12 mb-3">
+                                <label for="defect" class="form-label">ตำหนิ</label>
+                                {{ form.defect }}
+                            </div>
+
+                            <!-- Place -->
+                            <div class="col-12 mb-3">
+                                <label for="place" class="form-label">สถานที่</label>
+                                {{ form.place }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Date Limit -->
+                            <div class="col-12 mb-3">
+                                <label for="date_limit" class="form-label">วันครบกำหนด</label>
+                                {{ form.date_limit }}
+                            </div>
+                        </div>
+
+                        <!-- Save Changes Button -->
+                        <div class="text-end">        
+                            <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+                            <!-- Cancel -->
+                            <a href="{% url 'post_history' user_profile.id %}" class="btn btn-secondary ms-3">ยกเลิก</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+    const stuffPictureInput = document.getElementById('stuffPicture');
+    const fileLabel = document.getElementById('fileLabel');
+    const fileNameSpan = document.getElementById('fileName');
+    const previewImage = document.getElementById('preview-image');
+
+    // Update file label and show file name
+    stuffPictureInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            fileNameSpan.textContent = file.name;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result; // Set the preview image source
+            };
+            reader.readAsDataURL(file);
+        } else {
+            fileNameSpan.textContent = "No file chosen";
+            previewImage.src = "{% static 'images/1.jpg' %}"; // Reset preview to placeholder
+        }
+    });
+</script>
 {% endblock %}
