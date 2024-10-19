@@ -1,0 +1,83 @@
+{% extends 'myweb/base.html' %}
+
+{% load static %}
+
+{% block title %}
+ประวัติการโพสต์
+{% endblock %}
+
+{% block background_style %}
+background-color: rgba(0, 0, 0);
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">ประวัติการจับคู่</h2>
+
+    <!-- Giver Posts -->
+    <h3 class="mt-4">ประวัติการโพสต์ของผู้ให้</h3>
+    {% if match_histories %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ชื่อของที่ให้</th>
+                    <th>สถานะ</th>
+                    <th>วันที่</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for history in match_histories %}
+                    {% if history.giver_post and history.giver_post.user_profile == request.user.profile %}
+                    <tr>
+                        <td>{{ history.giver_post.stuff_name }}</td>
+                        <td>
+                            {% if history.is_matched %}
+                                จับคู่แล้ว
+                            {% else %}
+                                ยังไม่จับคู่
+                            {% endif %}
+                        </td>
+                        <td>{{ history.created_at|date:"d/m/Y" }}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-center">ยังไม่มีประวัติการจับคู่</p>
+    {% endif %}
+
+    <!-- Receiver Posts -->
+    <h3 class="mt-4">ประวัติการโพสต์ของผู้รับ</h3>
+    {% if match_histories %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ชื่อของที่รับ</th>
+                    <th>สถานะ</th>
+                    <th>วันที่</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for history in match_histories %}
+                    {% if history.receiver_post and history.receiver_post.user_profile == request.user.profile %}
+                    <tr>
+                        <td>{{ history.receiver_post.stuff_name }}</td>
+                        <td>
+                            {% if history.is_matched %}
+                                จับคู่แล้ว
+                            {% else %}
+                                ยังไม่จับคู่
+                            {% endif %}
+                        </td>
+                        <td>{{ history.created_at|date:"d/m/Y" }}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-center">ยังไม่มีประวัติการจับคู่</p>
+    {% endif %}
+</div>
+{% endblock %}
