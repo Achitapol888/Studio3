@@ -47,6 +47,7 @@ class PostGiver(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     is_matched = models.BooleanField(default=False)
+    is_verify = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.stuff_name} by {self.user_profile.user.username}"
@@ -64,6 +65,7 @@ class PostReceiver(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     is_matched = models.BooleanField(default=False)
+    is_verify = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.stuff_name} by {self.user_profile.user.username}"
