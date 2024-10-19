@@ -34,17 +34,17 @@ urlpatterns = [
     path('giver/', views.giver, name='giver'),
     path('profile/<int:id>/', views.profile, name='profile'),
     path('review/', views.review, name= 'review'),
-    path('verify/', views.verify, name= 'verify'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
-    path('results-receiver/', views.search_matches_receiver, name='results_receiver'),
-    path('results-giver/<int:post_id>/', views.search_matches_giver, name='results_giver'),
+    path('results-receiver/<int:post_ID>/', views.search_matches_receiver, name='results_receiver'),
+    path('results-giver/<int:post_ID>/', views.search_matches_giver, name='results_giver'),
     path('post_history/<int:profile_id>/', views.post_history, name='post_history'),
     path('edit_giver_post/<int:post_ID>/', views.edit_giver_post, name='edit_giver_post'),
     path('edit_receiver_post/<int:post_ID>/', views.edit_receiver_post, name='edit_receiver_post'),
     path('delete_giver_post/<int:post_ID>/', views.delete_giver_post, name='delete_giver_post'),
     path('delete_receiver_post/<int:post_ID>/', views.delete_receiver_post, name='delete_receiver_post'),
-
+    path('verify/<int:giver_post_id>/<int:receiver_post_id>/', views.verify_match, name='verify'),
+    path('confirm_verification/<int:match_ID>/', views.confirm_verification, name='confirm_verification'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

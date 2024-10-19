@@ -71,27 +71,13 @@ class PostReceiver(models.Model):
         return f"{self.stuff_name} by {self.user_profile.user.username}"
 
 
+class MatchPost(models.Model):
+    match_ID = models.AutoField(primary_key=True)
+    giver_post = models.ForeignKey(PostGiver, on_delete=models.CASCADE)
+    receiver_post = models.ForeignKey(PostReceiver, on_delete=models.CASCADE)
+    match_date = models.DateTimeField(default=timezone.now)
+    confirmation_date = models.DateTimeField(null=True, blank=True)  # To store the confirmation date
 
-"""
-class Chat(models.Model):
-    chat_ID = models.AutoField(primary_key=True)
-    sender = models.ForeignKey(UserProfile, related_name='sent_messages', on_delete=models.CASCADE)
-    receiver = models.ForeignKey(UserProfile, related_name='received_messages', on_delete=models.CASCADE)
-    message = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"Match ID: {self.match_ID} between {self.giver_post} and {self.receiver_post}"
 
-class Verify(models.Model):
-    verify_ID = models.AutoField(primary_key=True)
-    verify_status = models.BooleanField(default=False)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    verifier = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-
-class Review(models.Model):
-    review_ID = models.AutoField(primary_key=True)
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    score = models.FloatField()
-    content = models.TextField()
-    verify = models.ForeignKey(Verify, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-"""

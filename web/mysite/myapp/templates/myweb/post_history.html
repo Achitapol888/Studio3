@@ -1,7 +1,6 @@
 {% extends 'myweb/base.html' %}
 
 {% load static %}
-
 {% load form_tags %}
 
 {% block title %}
@@ -19,7 +18,7 @@ background-color: rgba(0, 0, 0);
         <h2>ประวัติการโพสต์</h2>
         <hr>
         <div class="mb-3">
-            <h3>ประวัติการโพสต์การเป็นผู้ให้</h3>
+            <h3>ประวัติการโพสต์ของการเป็นผู้ให้</h3>
         </div>
         <div class="row">
             {% for post in giver_posts %}
@@ -35,12 +34,13 @@ background-color: rgba(0, 0, 0);
                         <p class="card-text"><strong>สถานที่:</strong> {{ post.place }}</p>
                         <p class="card-text"><strong>วันครบกำหนด:</strong> {{ post.date_limit|date_thai }}</p>
                         <p class="card-text"><strong>โพสต์เมื่อ:</strong> {{ post.created_at|date_thai }}</p>
+
                         <p class="card-text"><strong>สถานะการจับคู่:</strong> 
-                            {% if post.is_matched %}
-                                แมตช์แล้ว
-                            {% else %}
-                                ยังไม่แมตช์
-                            {% endif %}
+                        {% if post.is_matched %}
+                            แมตช์แล้ว
+                        {% else %}
+                            ยังไม่แมตช์
+                        {% endif %}
                         </p>
                         <p class="card-text"><strong>สถานะการยืนยัน:</strong> 
                             {% if post.is_verify %}
@@ -49,13 +49,36 @@ background-color: rgba(0, 0, 0);
                                 ยังไม่ยืนยัน
                             {% endif %}
                         </p>
-                        <div class="d-flex justify-content-end mx-3"> <!-- Change to justify-content-end -->
-                            <a href="{% url 'edit_giver_post' post.post_ID %}" class="btn btn-primary">เเก้ไข</a>
-                            <form action="{% url 'delete_giver_post' post.post_ID %}" method="POST">
+
+                    {% if user.id == user_profile.user.id %}
+                        <div class="d-flex justify-content-end">
+                            <!-- Edit button only for matched but not verified posts -->
+                            {% if not post.is_matched and not post.is_verify %}
+                                <a href="{% url 'edit_giver_post' post.post_ID %}" class="btn btn-primary">เเก้ไข</a>
+                            {% endif %}
+
+                    
+                            <!-- Confirmation button for matched posts -->
+                            {% for matched in matched_posts %}
+                            {% if matched.is_matched and not matched.is_verify %}
+                                <form action="{% url 'confirm_verification' matched.match_ID %}" method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success">ยืนยันการจับคู่</button>
+                                </form>
+                            {% elif matched.is_verify %}
+                                <span>การจับคู่ได้รับการยืนยันแล้ว</span>
+                            {% endif %}
+                            {% endfor %}
+
+                            <!-- Delete post form -->
+                            <form action="{% url 'delete_giver_post' post.post_ID %}" method="POST" class="ms-3">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-danger ms-3">ลบโพสต์</button>
+                                <button type="submit" class="btn btn-danger">ลบโพสต์</button>
                             </form>
+                            
                         </div>
+                    {% endif %}
+                    
                     </div>
                 </div>
             </div>
@@ -68,10 +91,10 @@ background-color: rgba(0, 0, 0);
     </div>
 </div>
 
-<div class="card mb-4 mt-4"> <!-- Main card for Receiver Posts -->
+<div class="card mb-4 mt-4">
     <div class="card-body">
         <div class="mb-3">
-            <h3>ประวัติการโพสต์การเป็นผู้รับ</h3>
+            <h3>ประวัติการโพสต์ของการเป็นผู้รับ</h3>
         </div>
         <div class="row">
             {% for post in receiver_posts %}
@@ -91,35 +114,70 @@ background-color: rgba(0, 0, 0);
                             {% else %}
                                 ยังไม่แมตช์
                             {% endif %}
-                        </p>
-                        <p class="card-text"><strong>สถานะการยืนยัน:</strong> 
-                            {% if post.is_verify %}
-                                ยืนยันแล้ว
-                            {% else %}
-                                ยังไม่ยืนยัน
+                            </p>
+                            <p class="card-text"><strong>สถานะการยืนยัน:</strong> 
+                                {% if post.is_verify %}
+                                    ยืนยันแล้ว
+                                {% else %}
+                                    ยังไม่ยืนยัน
+                                {% endif %}
+                            </p>
+
+                            {% if user.id == user_profile.user.id %}
+                                <div class="d-flex justify-content-end">
+                                    <!-- Edit button only for matched but not verified posts -->
+                                    {% if not post.is_matched and not post.is_verify %}
+                                        <a href="{% url 'edit_receiver_post' post.post_ID %}" class="btn btn-primary">เเก้ไข</a>
+                                    {% endif %}
+                                
+
+                                    <!-- Confirmation button for matched posts -->
+                                    {% for matched in matched_posts %}
+                                    {% if matched.giver_post.is_matched and not matched.giver_post.is_verify %}
+                                        <form  form action="{% url 'confirm_verification' matched.match_ID %}" method="POST" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-success">ยืนยันการจับคู่</button>
+                                        </form>
+                                    {% elif matched.is_verify %}
+                                        <span>การจับคู่ได้รับการยืนยันแล้ว</span>
+                                    {% endif %}
+                                    {% endfor %}
+
+                                    <!-- Delete post form -->
+                                    <form action="{% url 'delete_receiver_post' post.post_ID %}" method="POST" class="ms-3">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">ลบโพสต์</button>
+                                    </form>
+
+                                    {% if not post.is_matched %}
+                                        <!-- Button to re-match the post -->
+                                        <a href="{% url 'results_receiver' post.post_ID %}" class="btn btn-success ms-3">จับคู่อีกครั้ง</a>
+                                    {% endif %}
+                                </div>
                             {% endif %}
-                        </p>
-                        <div class="d-flex justify-content-end"> <!-- Change to justify-content-end -->
-                            <a href="{% url 'edit_receiver_post' post.post_ID %}" class="btn btn-primary">เเก้ไข</a>
-                            <form action="{% url 'delete_receiver_post' post.post_ID %}" method="POST">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger ms-3">ลบโพสต์</button>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-4 text-center mx-auto">
+            {% endfor %}
+            {% if not receiver_posts %}
+            <div class="col-12 text-center mx-auto">
                 <div class="alert alert-info">ไม่มีโพสต์</div>
             </div>
-            {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>
+
+
 <!-- Return Button -->
+{% if user_profile.user.id == user.id %}
 <div class="mb-4 text-end">
     <a href="{% url 'profile' request.user.profile.id %}" class="btn btn-secondary">กลับไปที่โปรไฟล์</a>
 </div>
+{% else %}
+<div class="text-end text-white">
+    <a href="javascript:history.back()" class="btn btn-secondary btn-lg">ย้อนกลับ</a>
+</div>
+{% endif %}
 
 {% endblock %}

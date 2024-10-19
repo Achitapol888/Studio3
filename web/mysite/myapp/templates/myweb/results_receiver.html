@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block background_style %}
+background-color: rgba(0, 0, 0);
 {% endblock %}
 
 {% block styles %}
@@ -16,91 +17,99 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-3">
+<div class="container mt-2">
     <div class="row">
-        <div class="card-header mx-3 mb-4">
-            <h5 class="card-title">ผลลัพธ์</h5>
+        <div class="mb-2 text-white">
+            <h1>ผลลัพธ์</h1>
         </div>
-        {% for giver in matching_givers %}
-        <div class="col-md-6 mb-5">
-            <div class="card">
-                <div class="card-header">
-                    <h5>ผู้ใช้ที่ตรงกัน</h5> <!-- "Matching User" -->
-                </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-sm-12 text-center">
-                            <!-- Giver's Profile Picture -->
-                            {% if giver.user_profile.profile_picture %}
-                                <img src="{{ giver.user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle">
-                            {% else %}
-                                <img src="{% static 'images/icon_accout.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle">
-                            {% endif %}
-                        </div>
+        {% if best_match %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>ผู้ใช้ที่ตรงกัน</h5> <!-- "Matching User" -->
                     </div>
-                    <div class="row mb-5">
-                        <div class="col-sm-12 text-center">
-                            <p class="text-muted mb-0">{{ giver.user_profile.user.username }}</p> <!-- Giver's Username -->
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-sm-12 text-center">
+                                <!-- Receiver's Profile Picture -->
+                                {% if best_match.user_profile.profile_picture %}
+                                    <img src="{{ best_match.user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle">
+                                {% else %}
+                                    <img src="{% static 'images/icon_accout.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle">
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-12 text-center">
-                            {% if giver.user_profile.id %}
-                                <a href="{% url 'profile' giver.user_profile.id %}" class="btn btn-primary">กดดูโปรไฟล์</a>
-                            {% else %}
-                                <p class="text-danger">Profile not available</p>
-                            {% endif %}
+                        <div class="row mb-5">
+                            <div class="col-sm-12 text-center">
+                                <p class="text-muted mb-0">{{ best_match.user_profile.user.username }}</p> <!-- Receiver's Username -->
+                            </div>
                         </div>
-                        <div class="mt-3">
-                            <p>ชื่อ: {{ giver.user_profile.user.first_name }}</p> 
-                            <p>นามสกุล: {{ giver.user_profile.user.last_name }}</p> 
-                            <p>หอพัก: {{ giver.user_profile.dorm }}</p> 
-                            <p>เบอร์โทร: 0{{ giver.user_profile.phone_number }}</p>
-                            <p>รหัสนักศึกษา: {{ giver.user_profile.student_ID }}</p>
-                            <p>ออนไลน์ล่าสุด: {{ giver.user_profile.user.last_login|date_thai }}</p>
+                        <div class="row mb-3">
+                            <div class="col-sm-12 text-center">
+                                {% if best_match.user_profile.id %}
+                                    <a href="{% url 'profile' best_match.user_profile.id %}" class="btn btn-primary">กดดูโปรไฟล์</a>
+                                {% else %}
+                                    <p class="text-danger">Profile not available</p>
+                                {% endif %}
+                            </div>
+                            <div class="mt-3">
+                                <p>ชื่อ: {{ best_match.user_profile.user.first_name }}</p> 
+                                <p>นามสกุล: {{ best_match.user_profile.user.last_name }}</p> 
+                                <p>หอพัก: {{ best_match.user_profile.dorm }}</p> 
+                                <p>เบอร์โทร: 0{{ best_match.user_profile.phone_number }}</p>
+                                <p>รหัสนักศึกษา: {{ best_match.user_profile.student_ID }}</p>
+                                <p>ออนไลน์ล่าสุด: {{ best_match.user_profile.user.last_login|date_thai }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Display the corresponding item for each giver -->
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5>รายการที่ตรงกัน</h5> <!-- "Matched Item" -->
-                </div>
-                <div class="card-body">
-                    <div class="text-center mb-3">
-                        {% if giver.stuff_picture %}
-                            <img src="{{ giver.stuff_picture.url }}" alt="Stuff Picture" class="img-fluid" style="max-width: 25%;">
-                        {% else %}
-                            <img src="{% static 'images/default_stuff.png' %}" alt="Default Stuff Picture" class="img-fluid" style="max-width: 100%;">
-                        {% endif %}
+            
+            <!-- Display the corresponding item for the best match -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>รายการที่ตรงกัน</h5> <!-- "Matched Item" -->
                     </div>
-                    <div class="mb-3">
-                        <p>ชื่อสิ่งของ: {{ giver.stuff_name }}</p> <!-- Item Name -->
-                        <p>รายละเอียด: {{ giver.description }}</p> <!-- Item Description -->
-                        <p>ประเภท: {{ giver.categories }}</p> <!-- Item Category -->
-                        <p>สถานที่: {{ giver.place }}</p> <!-- Item Place -->
-                        <p>ตำหนิ: {{ giver.defect }}</p> <!-- Item Defect -->
-                        <p>วันสิ้นสุด: {{ giver.date_limit|date_thai }}</p> <!-- Format date in Thai -->
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            {% if best_match.stuff_picture %}
+                                <img src="{{ best_match.stuff_picture.url }}" alt="Stuff Picture" class="img-fluid" style="max-width: 25%;">
+                            {% else %}
+                                <img src="{% static 'images/default_stuff.png' %}" alt="Default Stuff Picture" class="img-fluid" style="max-width: 100%;">
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <p>ชื่อสิ่งของ: {{ best_match.stuff_name }}</p> <!-- Item Name -->
+                            <p>รายละเอียด: {{ best_match.description }}</p> <!-- Item Description -->
+                            <p>ประเภท: {{ best_match.categories }}</p> <!-- Item Category -->
+                            <p>สถานที่: {{ best_match.place }}</p> <!-- Item Place -->
+                            <p>ตำหนิ: {{ best_match.defect }}</p> <!-- Item Defect -->
+                            <p>วันสิ้นสุด: {{ best_match.date_limit|date_thai }}</p> <!-- Format date in Thai -->
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
+        {% else %}
+            <div class="col-md-12 mb-5">
+                <div class="alert alert-warning text-center">
+                    <strong>ไม่พบผู้ใช้ที่ตรงกัน</strong>
+                </div>
+            </div>
+        {% endif %}
     </div>
 
-    <!-- Back Button -->
-    <div class="text-center mt-4">
-        {% if matching_receivers and matching_receivers.user_profile %}
-            <a href="{% url 'profile' matching_receivers.user_profile.id %}" class="btn btn-danger">ย้อนกลับ</a> <!-- Redirect to receiver's profile -->
-        {% endif %}
-            <a href="{% url "verify" %}" class="btn btn-success">ยืนยันการจับคู่</a> <!-- Confirm Match Button -->
+    {% if best_match %}
+    <div class="text-center mt-1">
+        <a href="{% url 'verify'  best_match.post_ID current_receiver_post.post_ID %}" class="btn btn-success">ยืนยันการจับคู่</a> <!-- Confirm Match Button -->
+    </div>
+    {% endif %}
+    
+    <div class="text-center mt-3">
+        <a href="{% url 'profile' request.user.profile.id %}" class="btn btn-secondary">ยกเลิก</a>
     </div>
 </div>
-
 {% endblock %}
+
 
 

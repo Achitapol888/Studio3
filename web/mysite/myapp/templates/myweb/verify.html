@@ -33,7 +33,7 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-sm-12 text-center">
-                            <a href="{% url 'profile' %}" class="btn btn-primary">กลับไปที่หน้าโปรไฟล์ของคูณ</a> <!-- Button to return to the home page -->
+                            <a href="{% url 'profile' request.user.profile.id %}">กลับไปที่หน้าโปรไฟล์ของคูณ</a> <!-- Button to return to the home page -->
                         </div>
                     </div>
                 </div>
