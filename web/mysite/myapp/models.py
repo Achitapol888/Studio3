@@ -76,7 +76,7 @@ class MatchPost(models.Model):
     giver_post = models.ForeignKey(PostGiver, on_delete=models.CASCADE)
     receiver_post = models.ForeignKey(PostReceiver, on_delete=models.CASCADE)
     match_date = models.DateTimeField(default=timezone.now)
-    confirmation_date = models.DateTimeField(null=True, blank=True)  # To store the confirmation date
+    confirmation_date = models.DateTimeField(null=True, blank=True) 
     is_confirm = models.BooleanField(default=False)
 
     
