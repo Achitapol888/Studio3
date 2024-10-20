@@ -264,8 +264,7 @@ def search_matches_receiver(request, post_ID):
     return render(request, 'myweb/results_receiver.html', context)
 
 
-from fuzzywuzzy import fuzz
-from django.utils import timezone
+
 @login_required
 def search_matches_giver(request, post_ID):
     current_giver_post = get_object_or_404(PostGiver, post_ID=post_ID)
