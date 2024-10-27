@@ -35,8 +35,14 @@ background-color: rgba(0, 0, 0);
                         <p class="card-text"><strong>วันครบกำหนด:</strong> {{ post.date_limit|date_thai }}</p>
                         <p class="card-text"><strong>โพสต์เมื่อ:</strong> {{ post.created_at|date_thai }}</p>
                         <p class="card-text"><strong>สถานะการจับคู่:</strong>
-                        {% if post.is_matched %}
-                            แมตช์แล้ว
+                            {% if post.is_matched %}
+                            แมตช์แล้ว 
+                            <!-- Add a link to view match information -->
+                                {% with matched_post=matched_post_giver|get_related_matches_giver:post.post_ID %}
+                                    {% if matched_post %}
+                                        <a href="{% url "match_info_giver" matched_post.match_ID %}" class="btn btn-info btn-sm ms-2 text-white">ดูข้อมูลการจับคู่</a>
+                                    {% endif %}
+                                {% endwith %}
                         {% else %}
                             ยังไม่แมตช์
                         {% endif %}
@@ -88,6 +94,11 @@ background-color: rgba(0, 0, 0);
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn btn-success">ยืนยันการให้</button>
                                             </form>
+                                            <!-- Unmatch button for Giver -->
+                                            <form action="{% url 'unmatch_post' post.post_ID 'giver' %}" method="POST" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-warning ms-3">ยกเลิกการจับคู่</button>
+                                            </form>   
                                         {% elif matched_post.is_giver_confirm %}
 
                                         {% endif %}
@@ -103,7 +114,6 @@ background-color: rgba(0, 0, 0);
                             </form>
                         </div>
                     {% endif %}
-                    
                     </div>
                 </div>
             </div>
@@ -137,11 +147,17 @@ background-color: rgba(0, 0, 0);
                         <p class="card-text"><strong>วันครบกำหนด:</strong> {{ post.date_limit|date_thai }}</p>
                         <p class="card-text"><strong>โพสต์เมื่อ:</strong> {{ post.created_at|date_thai }}</p>
                         <p class="card-text"><strong>สถานะการจับคู่:</strong>
-                        {% if post.is_matched %}
-                            แมตช์แล้ว
-                        {% else %}
-                            ยังไม่แมตช์
-                        {% endif %}
+                            {% if post.is_matched %}
+                                แมตช์แล้ว 
+                                <!-- Add a link to view match information -->
+                                {% with matched_post=matched_post_receiver|get_related_matches_receiver:post.post_ID %}
+                                        {% if matched_post %}
+                                            <a href="{% url "match_info_receiver" matched_post.match_ID %}" class="btn btn-info btn-sm ms-2 text-white">ดูข้อมูลการจับคู่</a>
+                                        {% endif %}
+                                    {% endwith %}
+                            {% else %}
+                                ยังไม่แมตช์
+                            {% endif %}
                         </p>
                         {% if post.is_matched %}
                             {% with matched_post=matched_post_receiver|get_related_matches_receiver:post.post_ID %}
@@ -187,19 +203,22 @@ background-color: rgba(0, 0, 0);
                                         {% if not matched_post.is_receiver_confirm %}
                                             <form action="{% url 'confirm_verification_receiver' matched_post.match_ID %}" method="POST" class="d-inline">
                                                 {% csrf_token %}
-                                                <button type="submit" class="btn btn-success">ยืนยันการให้</button>
+                                                <button type="submit" class="btn btn-success">ยืนยันการรับ</button>
                                             </form>
+                                            <!-- Unmatch button for Receiver -->
+                                            <form action="{% url 'unmatch_post' post.post_ID 'receiver' %}" method="POST" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-warning ms-3">ยกเลิกการจับคู่</button>
+                                            </form>   
                                         {% elif matched_post.is_receiver_confirm %}
 
                                         {% endif %}
                                     {% endif %}
-                                {% endwith %}
+                                {% endwith %}           
                             {% endif %}
-
-
-
+                            
                             <!-- Delete post form -->
-                            <form action="{% url 'delete_giver_post' post.post_ID %}" method="POST" class="ms-3">
+                            <form action="{% url 'delete_receiver_post' post.post_ID %}" method="POST" class="ms-3">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">ลบโพสต์</button>
                             </form>
@@ -222,11 +241,11 @@ background-color: rgba(0, 0, 0);
 
 <!-- Return Button -->
 {% if user_profile.user.id == user.id %}
-<div class="mb-4 text-end">
+<div class="mt-5 mb-4 text-end">
     <a href="{% url 'profile' request.user.profile.id %}" class="btn btn-secondary">กลับไปที่โปรไฟล์</a>
 </div>
 {% else %}
-<div class="text-end text-white">
+<div class="mt-5 mb-4 text-end text-white">
     <a href="javascript:history.back()" class="btn btn-secondary btn-lg">ย้อนกลับ</a>
 </div>
 {% endif %}

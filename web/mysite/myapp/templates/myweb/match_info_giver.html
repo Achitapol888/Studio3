@@ -1,0 +1,111 @@
+<!-- match_info.html -->
+{% extends 'myweb/base.html' %}
+
+{% load static %}
+{% load form_tags %}
+
+{% block title %}
+ข้อมูลการจับคู่
+{% endblock %}
+
+{% block content %}
+<div class="card mt-2">
+    <!-- Card Header -->
+    <div class="card-header text-center">
+        <h1>ข้อมูลการจับคู่</h1>
+    </div>
+    
+    <!-- Card Body -->
+    <div class="card-body">
+        <!-- Row for Giver Profile and Giver Post -->
+        <div class="row">
+            <!-- Giver Profile Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5>โปรไฟล์ของผู้บริจาค</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            {% if match.receiver_post.user_profile.profile_picture %}
+                                <img src="{{ match.receiver_post.user_profile.profile_picture.url }}" 
+                                     alt="Profile Picture" 
+                                     class="img-fluid rounded-circle profile-img" 
+                                     style="max-width: 25%;">
+                            {% else %}
+                                <img src="{% static 'images/default_stuff.png' %}" 
+                                     alt="Default Picture" 
+                                     class="img-fluid profile-img" 
+                                     style="max-width: 25%;">
+                            {% endif %}
+                        </div>
+                        <div class="text-center mb-4 mt-4">
+                            <a href="{% url 'profile' match.receiver_post.user_profile.id %}" 
+                               class="btn btn-primary mt-3">กดดูโปรไฟล์</a>
+                        </div>
+                        <p><strong>ชื่อผู้ใช้:</strong> {{ match.receiver_post.user_profile.user.username }}</p>
+                        <p><strong>อีเมล:</strong> {{ match.receiver_post.user_profile.user.email }}</p>
+                        <p><strong>เบอร์โทร:</strong> 0{{ match.receiver_post.user_profile.phone_number }}</p>
+                        <p><strong>หอพัก:</strong> {{ match.receiver_post.user_profile.dorm }}</p>
+                        <p><strong>ออนไลน์ล่าสุด:</strong> {{ match.receiver_post.user_profile.user.last_login|date_thai }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Giver Post Card -->
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5>รายการที่ตรงกัน</h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        <p><strong>ชื่อสิ่งของ:</strong> {{ match.receiver_post.stuff_name }}</p>
+                        <p><strong>รายละเอียด:</strong> {{ match.receiver_post.description }}</p>
+                        <p><strong>ประเภท:</strong> {{ match.receiver_post.categories }}</p>
+                        <p><strong>สถานที่:</strong> {{ match.receiver_post.place }}</p>
+                        <p><strong>ตำหนิ:</strong> {{ match.receiver_post.defect }}</p>
+                        <p><strong>วันสิ้นสุด:</strong> {{ match.receiver_post.date_limit|date_thai }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Match Info Card -->
+    <div class="card mx-3 mb-3">
+        <div class="card-header">
+            <h4>รายละเอียด</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>โพสต์ของผู้บริจาค:</strong> {{ match.giver_post.user_profile.user.username }}</p>
+            <p><strong>วันที่จับคู่:</strong> {{ match.match_date|date_thai }}</p>
+            <p><strong>วันที่ยืนยัน:</strong> 
+                {% if match.confirmation_date %}
+                    {{ match.confirmation_date|date_thai }}
+                {% else %}
+                    ยังไม่มีการยืนยัน
+                {% endif %}
+            </p>
+            <p><strong>สถานะการยืนยันการให้:</strong> 
+                {% if match.is_giver_confirm %}
+                    ยืนยันแล้ว
+                {% else %}
+                    ยังไม่ยืนยัน
+                {% endif %}
+            </p>
+            <p><strong>สถานะการยืนยันการรับ:</strong> 
+                {% if match.is_receiver_confirm %}
+                    ยืนยันแล้ว
+                {% else %}
+                    ยังไม่ยืนยัน
+                {% endif %}
+            </p>
+            <!-- Back button -->
+            <div class="text-end">
+                <a href="javascript:history.back()" class="btn btn-secondary mt-3">ย้อนกลับ</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

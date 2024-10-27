@@ -45,6 +45,9 @@ urlpatterns = [
     path('verify/<int:giver_post_id>/<int:receiver_post_id>/', views.verify_match, name='verify'),
     path('confirm_verification_giver/<int:match_ID>/', views.confirm_verification_giver, name='confirm_verification_giver'),
     path('confirm_verification_receiver/<int:match_ID>/', views.confirm_verification_receiver, name='confirm_verification_receiver'),
+    path('unmatch_post/<int:post_id>/<str:post_type>/', views.unmatch_post, name='unmatch_post'),
+    path('match_info_giver/<int:match_id>/', views.match_info_giver, name='match_info_giver'),
+    path('match_info_receiver/<int:match_id>/', views.match_info_receiver, name='match_info_receiver'),
 
 
 

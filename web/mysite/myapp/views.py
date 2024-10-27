@@ -372,3 +372,58 @@ def confirm_verification_receiver(request, match_ID):
     print(receiver_post)
 
     return redirect('post_history', profile_id=request.user.profile.id)
+
+
+def unmatch_post(request, post_id, post_type):
+    if post_type == 'giver':
+        post = get_object_or_404(PostGiver, post_ID=post_id)
+        # Check for a match post associated with this giver post
+        match_post = MatchPost.objects.filter(giver_post=post).first()
+    elif post_type == 'receiver':
+        post = get_object_or_404(PostReceiver, post_ID=post_id)
+        # Check for a match post associated with this receiver post
+        match_post = MatchPost.objects.filter(receiver_post=post).first()
+    else:
+        return redirect('post_history', profile_id=request.user.profile.id)  # Handle invalid post_type
+
+    if request.method == 'POST':
+        # Unmatch the current post
+        post.is_matched = False
+        post.save()
+
+        # If there's a corresponding match post, unmatch the other post as well
+        if match_post:
+            # Unmatch the corresponding post
+            if post_type == 'giver':
+                match_post.receiver_post.is_matched = False
+                match_post.receiver_post.save()
+            else:
+                match_post.giver_post.is_matched = False
+                match_post.giver_post.save()
+
+            # Delete the match post
+            match_post.delete()
+
+    return redirect('post_history', profile_id=request.user.profile.id)
+
+def match_info_giver(request, match_id):
+    # Retrieve the MatchPost object or return a 404 if it doesn't exist
+    match = get_object_or_404(MatchPost, match_ID=match_id)
+    
+    # Pass the match object to the template for display
+    context = {
+        'match': match,
+    }
+    return render(request, 'myweb/match_info_giver.html', context)
+
+def match_info_receiver(request, match_id):
+    # Retrieve the MatchPost object or return a 404 if it doesn't exist
+    match = get_object_or_404(MatchPost, match_ID=match_id)
+    
+    # Pass the match object to the template for display
+    context = {
+        'match': match,
+    }
+    return render(request, 'myweb/match_info_receiver.html', context)
+    
+
