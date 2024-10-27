@@ -4,6 +4,10 @@ from django.contrib.auth.models import User
 import datetime
 from .models import UserProfile, PostGiver, PostReceiver
 
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from .models import UserProfile
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -20,7 +24,6 @@ class SignUpForm(UserCreationForm):
                   'dorm', 'phone_number', 'student_ID',
                   'password1', 'password2']
 
-        # Customize widgets to add Bootstrap classes
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
@@ -39,7 +42,25 @@ class SignUpForm(UserCreationForm):
         if email:
             if not (email.endswith('@kkumail.com') or email.endswith('@kku.ac.th')):
                 raise forms.ValidationError("Email must end with '@kkumail.com' or '@kku.ac.th'.")
+
+            # Check if the email is unique
+            """if User.objects.filter(email=email).exists():
+                raise forms.ValidationError("This email address is already in use.")"""
         return email
+
+    def clean_student_ID(self):
+        student_ID = self.cleaned_data.get('student_ID')
+        if student_ID:
+            # Check if the student ID is unique in UserProfile model
+            if UserProfile.objects.filter(student_ID=student_ID).exists():
+                raise forms.ValidationError("This student ID is already in use.")
+        return student_ID
+    
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
+            raise forms.ValidationError("This username is already taken. Please choose a different one.")
+        return username
 
     def save(self, commit=True):
         user = super(SignUpForm, self).save(commit=False)
@@ -58,6 +79,7 @@ class SignUpForm(UserCreationForm):
         return user
 
 
+
 #edit profile forms
 class UserProfileForm(forms.ModelForm):
     class Meta:
@@ -69,18 +91,31 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
     
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email:
+            if not (email.endswith('@kkumail.com') or email.endswith('@kku.ac.th')):
+                raise forms.ValidationError("Email must end with '@kkumail.com' or '@kku.ac.th'.")
+
+            # Check if the email is unique
+            """if User.objects.filter(email=email).exists():
+                raise forms.ValidationError("This email address is already in use.")"""
+        return email
+
+    def clean_student_ID(self):
+        student_ID = self.cleaned_data.get('student_ID')
+        if student_ID:
+            # Check if the student ID is unique in UserProfile model
+            if UserProfile.objects.filter(student_ID=student_ID).exists():
+                raise forms.ValidationError("This student ID is already in use.")
+        return student_ID
+    
     def clean_username(self):
         username = self.cleaned_data['username']
         if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
             raise forms.ValidationError("This username is already taken. Please choose a different one.")
         return username
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if email:
-            if not (email.endswith('@kkumail.com') or email.endswith('@kku.ac.th')):
-                raise forms.ValidationError("Email must end with '@kkumail.com' or '@kku.ac.th'.")
-        return email
     
 # Post Giver Form
 class PostGiverForm(forms.ModelForm):

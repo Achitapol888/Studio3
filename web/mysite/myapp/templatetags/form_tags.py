@@ -1,4 +1,6 @@
 from django import template
+from myapp.models import MatchPost  # Adjust with your app name
+
 
 register = template.Library()
 
@@ -19,3 +21,11 @@ def date_thai(date):
         return ""
     # Format: 23 พฤศจิกายน 2024
     return f"{date.day} {MONTHS_TH[date.month - 1]} {date.year}"
+
+@register.filter
+def get_related_matches_giver(matched_posts, post_id):
+    return matched_posts.filter(giver_post__post_ID=post_id).first()
+
+@register.filter
+def get_related_matches_receiver(matched_posts, post_id):
+    return matched_posts.filter(receiver_post__post_ID=post_id).first()

@@ -43,7 +43,9 @@ urlpatterns = [
     path('delete_giver_post/<int:post_ID>/', views.delete_giver_post, name='delete_giver_post'),
     path('delete_receiver_post/<int:post_ID>/', views.delete_receiver_post, name='delete_receiver_post'),
     path('verify/<int:giver_post_id>/<int:receiver_post_id>/', views.verify_match, name='verify'),
-    path('confirm_verification/<int:match_ID>/', views.confirm_verification, name='confirm_verification'),
+    path('confirm_verification_giver/<int:match_ID>/', views.confirm_verification_giver, name='confirm_verification_giver'),
+    path('confirm_verification_receiver/<int:match_ID>/', views.confirm_verification_receiver, name='confirm_verification_receiver'),
+
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

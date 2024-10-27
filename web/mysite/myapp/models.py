@@ -70,16 +70,15 @@ class PostReceiver(models.Model):
     def __str__(self):
         return f"{self.stuff_name} by {self.user_profile.user.username}"
 
-
 class MatchPost(models.Model):
     match_ID = models.AutoField(primary_key=True)
     giver_post = models.ForeignKey(PostGiver, on_delete=models.CASCADE)
     receiver_post = models.ForeignKey(PostReceiver, on_delete=models.CASCADE)
     match_date = models.DateTimeField(default=timezone.now)
     confirmation_date = models.DateTimeField(null=True, blank=True) 
-    is_confirm = models.BooleanField(default=False)
+    is_giver_confirm = models.BooleanField(default=False)
+    is_receiver_confirm = models.BooleanField(default=False)
 
-    
     def __str__(self):
         return f"Match ID: {self.match_ID} between {self.giver_post} and {self.receiver_post}"
 
