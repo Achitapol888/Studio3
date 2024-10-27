@@ -1,0 +1,78 @@
+{% extends 'myweb/base.html' %}
+
+{% block title %}ค้นหาประกาศ{% endblock %}
+
+{% block background_style %}
+background-color: rgba(255, 255, 255);
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>ค้นหาโพสต์</h1>
+    <form method="get" action="{% url 'search_posts' %}">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" name="q" placeholder="ชื่อสิ่งของ" class="form-control" value="{{ query }}">
+            </div>
+            <div class="col-md-4">
+                <select name="category" class="form-control">
+                    <option value="">เลือกประเภท</option>
+                    {% for cat, cat_label in CATEGORIES %}
+                        <option value="{{ cat }}" {% if cat == category %}selected{% endif %}>{{ cat_label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="place" placeholder="สถานที่" class="form-control" value="{{ place }}">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">ค้นหา</button>
+    </form>
+
+    <hr>
+
+    <h2>ผลการค้นหาสำหรับผู้บริจาค</h2>
+    <div class="row">
+        {% for giver_post in giver_posts %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class = "text-center mt-3 mb-3">
+                        <img src="{{ giver_post.stuff_picture.url }}" 
+                        alt="Stuff Picture" class="card-img-top" style="width: 200px;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ giver_post.stuff_name }}</h5>
+                        <p class="card-text">ประเภท: {{ giver_post.categories }}</p>
+                        <p class="card-text">สถานที่: {{ giver_post.place }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>ไม่พบประกาศที่ตรงกับผู้บริจาค</p>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <h2>ผลการค้นหาสำหรับผู้รับบริจาค</h2>
+    <div class="row">
+        {% for receiver_post in receiver_posts %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ receiver_post.stuff_name }}</h5>
+                        <p class="card-text">ประเภท: {{ receiver_post.categories }}</p>
+                        <p class="card-text">สถานที่: {{ receiver_post.place }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>ไม่พบประกาศที่ตรงกับผู้รับบริจาค</p>
+        {% endfor %}
+    </div>
+
+    <div class="mb-3">
+        <a href="{% url 'profile' user_profile.id %}" class="btn btn-secondary">กลับไปยังโปรไฟล์</a>
+    </div>
+</div>
+{% endblock %}

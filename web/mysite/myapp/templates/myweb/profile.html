@@ -42,12 +42,16 @@ background-color: rgba(0, 0, 0);
                             {% endif %}
                             <h5 class="my-3">{{ user_profile.user.username }}</h5>
                             <div class="d-flex justify-content-center mb-2">
+
                                 {% if user.id == user_profile.user.id %}
+                                    <a class="btn btn-outline-success mx-3 btn-lg " href="{% url 'search_posts' %}">ค้นหา</a>
+                                    
                                     <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                                         แก้ไขโปรไฟล์
                                     </button>
+
                                 {% endif %}
-                                <a class="btn btn-outline-info btn-lg mx-4" href="{% url 'post_history' user_profile.id %}">ดูประวัติ</a>
+                                <a class="btn btn-outline-info btn-lg mx-3" href="{% url 'post_history' user_profile.id %}">ดูประวัติ</a>
                             </div>
                         </div>
                     </div>

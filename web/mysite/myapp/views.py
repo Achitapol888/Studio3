@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse,  get_object_or_404
 from .forms import SignUpForm, UserForm, UserProfileForm, PostGiverForm, PostReceiverForm
-from .models import UserProfile, PostGiver, PostReceiver, MatchPost
+from .models import UserProfile, PostGiver, PostReceiver, MatchPost, CATEGORIES, DEFECT
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -425,5 +425,35 @@ def match_info_receiver(request, match_id):
         'match': match,
     }
     return render(request, 'myweb/match_info_receiver.html', context)
+
+def search_posts(request):
+    query = request.GET.get("q", "")
+    category = request.GET.get("category", "")
+    place = request.GET.get("place", "")
+
+    user_profile = request.user.profile
+
+    giver_posts = PostGiver.objects.exclude(user_profile=user_profile)
+    receiver_posts = PostReceiver.objects.exclude(user_profile=user_profile)
+
+    if query:
+        giver_posts = giver_posts.filter(stuff_name__icontains=query)
+        receiver_posts = receiver_posts.filter(stuff_name__icontains=query)
+    if category:
+        giver_posts = giver_posts.filter(categories=category)
+        receiver_posts = receiver_posts.filter(categories=category)
+    if place:
+        giver_posts = giver_posts.filter(place__icontains=place)
+        receiver_posts = receiver_posts.filter(place__icontains=place)
+
+    context = {
+        "query": query,
+        "category": category,
+        "place": place,
+        "giver_posts": giver_posts,
+        "receiver_posts": receiver_posts,
+        "user_profile": user_profile
+    }
+    return render(request, "myweb/search_posts.html", context)
     
 
