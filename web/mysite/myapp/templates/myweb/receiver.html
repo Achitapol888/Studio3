@@ -1,7 +1,6 @@
 {% extends 'myweb/base.html' %}
 
 {% load static %}
-
 {% load form_tags %}
 
 {% block title %}
@@ -13,7 +12,6 @@ background-color: rgba(0, 0, 0);
 {% endblock %}
 
 {% block styles %}
-<!-- Add more CSS files here -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 {% endblock %}
@@ -22,7 +20,7 @@ background-color: rgba(0, 0, 0);
     <div class="container mt-5 col-lg-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title text-center">เเบบฟอร์มของผู้ต้องการรับสิ่งของ</h5>
+                <h5 class="card-title text-center">เเบบฟอร์มของผู้ต้องการรับบริจาค</h5>
             </div>
             <div class="card-body">
                 {% if form.errors %}
@@ -41,7 +39,7 @@ background-color: rgba(0, 0, 0);
                     </div>
                 {% endif %}
                 
-                <form method="post" enctype="multipart/form-data">
+                <form method="post" enctype="multipart/form-data" id="donationForm">
                     {% csrf_token %}
                     
                     <div class="mb-3">
@@ -91,8 +89,9 @@ background-color: rgba(0, 0, 0);
                             <div class="text-danger">{{ error }}</div>
                         {% endfor %}
                     </div>
+
                     <div class="text-end">
-                        <button type="submit" class="btn btn-primary">โพสต์</button>
+                        <button type="submit" class="btn btn-primary" id="postButton" disabled>โพสต์</button>
                         <a href="javascript:history.back()" class="btn btn-secondary">ย้อนกลับ</a>
                     </div>
                     
@@ -100,21 +99,32 @@ background-color: rgba(0, 0, 0);
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block script %}
 <script>
+    // Get form fields and button
+    const form = document.getElementById('donationForm');
+    const postButton = document.getElementById('postButton');
+    const inputs = form.querySelectorAll('input, textarea, select');
 
-    const dateInput = document.getElementById('date');
-    const formattedDateDisplay = document.getElementById('formattedDate');
+    // Function to check if all fields are filled
+    function checkFormFields() {
+        let allFilled = true;
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                allFilled = false;
+            }
+        });
+        postButton.disabled = !allFilled;
+    }
 
-    dateInput.addEventListener('change', function() {
-        const selectedDate = new Date(dateInput.value);
-        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Bangkok', hour12: false };
-        const thaiFormattedDate = new Intl.DateTimeFormat('th-TH', options).format(selectedDate);
-        formattedDateDisplay.textContent = `วันที่เลือก: ${thaiFormattedDate}`;
+    // Event listeners for input fields
+    inputs.forEach(input => {
+        input.addEventListener('input', checkFormFields);
     });
-    
+
+    // Initial check in case of autofilled fields
+    document.addEventListener('DOMContentLoaded', checkFormFields);
 </script>
 {% endblock %}
