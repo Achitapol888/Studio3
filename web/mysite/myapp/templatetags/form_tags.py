@@ -1,5 +1,5 @@
 from django import template
-from myapp.models import MatchPost  # Adjust with your app name
+
 
 
 register = template.Library()
