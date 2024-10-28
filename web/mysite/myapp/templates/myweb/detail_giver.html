@@ -92,7 +92,11 @@ background-color: rgba(0, 0, 0);
     </div>
     
     <div class="text-center mt-3">
-        <a href="{% url 'profile' request.user.profile.id %}" class="btn btn-secondary">ยกเลิก</a>
+        <form method="post" action="{% url 'delete_receiver_post_2' current_receiver_post.post_ID %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">ยกเลิก</button>
+        </form>
     </div>
+    
 </div>
 {% endblock %}

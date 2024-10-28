@@ -209,18 +209,6 @@ def delete_receiver_post(request, post_ID):
 
     return render(request, 'myweb/delete_post_confirmation.html', {'post': post})
 
-def delete_receiver_post_2(request, post_ID):
-    post = get_object_or_404(PostReceiver, post_ID=post_ID)
-
-    if request.method == 'POST':
-        post.delete()
-        # Use the related_name to access the user profile
-        if hasattr(request.user, 'profile'):
-            return redirect('search_posts', id=request.user.profile.id)  
-
-    return render(request, 'myweb/delete_post_confirmation.html', {'post': post})
-
-
 # Delete Giver Post
 @login_required
 def delete_giver_post(request, post_ID):
@@ -495,31 +483,41 @@ def search_posts(request, id):
     return render(request, "myweb/search_posts.html", context)
 
 def send_data_receiver(request, post_ID):
-    # Ensure we're using the correct model for `post_ID`
     post_giver = get_object_or_404(PostGiver, post_ID=post_ID)
 
     if request.method == 'POST':
         form = PostReceiverForm(request.POST, request.FILES)
+        # Temporarily set stuff_name and categories to not required
+        form.fields['stuff_name'].required = False
+        form.fields['categories'].required = False
+        
         if form.is_valid():
             post = form.save(commit=False)
             post.user_profile = request.user.profile
+            # Use data from post_giver for these fields
+            post.stuff_name = post_giver.stuff_name
+            post.categories = post_giver.categories
+            
             post.save()
-            # Redirect to detail_giver view with both post IDs
             return redirect('detail_giver', post_giver_ID=post_giver.post_ID, post_receiver_ID=post.post_ID)
     else:
         form = PostReceiverForm(initial={
             'categories': post_giver.categories,
             'stuff_name': post_giver.stuff_name,
         })
-        # Conditionally disable fields for this specific page
+        # Disable the fields in the form
         form.fields['categories'].widget.attrs['disabled'] = 'disabled'
         form.fields['stuff_name'].widget.attrs['disabled'] = 'disabled'
+        # Set them as not required
+        form.fields['stuff_name'].required = False
+        form.fields['categories'].required = False
 
     context = {
         "post_giver": post_giver,
         'form': form
     }
     return render(request, "myweb/send_data_receiver.html", context)
+
 
 def detail_giver(request, post_giver_ID, post_receiver_ID):
     # Retrieve PostReceiver using post_receiver_ID
@@ -533,6 +531,14 @@ def detail_giver(request, post_giver_ID, post_receiver_ID):
     }
     return render(request, 'myweb/detail_giver.html', context)
 
+def delete_receiver_post_2(request, post_ID):
+    post = get_object_or_404(PostReceiver, post_ID=post_ID)
+    if request.method == 'POST':
+        post.delete()
+        print(post)
+        # Redirect to the search_posts view using the user's profile ID
+        return redirect('search_posts', id=request.user.profile.id)
+    return print("No post")
 
 def send_data_giver(request, post_ID):
     post_receiver = get_object_or_404(PostReceiver, post_ID=post_ID)

@@ -208,7 +208,7 @@ background-color: rgba(0, 0, 0);
                                             <!-- Unmatch button for Receiver -->
                                             <form action="{% url 'unmatch_post' post.post_ID 'receiver' %}" method="POST" class="d-inline">
                                                 {% csrf_token %}
-                                                <button type="submit" class="btn btn-warning ms-3">ยกเลิกการจับคู่</button>
+                                                <button type="submit" class="btn text-white btn-warning ms-3">ยกเลิกการจับคู่</button>
                                             </form>   
                                         {% elif matched_post.is_receiver_confirm %}
 
@@ -237,17 +237,13 @@ background-color: rgba(0, 0, 0);
     </div>
 </div>
 
-
-
-<!-- Return Button -->
 {% if user_profile.user.id == user.id %}
-<div class="mt-5 mb-4 text-end">
-    <a href="{% url 'profile' request.user.profile.id %}" class="btn btn-secondary">กลับไปที่โปรไฟล์</a>
-</div>
-{% else %}
-<div class="mt-5 mb-4 text-end text-white">
-    <a href="javascript:history.back()" class="btn btn-secondary btn-lg">ย้อนกลับ</a>
-</div>
+            <div class="mt-5 mb-4 text-end">
+                <a href="{% url 'profile' request.user.profile.id %}" class="btn btn-secondary btn-lg px-4 py-2">กลับไปที่โปรไฟล์</a>
+            </div>            
+            {% else %}
+            <div class="mt-5 mb-4 text-end text-white">
+                <a href="javascript:history.back()" class="btn btn-secondary btn-lg">ย้อนกลับ</a>
+            </div>
 {% endif %}
-
 {% endblock %}

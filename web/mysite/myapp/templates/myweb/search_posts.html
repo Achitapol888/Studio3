@@ -43,6 +43,9 @@ background-color: rgba(255, 255, 255);
 <h2 class = "my-4">ผลการค้นหาสำหรับผู้บริจาค</h2>
 <div class="row">
     {% for giver_post in giver_posts %}
+        {% if not giver_post.is_matched %}
+        
+        
         <div class="col-md-4 mb-4">
             <div class="card">
                 <div class="text-center mt-3 mb-3">
@@ -58,8 +61,6 @@ background-color: rgba(255, 255, 255);
                         <a class="btn btn-danger mx-1 btn-lg" href="{% url 'send_data_receiver' giver_post.post_ID %}" title="จับคู่โพสต์นี้">จับคู่</a>
                         <button type="button" class="btn btn-dark mx-1" data-bs-toggle="modal" data-bs-target="#detailsModal{{ giver_post.post_ID }}">ดูรายละเอียด</button>
                     </div>
-                    <!-- Print post ID for debugging -->
-                    <p>Post ID: {{ giver_post.post_ID }}</p>  <!-- Debugging line -->
                 </div>
             </div>
         </div>
@@ -82,8 +83,7 @@ background-color: rgba(255, 255, 255);
                         <p><strong>รายละเอียด:</strong> {{ giver_post.description }}</p>
                         <p><strong>วันที่โพสต์:</strong> {{ giver_post.created_at|date_thai }}</p>
                         <p><strong>อัพเดตล่าสุด:</strong> {{ giver_post.updated_at|date_thai }}</p>
-                        <!-- Print post ID in the modal for debugging -->
-                        <p>Modal ID: {{ giver_post.post_ID }}</p>  <!-- Debugging line -->
+                        <a href="{% url 'profile' giver_post.user_profile.id %}" class="btn btn-info text-white">ดูโปรไฟล์ผู้โพสต์</a>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
@@ -91,6 +91,9 @@ background-color: rgba(255, 255, 255);
                 </div>
             </div>
         </div>
+        {% else %}
+
+        {% endif %}
 
     {% empty %}
         <p>ไม่พบประกาศที่ตรงกับการค้นหาของคุณ</p>
@@ -101,6 +104,7 @@ background-color: rgba(255, 255, 255);
 <h2 class = "my-4">ผลการค้นหาสำหรับผู้รับบริจาค</h2>
 <div class="row">
     {% for receiver_post in receiver_posts %}
+    {% if not receiver_post.is_matched %}
         <div class="col-md-4 mb-4">
             <div class="card">
                 <div class="card-body">
@@ -112,8 +116,6 @@ background-color: rgba(255, 255, 255);
                         <a class="btn btn-danger mx-1 btn-lg" href="{% url 'send_data_giver' receiver_post.post_ID %}" title="จับคู่โพสต์นี้">จับคู่</a>
                         <button type="button" class="btn btn-dark mx-1" data-bs-toggle="modal" data-bs-target="#detailsModal{{ receiver_post.post_ID }}">ดูรายละเอียด</button>
                     </div>
-                    <!-- Print post ID for debugging -->
-                    <p>Post ID: {{ receiver_post.post_ID }}</p>  <!-- Debugging line -->
                 </div>
             </div>
         </div>
@@ -133,8 +135,7 @@ background-color: rgba(255, 255, 255);
                         <p><strong>รายละเอียด:</strong> {{ receiver_post.description }}</p>
                         <p><strong>วันที่โพสต์:</strong> {{ receiver_post.created_at|date_thai }}</p>
                         <p><strong>อัพเดตล่าสุด:</strong> {{ receiver_post.updated_at|date_thai }}</p>
-                        <!-- Print post ID in the modal for debugging -->
-                        <p>Modal ID: {{ receiver_post.post_ID }}</p>  <!-- Debugging line -->
+                        <a href="{% url 'profile' receiver_post.user_profile.id %}" class="btn btn-info text-white">ดูโปรไฟล์ผู้โพสต์</a>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
@@ -142,6 +143,9 @@ background-color: rgba(255, 255, 255);
                 </div>
             </div>
         </div>
+        {% else %}
+
+        {% endif %}
     {% empty %}
         <p>ไม่พบประกาศที่ตรงกับการค้นหาของคุณ</p>
     {% endfor %}
