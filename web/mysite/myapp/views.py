@@ -19,8 +19,6 @@ class CustomLoginView(LoginView):
             return reverse('profile', args=[self.request.user.profile.id])
         else:
             return reverse('login') 
-def results_post(request):
-    return render(request, "myweb/results_post.html")
 
 def placeholder_view(request):
     return HttpResponse("This is a placeholder for the home page.")
@@ -208,6 +206,17 @@ def delete_receiver_post(request, post_ID):
         # Use the related_name to access the user profile
         if hasattr(request.user, 'profile'):
             return redirect('post_history', profile_id=request.user.profile.id)  
+
+    return render(request, 'myweb/delete_post_confirmation.html', {'post': post})
+
+def delete_receiver_post_2(request, post_ID):
+    post = get_object_or_404(PostReceiver, post_ID=post_ID)
+
+    if request.method == 'POST':
+        post.delete()
+        # Use the related_name to access the user profile
+        if hasattr(request.user, 'profile'):
+            return redirect('search_posts', id=request.user.profile.id)  
 
     return render(request, 'myweb/delete_post_confirmation.html', {'post': post})
 
@@ -428,7 +437,7 @@ def match_info_receiver(request, match_id):
     }
     return render(request, 'myweb/match_info_receiver.html', context)
 
-def search_posts(request):
+def search_posts(request, id):
     
     CATEGORIES = [
     ("หนังสือ", "หนังสือ"),
@@ -472,6 +481,7 @@ def search_posts(request):
         receiver_posts = receiver_posts.filter(defect=defect)
 
     context = {
+        "user_profile":user_profile,
         "query": query,
         "category": category,
         "place": place,
@@ -483,5 +493,69 @@ def search_posts(request):
         "DEFECT": DEFECT,
     }
     return render(request, "myweb/search_posts.html", context)
+
+def send_data_receiver(request, post_ID):
+    # Ensure we're using the correct model for `post_ID`
+    post_giver = get_object_or_404(PostGiver, post_ID=post_ID)
+
+    if request.method == 'POST':
+        form = PostReceiverForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user_profile = request.user.profile
+            post.save()
+            # Redirect to detail_giver view with both post IDs
+            return redirect('detail_giver', post_giver_ID=post_giver.post_ID, post_receiver_ID=post.post_ID)
+    else:
+        form = PostReceiverForm(initial={
+            'categories': post_giver.categories,
+            'stuff_name': post_giver.stuff_name,
+        })
+        # Conditionally disable fields for this specific page
+        form.fields['categories'].widget.attrs['disabled'] = 'disabled'
+        form.fields['stuff_name'].widget.attrs['disabled'] = 'disabled'
+
+    context = {
+        "post_giver": post_giver,
+        'form': form
+    }
+    return render(request, "myweb/send_data_receiver.html", context)
+
+def detail_giver(request, post_giver_ID, post_receiver_ID):
+    # Retrieve PostReceiver using post_receiver_ID
+    current_receiver_post = get_object_or_404(PostReceiver, post_ID=post_receiver_ID)
+    # Retrieve PostGiver using post_giver_ID
+    giver_post = get_object_or_404(PostGiver, post_ID=post_giver_ID)
+
+    context = {
+        'current_receiver_post': current_receiver_post,
+        'giver_post': giver_post,
+    }
+    return render(request, 'myweb/detail_giver.html', context)
+
+
+def send_data_giver(request, post_ID):
+    post_receiver = get_object_or_404(PostReceiver, post_ID=post_ID)
+    
+    if request.method == 'POST':
+        form = PostGiverForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user_profile = request.user.profile
+            post.save()
+            return redirect('results_giver', post_ID=post.post_ID)
+    else:
+        form = PostGiverForm(initial={
+            'categories': post_receiver.categories,
+            'stuff_name': post_receiver.stuff_name,
+        })
+        # Conditionally disable fields for this specific page
+        form.fields['categories'].widget.attrs['disabled'] = 'disabled'
+
+    context = {
+        "post_receiver": post_receiver,
+        'form': form
+    }
+    return render(request, "myweb/send_data_giver.html", context)
 
 

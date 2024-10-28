@@ -42,15 +42,17 @@ urlpatterns = [
     path('edit_receiver_post/<int:post_ID>/', views.edit_receiver_post, name='edit_receiver_post'),
     path('delete_giver_post/<int:post_ID>/', views.delete_giver_post, name='delete_giver_post'),
     path('delete_receiver_post/<int:post_ID>/', views.delete_receiver_post, name='delete_receiver_post'),
+    path('delete_receiver_post_2/<int:post_ID>/', views.delete_receiver_post_2, name='delete_receiver_post_2'),
     path('verify/<int:giver_post_id>/<int:receiver_post_id>/', views.verify_match, name='verify'),
     path('confirm_verification_giver/<int:match_ID>/', views.confirm_verification_giver, name='confirm_verification_giver'),
     path('confirm_verification_receiver/<int:match_ID>/', views.confirm_verification_receiver, name='confirm_verification_receiver'),
     path('unmatch_post/<int:post_id>/<str:post_type>/', views.unmatch_post, name='unmatch_post'),
     path('match_info_giver/<int:match_id>/', views.match_info_giver, name='match_info_giver'),
     path('match_info_receiver/<int:match_id>/', views.match_info_receiver, name='match_info_receiver'),
-    path('search/', views.search_posts, name='search_posts'),
-    path('results-post',views.results_post, name = 'results_posts'),
-
+    path('search/<int:id>', views.search_posts, name='search_posts'),
+    path('send-data-receiver/for-giver-ID-<int:post_ID>',views.send_data_receiver, name = 'send_data_receiver'),
+    path('send-data-giver/for-receiver-ID-<int:post_ID>',views.send_data_giver, name = 'send_data_giver'),
+    path('detail-giver/<int:post_giver_ID>/<int:post_receiver_ID>/', views.detail_giver, name='detail_giver'),
 
 
 

@@ -1,0 +1,130 @@
+{% extends 'myweb/base.html' %}
+
+{% load static %}
+{% load form_tags %}
+
+{% block title %}
+ผู้รับ
+{% endblock %}
+
+{% block background_style %}
+background-color: rgba(0, 0, 0);
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+{% endblock %}
+
+{% block content %} 
+    <div class="container mt-5 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title text-center">เเบบฟอร์มของผู้ต้องการรับบริจาค</h5>
+            </div>
+            <div class="card-body">
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <strong>กรุณาใส่เเบบฟอร์มให้ถูกต้อง:</strong>
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                
+                <form method="post" enctype="multipart/form-data" id="donationForm">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.stuff_name.id_for_label }}" class="form-label">ชื่อสิ่งของ</label>
+                        {{ form.stuff_name|add_class:"form-control" }}
+                        {% for error in form.stuff_name.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.categories.id_for_label }}" class="form-label">ประเภท</label>
+                        {{ form.categories|add_class:"form-control" }} 
+                        {% for error in form.categories.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">รายละเอียด</label>
+                        {{ form.description|add_class:"form-control" }}
+                        {% for error in form.description.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.defect.id_for_label }}" class="form-label">ตำหนิ</label>
+                        {{ form.defect|add_class:"form-control" }}
+                        {% for error in form.defect.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.place.id_for_label }}" class="form-label">สถานที่</label>
+                        {{ form.place|add_class:"form-control" }}
+                        {% for error in form.place.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.date_limit.id_for_label }}" class="form-label">ต้องการรับภายในวันที่</label>
+                        {{ form.date_limit|add_class:"form-control" }}
+                        {% for error in form.date_limit.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary" id="postButton" disabled>ส่งข้อมูลไปยังผู้บริจาค</button>
+                        <a href="javascript:history.back()" class="btn btn-secondary">ย้อนกลับ</a>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    // Get form fields and button
+    const form = document.getElementById('donationForm');
+    const postButton = document.getElementById('postButton');
+    const inputs = form.querySelectorAll('input, textarea, select');
+
+    // Function to check if all fields are filled
+    function checkFormFields() {
+        let allFilled = true;
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                allFilled = false;
+            }
+        });
+        postButton.disabled = !allFilled;
+    }
+
+    // Event listeners for input fields
+    inputs.forEach(input => {
+        input.addEventListener('input', checkFormFields);
+    });
+
+    // Initial check in case of autofilled fields
+    document.addEventListener('DOMContentLoaded', checkFormFields);
+</script>
+{% endblock %}

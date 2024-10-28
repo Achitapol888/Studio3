@@ -57,7 +57,7 @@ background-color: rgba(0, 0, 0);
 
                                 {% if user.id == user_profile.user.id %}
                                 <button type="button" class="btn btn-outline-success mx-3 btn-lg" 
-                                    onclick="location.href='{% url 'search_posts' %}'"
+                                    onclick="location.href='{% url 'search_posts' user_profile.user.id %}'"
                                     onmouseover="this.classList.add('text-white')" 
                                     onmouseout="this.classList.remove('text-white')">
                                     ค้นหา

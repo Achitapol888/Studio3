@@ -138,8 +138,6 @@ class PostGiverForm(forms.ModelForm):
             raise forms.ValidationError("The date must be in the future.")
         return date_limit
 
-
-# Post Receiver Form
 class PostReceiverForm(forms.ModelForm):
     class Meta:
         model = PostReceiver

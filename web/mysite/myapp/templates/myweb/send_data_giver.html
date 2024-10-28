@@ -1,0 +1,194 @@
+{% extends 'myweb/base.html' %}
+
+{% load static %}
+{% load form_tags %}
+
+{% block title %}
+ผู้ให้
+{% endblock %}
+
+{% block background_style %}
+background-color: rgba(0, 0, 0);
+{% endblock %}
+
+{% block styles %}
+<!-- Add more CSS files here -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
+<style>
+    /* Hide the default file input */
+    .custom-file-input input[type="file"] {
+        display: none;
+    }
+    
+    /* Style the custom file input label */
+    .custom-file-input label {
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    
+    /* Change the button style when hovered */
+    .custom-file-input label:hover {
+        background-color: #007bff;
+        border-color: #0056b3;
+        color: white;
+    }
+    
+    /* Style the file name span */
+    #fileName {
+        font-size: 14px;
+        color: #6c757d;
+        font-style: italic;
+    }
+ </style>
+
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 col-lg-6">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">เเบบฟอร์มของผู้ต้องการบริจาคสิ่งของ</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" id="giverForm">
+                {% csrf_token %}
+                
+                {% if form.stuff_picture %}
+                <div class="mb-3">
+                    <label for="{{ form.stuff_picture.id_for_label }}" class="form-label mt-2">รูปภาพ</label>
+
+                    <!-- Image preview -->
+                    <div class="mb-3 text-center">
+                        <img id="preview-image" src="{% static 'images/placeholder_img.jpg' %}" alt="Image Preview" class="img-fluid img-thumbnail" style="max-height: 200px;">
+                    </div>
+
+                    <!-- Custom file input styling -->
+                    <div class="custom-file-input text-center">
+                        <input type="file" id="stuffPicture" name="{{ form.stuff_picture.name }}">
+                        <label for="stuffPicture" id="fileLabel" class="btn btn-outline-primary">Choose File</label>
+                        <span id="fileName" class="ml-2">No file chosen</span>
+                    </div>    
+
+
+                    {% for error in form.stuff_picture.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if form.stuff_name %}
+                <div class="mb-3">
+                    <label for="{{ form.stuff_name.id_for_label }}" class="form-label mt-1">ชื่อสิ่งของ</label>
+                    {{ form.stuff_name|add_class:"form-control" }}
+                    {% for error in form.stuff_name.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if form.categories %}
+                <div class="mb-3">
+                    <label for="{{ form.categories.id_for_label }}" class="form-label">ประเภท</label>
+                    {{ form.categories|add_class:"form-control" }}
+                    {% for error in form.categories.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if form.description %}
+                <div class="mb-3">
+                    <label for="{{ form.description.id_for_label }}" class="form-label">รายละเอียด</label>
+                    {{ form.description|add_class:"form-control" }}
+                    {% for error in form.description.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if form.defect %}
+                <div class="mb-3">
+                    <label for="{{ form.defect.id_for_label }}" class="form-label">ตำหนิ</label>
+                    {{ form.defect|add_class:"form-control" }}
+                    {% for error in form.defect.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if form.place %}
+                <div class="mb-3">
+                    <label for="{{ form.place.id_for_label }}" class="form-label">สถานที่</label>
+                    {{ form.place|add_class:"form-control" }}
+                    {% for error in form.place.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if form.date_limit %}
+                <div class="mb-3">
+                    <label for="{{ form.date_limit.id_for_label }}" class="form-label">ต้องการให้ภายในวันที่</label>
+                    {{ form.date_limit|add_class:"form-control" }}
+                    {% for error in form.date_limit.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <div class="mb-3 form-check">
+                    <input type="checkbox" id="donationCheckbox" class="form-check-input">
+                    <label for="donationCheckbox" class="form-check-label">สำหรับบริจาคเท่านั้น</label>
+                </div>
+                <div class="text-end">                                        
+                    <button type="submit" class="btn btn-primary disabled" id="submitButton" disabled>ส่งข้อมูลไปยังผู้รับบริจาค</button>
+                    <a href="javascript:history.back()" class="btn btn-secondary">ย้อนกลับ</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    const stuffPictureInput = document.getElementById('stuffPicture');
+    const fileLabel = document.getElementById('fileLabel');
+    const fileNameSpan = document.getElementById('fileName');
+    const previewImage = document.getElementById('preview-image');
+    const checkbox = document.getElementById("donationCheckbox");
+    const submitButton = document.getElementById("submitButton");
+
+        // Event listener to enable or disable the submit button
+        checkbox.addEventListener("change", function() {
+            if (this.checked) {
+                submitButton.disabled = false; // Enable button if checked
+                submitButton.classList.remove("disabled"); // Remove Bootstrap disabled class
+            } else {
+                submitButton.disabled = true; // Disable button if unchecked
+                submitButton.classList.add("disabled"); // Add Bootstrap disabled class
+            }
+        });
+
+    // Update file label and show file name
+    stuffPictureInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            fileNameSpan.textContent = file.name;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result; // Set the preview image source
+            };
+            reader.readAsDataURL(file);
+        } else {
+            fileNameSpan.textContent = "No file chosen";
+            previewImage.src = "{% static 'images/1.jpg' %}"; 
+        }
+    });
+</script>
+{% endblock %}

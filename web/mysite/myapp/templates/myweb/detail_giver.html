@@ -1,0 +1,98 @@
+{% extends 'myweb/base.html' %}
+
+{% load static %}
+{% load form_tags %}
+
+{% block title %}
+ผลลัพธ์
+{% endblock %}
+
+{% block background_style %}
+background-color: rgba(0, 0, 0);
+{% endblock %}
+
+{% block content %}
+<div class="container mt-2">
+    <div class="row">
+        <div class="mb-2 text-white">
+            <h1>รายละเอียดโพสต์</h1>
+        </div>
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>ผู้โพสต์</h5> <!-- "Matching User" -->
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-sm-12 text-center">
+                                <!-- Receiver's Profile Picture -->
+                                {% if giver_post.user_profile.profile_picture %}
+                                    <img src="{{ giver_post.user_profile.profile_picture.url }}" alt="Profile Picture" 
+                                    class="img-fluid rounded-circle"  style="max-width: 25%;">
+                                {% else %}
+                                    <img src="{% static 'images/icon_accout.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col-sm-12 text-center">
+                                <p class="text-muted mb-0">{{ giver_post.user_profile.user.username }}</p> <!-- Receiver's Username -->
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-12 text-center">
+                                {% if giver_post.user_profile.id %}
+                                    <a href="{% url 'profile' giver_post.user_profile.id %}" class="btn btn-primary">กดดูโปรไฟล์</a>
+                                {% else %}
+                                    <p class="text-danger">ไม่พบผู้ใช้โปรไฟล์นี้</p>
+                                {% endif %}
+                            </div>
+                            <div class="mt-3">
+                                <p>ชื่อ: {{ giver_post.user_profile.user.first_name }}</p> 
+                                <p>นามสกุล: {{ giver_post.user_profile.user.last_name }}</p> 
+                                <p>หอพัก: {{ giver_post.user_profile.dorm }}</p> 
+                                <p>เบอร์โทร: 0{{ giver_post.user_profile.phone_number }}</p>
+                                <p>รหัสนักศึกษา: {{ giver_post.user_profile.student_ID }}</p>
+                                <p>ออนไลน์ล่าสุด: {{ giver_post.user_profile.user.last_login|date_thai }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Display the corresponding item for the best match -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>สิ่งของ</h5> <!-- "Matched Item" -->
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            {% if giver_post.stuff_picture %}
+                                <img src="{{ giver_post.stuff_picture.url }}" alt="Stuff Picture" class="img-fluid" style="max-width: 25%;">
+                            {% else %}
+                                <img src="{% static 'images/default_stuff.png' %}" alt="Default Stuff Picture" class="img-fluid" style="max-width: 100%;">
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <p>ชื่อสิ่งของ: {{ giver_post.stuff_name }}</p> <!-- Item Name -->
+                            <p>รายละเอียด: {{ giver_post.description }}</p> <!-- Item Description -->
+                            <p>ประเภท: {{ giver_post.categories }}</p> <!-- Item Category -->
+                            <p>สถานที่: {{ giver_post.place }}</p> <!-- Item Place -->
+                            <p>ตำหนิ: {{ giver_post.defect }}</p> <!-- Item Defect -->
+                            <p>วันสิ้นสุด: {{ giver_post.date_limit|date_thai }}</p> <!-- Format date in Thai -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <div class="text-center mt-1">
+        <a href="{% url 'verify' giver_post.post_ID current_receiver_post.post_ID %}" class="btn btn-success">ยืนยันการจับคู่</a> <!-- Confirm Match Button -->
+    </div>
+    
+    <div class="text-center mt-3">
+        <a href="{% url 'profile' request.user.profile.id %}" class="btn btn-secondary">ยกเลิก</a>
+    </div>
+</div>
+{% endblock %}
