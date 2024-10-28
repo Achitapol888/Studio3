@@ -22,7 +22,7 @@ background-color: rgba(0, 0, 0);
         </div>
         <div class="row">
             {% for post in giver_posts %}
-            <div class="col-md-6 col-lg-4 mb-4">
+            <div class="col-md-12 col-lg-4 mb-4">
                 <div class="card">
                     <div class="card-body">
                         <img src="{{ post.stuff_picture.url }}" class="card-img-top" alt="{{ post.stuff_name }}" 
@@ -72,7 +72,7 @@ background-color: rgba(0, 0, 0);
 
 
                     {% if user.id == user_profile.user.id %}
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex justify-content-center justify-content-lg-end">
                             {% if not post.is_matched %}
                                 <!-- Button to re-match the post -->
                                 <a href="{% url 'results_giver' post.post_ID %}" 
@@ -136,7 +136,7 @@ background-color: rgba(0, 0, 0);
         </div>
         <div class="row">
             {% for post in receiver_posts %}
-            <div class="col-md-6 col-lg-4 mb-4">
+            <div class="col-md-12 col-lg-4 mb-4">
                 <div class="card">
                     <div class="card-body">
                         <p class="card-text pt-3"><strong>ชื่อสิ่งของ:</strong> {{ post.stuff_name }}</p>
@@ -183,7 +183,7 @@ background-color: rgba(0, 0, 0);
 
 
                     {% if user.id == user_profile.user.id %}
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex justify-content-center justify-content-lg-end">
                             {% if not post.is_matched %}
                                 <!-- Button to re-match the post -->
                                 <a href="{% url 'results_receiver' post.post_ID %}" 

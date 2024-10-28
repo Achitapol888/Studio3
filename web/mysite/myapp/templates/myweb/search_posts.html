@@ -27,7 +27,7 @@ background-color: rgba(255, 255, 255);
             </div>
             <div class="col-md-3">
                 <select name="defect" class="form-control">
-                    <option value="">ตำหนิ</option>
+                    <option value="">เลือกตำหนิ</option>
                     {% for def, def_label in DEFECT %}
                         <option value="{{ def }}" {% if def == defect %}selected{% endif %}>{{ def_label }}</option>
                     {% endfor %}

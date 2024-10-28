@@ -21,6 +21,18 @@ background-color: rgba(0, 0, 0);
     border: 0;
 }
 
+.figure-hover img {
+    transition: opacity 0.3s ease; /* Smooth transition for the opacity change */
+}
+
+.figure-hover figcaption {
+    transition: opacity 0.3s ease; /* Smooth transition for the opacity change */
+}
+
+.figure-hover:hover img,
+.figure-hover:hover figcaption {
+    opacity: 0.5; /* Change opacity to 0.5 on hover for both */
+}
 
 </style>
 {% endblock %}
@@ -44,14 +56,24 @@ background-color: rgba(0, 0, 0);
                             <div class="d-flex justify-content-center mb-2">
 
                                 {% if user.id == user_profile.user.id %}
-                                    <a class="btn btn-outline-success mx-3 btn-lg " href="{% url 'search_posts' %}">ค้นหา</a>
-                                    
+                                <button type="button" class="btn btn-outline-success mx-3 btn-lg" 
+                                    onclick="location.href='{% url 'search_posts' %}'"
+                                    onmouseover="this.classList.add('text-white')" 
+                                    onmouseout="this.classList.remove('text-white')">
+                                    ค้นหา
+                                </button>                                    
                                     <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                                         แก้ไขโปรไฟล์
                                     </button>
 
                                 {% endif %}
-                                <a class="btn btn-outline-info btn-lg mx-3" href="{% url 'post_history' user_profile.id %}">ดูประวัติ</a>
+                                <button type="button" class="btn btn-outline-info btn-lg mx-3 text-info" 
+                                    onclick="location.href='{% url 'post_history' user_profile.id %}'"
+                                    onmouseover="this.classList.add('text-white')" 
+                                    onmouseout="this.classList.remove('text-white')">
+                                    ดูประวัติ
+                                </button>
+
                             </div>
                         </div>
                     </div>
@@ -129,22 +151,23 @@ background-color: rgba(0, 0, 0);
                         <!-- Giver -->
                         <div class="col-lg-5 col-md-6 col-sm-8 mb-3 mx-4" id="profile_text">
                             <a href="{% url 'giver' %}">
-                                <figure class="d-block h-100 text-center" data-url="{% url 'giver' %}" onclick="selectRole(this)">
+                                <figure class="d-block h-100 text-center figure-hover" data-url="{% url 'giver' %}" onclick="selectRole(this)">
                                     <img class="img-fluid img-thumbnail bg-primary" src="{% static 'images/package.png' %}" alt="Giver">
                                     <figcaption class="fs-5 mt-3">ผู้บริจาค</figcaption>
                                 </figure>
                             </a>
                         </div>
-
+                    
                         <!-- Receiver -->
                         <div class="col-lg-5 col-md-6 col-sm-8 mb-3 mx-4" id="profile_text">
                             <a href="{% url 'receiver' %}">
-                                <figure class="d-block h-100 text-center" data-url="{% url 'receiver' %}" onclick="selectRole(this)">
+                                <figure class="d-block h-100 text-center figure-hover" data-url="{% url 'receiver' %}" onclick="selectRole(this)">
                                     <img class="img-fluid img-thumbnail bg-warning" src="{% static 'images/receiver.png' %}" alt="Receiver">
                                     <figcaption class="fs-5 mt-3">ผู้รับบริจาค</figcaption>
                                 </figure>
                             </a>
                         </div>
+                    </div>
                         
                     </div>
                 </div>
@@ -152,7 +175,7 @@ background-color: rgba(0, 0, 0);
     
             <!-- Logout Button -->
         {% if user_profile.user.id == user.id %}
-            <form action="{% url 'logout' %}" method="post" class="mb-4 text-center text-lg-end">
+            <form action="{% url 'logout' %}" method="post" class="mb-4 mt-5 text-center text-lg-end">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger btn-lg text-white">ออกจากระบบ</button>
             </form>
@@ -219,7 +242,7 @@ background-color: rgba(0, 0, 0);
                         <input type="text" class="form-control" id="studentID" name="student_ID" value="{{ user_profile.student_ID }}" required>
                     </div>
 
-                    <div class="text-end"> <!-- Aligns the button to the right -->
+                    <div class="text-end"> 
                         <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
                     </div>
                 </form>
