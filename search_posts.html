@@ -1,0 +1,116 @@
+{% extends 'myweb/base.html' %}
+
+{% block title %}ค้นหาประกาศ{% endblock %}
+
+{% block background_style %}
+background-color: rgba(255, 255, 255);
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>ค้นหาโพสต์</h1>
+    <form method="get" action="{% url 'search_posts' %}">
+        <div class="row">
+            <div class="col-md-3">
+                <input type="text" name="q" placeholder="ชื่อสิ่งของ" class="form-control" value="{{ query }}">
+            </div>
+            <div class="col-md-3">
+                <select name="category" class="form-control">
+                    <option value="">ประเภท</option>
+                    {% for cat, cat_label in CATEGORIES %}
+                        <option value="{{ cat }}" {% if cat == category %}selected{% endif %}>{{ cat_label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="place" placeholder="สถานที่" class="form-control" value="{{ place }}">
+            </div>
+            <div class="col-md-3">
+                <select name="defect" class="form-control">
+                    <option value="">ตำหนิ</option>
+                    {% for def, def_label in DEFECT %}
+                        <option value="{{ def }}" {% if def == defect %}selected{% endif %}>{{ def_label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">ค้นหา</button>
+    </form>
+
+    <hr>
+
+    <h2>ผลการค้นหาสำหรับผู้บริจาค</h2>
+    <div class="row">
+        {% for giver_post in giver_posts %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class = "text-center mt-3 mb-3">
+                        <img src="{{ giver_post.stuff_picture.url }}" 
+                        alt="Stuff Picture" class="card-img-top" style="width: 200px;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title"><strong>{{ giver_post.stuff_name }}</strong></h5>
+                        <p class="card-text">ประเภท: {{ giver_post.categories }}</p>
+                        <p class="card-text">วันที่ลง: {{ giver_post.created_at }}</p>
+                        <div class="d-flex justify-content-center">
+                            <!--Button for Matching Items-->
+                            <a class="btn btn-danger mx-1 btn-lg" href="{% url 'results_posts' %}" title="จับคู่โพสต์นี้">จับคู่</a>
+                            <!-- Trigger for Details Modal -->
+                            <button type="button" class="btn btn-dark mx-1" data-bs-toggle="modal" data-bs-target="#detailsModal{{ giver_post.id }}">ดูรายละเอียด</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for More Details -->
+            <div class="modal fade" id="detailsModal{{ giver_post.id }}" tabindex="-1" aria-labelledby="detailsModalLabel{{ giver_post.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="detailsModalLabel{{ giver_post.id }}">{{ giver_post.stuff_name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>ประเภท:</strong> {{ giver_post.categories }}</p>
+                            <p><strong>รายละเอียด:</strong> {{ giver_post.description }}</p>
+                            <p><strong>วันที่ลง:</strong> {{ giver_post.created_at }}</p>
+                            <p><strong>วันที่อัพเดต:</strong> {{ giver_post.updated_at }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>ไม่พบประกาศที่ตรงกับผู้บริจาค</p>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <h2>ผลการค้นหาสำหรับผู้รับบริจาค</h2>
+    <div class="row">
+        {% for receiver_post in receiver_posts %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><strong>{{ receiver_post.stuff_name }}</strong></h5>
+                        <p class="card-text">ประเภท: {{ receiver_post.categories }}</p>
+                        <p class="card-text">วันที่ลง: {{ receiver_post.created_at }}</p>
+                        <p class="card-text">วันที่อัพเดต: {{ receiver_post.updated_at }}</p>
+                        <a class="btn btn-danger mx-1 btn-lg" href="" title="จับคู่โพสต์นี้">จับคู่</a>
+                        <button type="button" class="btn btn-dark mx-1" data-bs-toggle="modal" data-bs-target="#detailsModal{{ receiver_post.id }}">ดูรายละเอียด</button>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>ไม่พบประกาศที่ตรงกับผู้รับบริจาค</p>
+        {% endfor %}
+    </div>
+
+    <div class="mb-3">
+        <a href="{% url 'profile' user_profile.id %}" class="btn btn-secondary">กลับไปยังโปรไฟล์</a>
+    </div>
+</div>
+{% endblock %}
