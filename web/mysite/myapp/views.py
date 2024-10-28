@@ -427,15 +427,35 @@ def match_info_receiver(request, match_id):
     return render(request, 'myweb/match_info_receiver.html', context)
 
 def search_posts(request):
+    
+    CATEGORIES = [
+    ("หนังสือ", "หนังสือ"),
+    ("เครื่องครัว", "เครื่องครัว"),
+    ("อุปกรณ์เสริมสวย", "อุปกรณ์เสริมสวย"),
+    ("เครื่องใช้ไฟฟ้า", "เครื่องใช้ไฟฟ้า"),
+    ("เฟอร์นิเจอร์", "เฟอร์นิเจอร์"),
+    ("อุปกรณ์สำหรับสัตว์เลี้ยง", "อุปกรณ์สำหรับสัตว์เลี้ยง"),
+    ("เสื้อผ้า", "เสื้อผ้า"),
+    ]
+
+    DEFECT = [
+        ("ไม่มี", "ไม่มี"),
+        ("น้อย", "น้อย"),
+        ("ปานกลาง", "ปานกลาง"),
+        ("มาก", "มาก"),
+    ]
     query = request.GET.get("q", "")
     category = request.GET.get("category", "")
     place = request.GET.get("place", "")
+    defect = request.GET.get("defect", "")
 
     user_profile = request.user.profile
 
+    # Exclude the current user's posts
     giver_posts = PostGiver.objects.exclude(user_profile=user_profile)
     receiver_posts = PostReceiver.objects.exclude(user_profile=user_profile)
 
+    # Filter by query, category, place, and defect
     if query:
         giver_posts = giver_posts.filter(stuff_name__icontains=query)
         receiver_posts = receiver_posts.filter(stuff_name__icontains=query)
@@ -445,15 +465,21 @@ def search_posts(request):
     if place:
         giver_posts = giver_posts.filter(place__icontains=place)
         receiver_posts = receiver_posts.filter(place__icontains=place)
+    if defect:
+        giver_posts = giver_posts.filter(defect=defect)
+        receiver_posts = receiver_posts.filter(defect=defect)
 
     context = {
         "query": query,
         "category": category,
         "place": place,
+        "defect": defect,
         "giver_posts": giver_posts,
         "receiver_posts": receiver_posts,
-        "user_profile": user_profile
+        "user_profile": user_profile,
+        "CATEGORIES": CATEGORIES,
+        "DEFECT": DEFECT,
     }
     return render(request, "myweb/search_posts.html", context)
-    
+
 

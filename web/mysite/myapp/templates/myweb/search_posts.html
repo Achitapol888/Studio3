@@ -11,10 +11,10 @@ background-color: rgba(255, 255, 255);
     <h1>ค้นหาโพสต์</h1>
     <form method="get" action="{% url 'search_posts' %}">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input type="text" name="q" placeholder="ชื่อสิ่งของ" class="form-control" value="{{ query }}">
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <select name="category" class="form-control">
                     <option value="">เลือกประเภท</option>
                     {% for cat, cat_label in CATEGORIES %}
@@ -22,8 +22,16 @@ background-color: rgba(255, 255, 255);
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input type="text" name="place" placeholder="สถานที่" class="form-control" value="{{ place }}">
+            </div>
+            <div class="col-md-3">
+                <select name="defect" class="form-control">
+                    <option value="">เลือกสภาพ</option>
+                    {% for def, def_label in DEFECT %}
+                        <option value="{{ def }}" {% if def == defect %}selected{% endif %}>{{ def_label }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
         <button type="submit" class="btn btn-primary mt-3">ค้นหา</button>
