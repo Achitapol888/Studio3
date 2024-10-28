@@ -19,6 +19,8 @@ class CustomLoginView(LoginView):
             return reverse('profile', args=[self.request.user.profile.id])
         else:
             return reverse('login') 
+def results_post(request):
+    return render(request, "myweb/results_post.html")
 
 def placeholder_view(request):
     return HttpResponse("This is a placeholder for the home page.")

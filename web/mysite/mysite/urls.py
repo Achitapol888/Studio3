@@ -49,6 +49,9 @@ urlpatterns = [
     path('match_info_giver/<int:match_id>/', views.match_info_giver, name='match_info_giver'),
     path('match_info_receiver/<int:match_id>/', views.match_info_receiver, name='match_info_receiver'),
     path('search/', views.search_posts, name='search_posts'),
+    path('results-post',views.results_post, name = 'results_posts'),
+
+
 
 
 
