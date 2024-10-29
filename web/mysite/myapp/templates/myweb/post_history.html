@@ -29,9 +29,9 @@ background-color: rgba(0, 0, 0);
                         <img src="{{ post.stuff_picture.url }}" class="card-img-top" alt="{{ post.stuff_name }}" 
                         style="width: 200px; height: auto; display: block; margin: 0 auto;">
                         {% else %}
-                        
+                        <img src="{% static 'images/icon_accout.png' %}" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                        style="width: 200px; height: auto; display: block; margin: 0 auto;">
                         {% endif %}
-                        
                         <p class="card-text pt-3"><strong>ชื่อสิ่งของ:</strong> {{ post.stuff_name }}</p>
                         <p class="card-text"><strong>ประเภท:</strong> {{ post.categories }}</p>
                         <p class="card-text"><strong>รายละเอียด:</strong> {{ post.description }}</p>
