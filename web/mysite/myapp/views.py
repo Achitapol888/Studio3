@@ -318,7 +318,7 @@ def search_matches_giver(request, post_ID):
 def verify_match(request, giver_post_id, receiver_post_id):
     current_giver_post = get_object_or_404(PostGiver, post_ID=giver_post_id)
     current_receiver_post = get_object_or_404(PostReceiver, post_ID=receiver_post_id)
-
+    #is_matches in model
     current_giver_post.is_matched = True
     current_giver_post.save()
 
@@ -352,7 +352,7 @@ def confirm_verification_giver(request, match_ID):
     
     print(giver_post)
     print(receiver_post)
-
+       # redirect=หน้าที่เคยมีอยู่แล้ว
     return redirect('post_history', profile_id=request.user.profile.id)
 
 @login_required
@@ -492,21 +492,22 @@ def send_data_receiver(request, post_ID):
         form.fields['categories'].required = False
         
         if form.is_valid():
-            post = form.save(commit=False)
-            post.user_profile = request.user.profile
+            post = form.save(commit=False)#notsave
+            post.user_profile = request.user.profile #receriver
             # Use data from post_giver for these fields
+            # ตั้งชื่อเดียวกัน
             post.stuff_name = post_giver.stuff_name
             post.categories = post_giver.categories
             
             post.save()
             return redirect('detail_giver', post_giver_ID=post_giver.post_ID, post_receiver_ID=post.post_ID)
-    else:
+    else: 
         form = PostReceiverForm(initial={
             'categories': post_giver.categories,
             'stuff_name': post_giver.stuff_name,
-        })
+        })#ค่าเริ่มต้น initial
         # Disable the fields in the form
-        form.fields['categories'].widget.attrs['disabled'] = 'disabled'
+        form.fields['categories'].widget.attrs['disabled'] = 'disabled' #แก้ไม่ได้
         form.fields['stuff_name'].widget.attrs['disabled'] = 'disabled'
         # Set them as not required
         form.fields['stuff_name'].required = False
@@ -514,10 +515,9 @@ def send_data_receiver(request, post_ID):
 
     context = {
         "post_giver": post_giver,
-        'form': form
-    }
+        'form': form #ข้อมูลที่เราเอามาใส่
+    } 
     return render(request, "myweb/send_data_receiver.html", context)
-
 
 def detail_giver(request, post_giver_ID, post_receiver_ID):
     # Retrieve PostReceiver using post_receiver_ID
@@ -531,7 +531,7 @@ def detail_giver(request, post_giver_ID, post_receiver_ID):
     }
     return render(request, 'myweb/detail_giver.html', context)
 
-def delete_receiver_post_2(request, post_ID):
+def delete_receiver_post_2(request, post_ID): #
     post = get_object_or_404(PostReceiver, post_ID=post_ID)
     if request.method == 'POST':
         post.delete()
@@ -545,11 +545,17 @@ def send_data_giver(request, post_ID):
     
     if request.method == 'POST':
         form = PostGiverForm(request.POST, request.FILES)
+        form.fields['stuff_name'].required = False
+        form.fields['categories'].required = False
+
         if form.is_valid():
             post = form.save(commit=False)
             post.user_profile = request.user.profile
+            post.stuff_name = post_receiver.stuff_name
+            post.categories = post_receiver.categories
+        
             post.save()
-            return redirect('results_giver', post_ID=post.post_ID)
+            return redirect('datail_receiver', post_receiver_ID=post_receiver.post_ID,post_giver_ID = post.post_ID)
     else:
         form = PostGiverForm(initial={
             'categories': post_receiver.categories,
@@ -557,6 +563,10 @@ def send_data_giver(request, post_ID):
         })
         # Conditionally disable fields for this specific page
         form.fields['categories'].widget.attrs['disabled'] = 'disabled'
+        form.fields['stuff_name'].widget.attrs['disabled'] = 'disabled'
+
+        form.fields['stuff_name'].required = False
+        form.fields['categories'].required = False
 
     context = {
         "post_receiver": post_receiver,
@@ -564,4 +574,24 @@ def send_data_giver(request, post_ID):
     }
     return render(request, "myweb/send_data_giver.html", context)
 
+
+#cat
+def datail_receiver(request, post_receiver_ID, post_giver_ID):
+    current_giver_post = get_object_or_404(PostGiver,post_ID=post_giver_ID)
+    receiver_post = get_object_or_404(PostReceiver, post_ID=post_receiver_ID)
+
+    context = {
+        'current_giver_post': current_giver_post,
+        'receiver_post': receiver_post
+    }
+
+    return render(request,'myweb/detail_receiver.html',context)
+
+def delete_giver_post_2(request, post_ID):
+    post = get_object_or_404(PostGiver,post_ID=post_ID)
+    if request.method == 'POST':
+        post.delete()
+        print(post)
+
+        return redirect('search_posts',id=request.user.profile.id)
 
