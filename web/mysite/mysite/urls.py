@@ -57,7 +57,7 @@ urlpatterns = [
     path('delete_giver_post_2/<int:post_ID>/',views.delete_giver_post_2,name='delete_giver_post_2'),
     path('contact-us/',views.contact_us,name='contact_us'),
     path('about-us/',views.about_us,name='about_us'),
-
+    path('tutorial/',views.tutorial,name='tutorial')
 
 
 

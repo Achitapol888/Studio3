@@ -623,3 +623,6 @@ def contact_us(request):
 
 def about_us(request):
     return render(request, "myweb/about_us.html")
+
+def tutorial(request):
+    return render(request,'myweb/tutorial.html')
