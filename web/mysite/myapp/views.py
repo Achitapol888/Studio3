@@ -620,3 +620,6 @@ def contact_us(request):
         return redirect('home')  # Redirect after sending email
 
     return render(request, 'myweb/contact.html')
+
+def about_us(request):
+    return render(request, "myweb/about_us.html")
