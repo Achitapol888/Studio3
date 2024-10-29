@@ -8,6 +8,8 @@ from .models import UserProfile
 from django.urls import reverse
 from fuzzywuzzy import fuzz
 from django.utils import timezone
+from django.conf import settings
+from django.core.mail import send_mail
 
 
 class CustomLoginView(LoginView):
@@ -595,3 +597,26 @@ def delete_giver_post_2(request, post_ID):
 
         return redirect('search_posts',id=request.user.profile.id)
 
+def contact_us(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        # Compose email content
+        email_subject = f"New Contact Us Message: {subject}"
+        email_message = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}"
+        
+        # Send email
+        send_mail(
+            email_subject,
+            email_message,
+            settings.EMAIL_HOST_USER,
+            ['achitapol2017@hotmail.com'],
+            fail_silently=False,
+        )
+
+        return redirect('home')  # Redirect after sending email
+
+    return render(request, 'myweb/contact.html')
