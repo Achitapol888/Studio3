@@ -7,19 +7,69 @@
 {% endblock %}
 
 {% block background_style %}
-background-color: rgba(0, 0, 0);
+background-color: rgba(225, 225, 225);
 {% endblock %}
 
 {% block styles %}
-<!-- Add any additional styles here if needed -->
+<style>
+  .video-container {
+      max-width: 800px;
+      margin: auto;
+  }
+  .video-title {
+      font-size: 1.25rem;
+      margin-top: 1rem;
+  }
+  video {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+</style>
 {% endblock %}
 
 {% block content %}
 <div class="container mt-5 vh-50">
-    <h2 class="text-center">คลิปคู่มือการใช้งานระบบการจับคู่</h2>
-    <p class="text-center">ยินดีต้อนรับสู่คู่มือการจับคู่ของระบบโดยเราจะแบ่งออกเป็น 3 คลิปวีดีโอด้วยกัน</p>
-    <h4>1.</h4>
+    <h2 class="text-center mb-4">คลิปคู่มือการใช้งานระบบการจับคู่</h2>
+    <p class="text-center">ยินดีต้อนรับสู่คู่มือการจับคู่ของระบบโดยเราจะแบ่งออกเป็น 4 คลิปวีดีโอด้วยกัน</p>
 
+    <div class="video-container">
+        <!-- Video 1 -->
+        <div class="text-center">
+            <h4 class="video-title">1. การสร้างโพสต์ของผู้บริจาค</h4>
+            <video controls class="mb-4 mt-3">
+                <source src="{% static 'videos/Match_giver.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Video 2 -->
+        <div class="text-center">
+            <h4 class="video-title">2. การสร้างโพสต์ของผู้รับบริจาค</h4>
+            <video controls class="mb-4 mt-3">
+                <source src="{% static 'videos/Match_receiver.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Video 3 -->
+        <div class="text-center">
+            <h4 class="video-title">3. การค้นหาโพสต์ผู้บริจาค</h4>
+            <video controls class="mb-4 mt-3">
+                <source src="{% static 'videos/Serach_giver.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Video 4 -->
+        <div class="text-center">
+            <h4 class="video-title">4. การค้นหาโพสต์ผู้รับบริจาค</h4>
+            <video controls class="mb-4 mt-3">
+                <source src="{% static 'videos/Serach_receiver.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
 </div>
 {% endblock %}
-
