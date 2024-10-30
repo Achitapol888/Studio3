@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse,  get_object_or_404
 from .forms import SignUpForm, UserForm, UserProfileForm, PostGiverForm, PostReceiverForm
-from .models import UserProfile, PostGiver, PostReceiver, MatchPost, CATEGORIES, DEFECT
+from .models import UserProfile, PostGiver, PostReceiver, MatchPost
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -8,8 +8,6 @@ from .models import UserProfile
 from django.urls import reverse
 from fuzzywuzzy import fuzz
 from django.utils import timezone
-from django.conf import settings
-from django.core.mail import send_mail
 
 
 class CustomLoginView(LoginView):
@@ -222,7 +220,6 @@ def delete_giver_post(request, post_ID):
             return redirect('post_history', profile_id=request.user.profile.id) 
 
     return render(request, 'myweb/delete_post_confirmation.html', {'post': post})
-
 
 @login_required
 def search_matches_receiver(request, post_ID):

@@ -13,10 +13,10 @@ background-color: rgba(255, 255, 255);
     <h1>ค้นหาโพสต์</h1>
     <form method="get" action="{% url 'search_posts' user_profile.user.id %}">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 mt-3">
                 <input type="text" name="q" placeholder="ชื่อสิ่งของ" class="form-control" value="{{ query }}">
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 mt-3">
                 <select name="category" class="form-control">
                     <option value="">ประเภทสิ่งของ</option>
                     {% for cat, cat_label in CATEGORIES %}
@@ -24,10 +24,10 @@ background-color: rgba(255, 255, 255);
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 mt-3">
                 <input type="text" name="place" placeholder="สถานที่" class="form-control" value="{{ place }}">
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 mt-3">
                 <select name="defect" class="form-control">
                     <option value="">ตำหนิ</option>
                     {% for def, def_label in DEFECT %}
@@ -39,6 +39,7 @@ background-color: rgba(255, 255, 255);
         <button type="submit" class="btn btn-primary mt-3">ค้นหา</button>
     </form>
 </div>
+
 <hr>
 <h2 class = "my-4">ผลการค้นหาสำหรับผู้บริจาค</h2>
 <div class="row">
