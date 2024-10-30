@@ -75,25 +75,22 @@ background-color: rgba(0, 0, 0);
                         {% endif %}
 
 
-
-                    {% if user.id == user_profile.user.id %}
+                        {% if user.id == user_profile.user.id %}
                         <div class="d-flex justify-content-center justify-content-lg-end">
                             {% if not post.is_matched %}
                                 <!-- Button to re-match the post -->
-                                <a href="{% url 'results_giver' post.post_ID %}" 
-                                class="btn btn-success me-3">จับคู่อีกครั้ง</a>
+                                <a href="{% url 'results_giver' post.post_ID %}" class="btn btn-success me-3">จับคู่อีกครั้ง</a>
                             {% endif %}
-                        
-                            <!-- Edit button only for not matched -->
-                            {% if not post.is_matched%}
+                            
+                            <!-- Edit button only for not matched posts -->
+                            {% if not post.is_matched %}
                                 <a href="{% url 'edit_giver_post' post.post_ID %}" class="btn btn-primary">เเก้ไข</a>
                             {% endif %}
-
                     
                             <!-- Confirmation button for matched posts -->
                             {% if post.is_matched %}
-                                {% with matched_post=matched_post_giver|get_related_matches_giver:post.post_ID %}        
-                                    {% if matched_post %}                            
+                                {% with matched_post=matched_post_giver|get_related_matches_giver:post.post_ID %}
+                                    {% if matched_post %}
                                         {% if not matched_post.is_giver_confirm %}
                                             <form action="{% url 'confirm_verification_giver' matched_post.match_ID %}" method="POST" class="d-inline">
                                                 {% csrf_token %}
@@ -103,22 +100,27 @@ background-color: rgba(0, 0, 0);
                                             <form action="{% url 'unmatch_post' post.post_ID 'giver' %}" method="POST" class="d-inline">
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn btn-warning ms-3">ยกเลิกการจับคู่</button>
-                                            </form>   
-                                        {% elif matched_post.is_giver_confirm %}
-
+                                            </form>
+                                        {% elif matched_post.is_giver_confirm and matched_post.is_receiver_confirm %}
+                                            <form action="{% url 'delete_giver_post' post.post_ID %}" method="POST" class="ms-3">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">ลบโพสต์</button>
+                                            </form>
                                         {% endif %}
                                     {% endif %}
                                 {% endwith %}
                             {% endif %}
-
-
-                            <!-- Delete post form -->
-                            <form action="{% url 'delete_giver_post' post.post_ID %}" method="POST" class="ms-3">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">ลบโพสต์</button>
-                            </form>
+                    
+                            <!-- Delete post form, only shown if the post is not matched -->
+                            {% if not post.is_matched %}
+                                <form action="{% url 'delete_giver_post' post.post_ID %}" method="POST" class="ms-3">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">ลบโพสต์</button>
+                                </form>
+                            {% endif %}
                         </div>
                     {% endif %}
+                    
                     </div>
                 </div>
             </div>
