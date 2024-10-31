@@ -44,8 +44,8 @@ class SignUpForm(UserCreationForm):
                 raise forms.ValidationError("Email must end with '@kkumail.com' or '@kku.ac.th'.")
 
             # Check if the email is unique
-            """if User.objects.filter(email=email).exists():
-                raise forms.ValidationError("This email address is already in use.")"""
+            if User.objects.filter(email=email).exists():
+                raise forms.ValidationError("This email address is already in use.")
         return email
 
     def clean_student_ID(self):
@@ -98,8 +98,8 @@ class UserForm(forms.ModelForm):
                 raise forms.ValidationError("Email must end with '@kkumail.com' or '@kku.ac.th'.")
 
             # Check if the email is unique
-            """if User.objects.filter(email=email).exists():
-                raise forms.ValidationError("This email address is already in use.")"""
+            if User.objects.filter(email=email).exists():
+                raise forms.ValidationError("This email address is already in use.")
         return email
 
     def clean_student_ID(self):
