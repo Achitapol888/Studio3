@@ -485,7 +485,7 @@ def send_data_receiver(request, post_ID):
     post_giver = get_object_or_404(PostGiver, post_ID=post_ID)
 
     if request.method == 'POST':
-        form = PostReceiverForm(request.POST)
+        form = PostReceiverForm(request.POST, request.FILES)
         # Temporarily set stuff_name and categories to not required
         form.fields['stuff_name'].required = False
         form.fields['categories'].required = False
@@ -573,6 +573,8 @@ def send_data_giver(request, post_ID):
     }
     return render(request, "myweb/send_data_giver.html", context)
 
+
+#cat
 def datail_receiver(request, post_receiver_ID, post_giver_ID):
     current_giver_post = get_object_or_404(PostGiver,post_ID=post_giver_ID)
     receiver_post = get_object_or_404(PostReceiver, post_ID=post_receiver_ID)
